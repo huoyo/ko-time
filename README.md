@@ -55,18 +55,19 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 #### 版本说明
 
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1210/192544_932c9e75_1625471.png "屏幕截图.png")
+
 1.接口列表总览
 
 在列表中会显示该接口的运行耗时，如果为绿色则无需优化，如果为红色，需要详细查看问题所在
 
-
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1209/232411_3e487b47_1625471.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1210/192615_192e1123_1625471.png "屏幕截图.png")
 
 2.调用详情
 
 点开接口时，会显示该接口的调用链路以及运行时长
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1209/232636_4ec0556c_1625471.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1210/192639_e49ad1fa_1625471.png "屏幕截图.png")
 
 #### 版本说明
 

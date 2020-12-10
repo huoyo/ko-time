@@ -1,0 +1,15 @@
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  freemarker:
+    allow-request-override: false
+    cache: true
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    suffix: .html
+    template-loader-path: classpath:/templates
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    request-context-attribute: ctx

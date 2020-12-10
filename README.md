@@ -6,12 +6,13 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
 
 
 优点：
-> * 无缝集成springboot，使用简单
-> * 通过简单配置集成，与业务逻辑无耦合
+> * 实时监听方法，统计运行时长
+> * web展示方法调用链路，瓶颈可视化追踪
+
 
 
 缺点：
-> * 目前仅适用于单机版，不支持分布式和集群
+> * 仅支撑单体应用
 
 
 #### 安装教程
@@ -20,7 +21,7 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
 ```
  <dependency>
     <groupId>cn.langpy</groupId>
-    <artifactId>koTime</artifactId>
+    <artifactId>ko-time</artifactId>
     <version>1.0</version>
   </dependency>
 ```
@@ -74,14 +75,3 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 > V1.0：-
 
 
-
-#### 问题说明
-
-1.  本项目中使用了aspectjweaver依赖，如果引入的项目中没有该依赖，自行引入
-```
- <dependency>
-        <groupId>org.aspectj</groupId>
-        <artifactId>aspectjweaver</artifactId>
-        <version>xxx</version>
-  </dependency>
-```

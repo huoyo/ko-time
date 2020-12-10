@@ -20,59 +20,38 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
 ```
  <dependency>
     <groupId>cn.langpy</groupId>
-    <artifactId>simsearch</artifactId>
-    <version>1.2</version>
+    <artifactId>koTime</artifactId>
+    <version>1.0</version>
   </dependency>
 ```
 2.  配置信息
 
 在application.yml中配置
 ```
-sim-search.dir=xxx  //索引位置，可不填，使用默认位置：当前项目下的indexs目录（第一次运行需手动创建）
-sim-search.size.core=10  //创建索引的核心线程数量，根据cpu自行决定，可不填，默认为10
-sim-search.size.max=10  //创建索引的最大线程数量，根据cpu自行决定，可不填，默认为200
-sim-search.size.queue=1000 //创建索引的线程队列容量，自行决定，可不填，默认为20000
-sim-search.index.init=true 重启时是否要对之前的索引进行删除，默认为false
+spring.profiles.active=koTime
 ```
 
 #### 使用说明
 
-1.  在需要创建索引的实体上标注需要创建索引的字段
+1.  新建一个类，实现ComputeTimeHandlerInterface，并在 @Pointcut 写入 需要监测的范围
 ```java
-import cn.langpy.simsearch.annotation.IndexColumn;
-import cn.langpy.simsearch.annotation.IndexId;
+@Component
+@Aspect
+public class RunTimeHandler implements ComputeTimeHandlerInterface {
+    @Override
+    @Pointcut("execution(* com.huoyo..*.*(..))")
+    public void prog() {
 
-public class Student {
-    /*索引唯一id*/
-    @IndexId 
-    private String id;
-    /*需要创建索引的字段*/
-    @IndexColumn
-    private String studentName;
-    @IndexColumn
-    private String schoolName;
-    private String age;
+    }
 }
-```
-
-2.  在需要创建索引的方法上加上创建索引的注解
-
-```java
 
 ```
 
-3.  在需要删除索引的方法上加上删除索引的注解
+2.  启动项目访问 `/koTime` 路径即可
 
-```java
+比如：`http://localhost:8080/koTime`
+如果项目自定义的contextpath，访问如`http://localhost:8080/xxx服务/koTime`
 
-```
-
-4.  搜索的时候自定义一个空的方法，加上注解即可
-
-```java
-
-```
-注意：搜索结果仅仅是搜索出加上@IndexId和@IndexColumn的字段，具体内容自行往业务数据库查询
 
 #### 版本说明
 
@@ -91,11 +70,9 @@ public class Student {
 
 #### 版本说明
 
-> V1.0-snapshots：提供基础索引创建、删除和检索功能
+> V1.0：-
 
-> V1.1：增加重启索引初始化功能
 
-> V1.2：搜索时，如果未找到搜索，可走默认模式
 
 #### 问题说明
 

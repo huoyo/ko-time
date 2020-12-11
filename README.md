@@ -3,6 +3,8 @@
 #### 介绍
 koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈：
 
+#### 预览
+
 
 
 优点：
@@ -75,6 +77,8 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 #### 版本说明
 
-> V1.0：-
+> V1.0：基本功能
+> V1.1：接口统计
+> V1.2：添加日志、时间阈值可配置
 
 

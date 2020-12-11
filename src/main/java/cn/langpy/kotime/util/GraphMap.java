@@ -32,7 +32,8 @@ public class GraphMap {
 
     public static List<RunTimeNode> get(MethodType methodType) {
         return runTimeNodeMap.values().stream()
-                .filter(runTimeNode -> runTimeNode.getMethodType()==methodType)
+                .filter(runTimeNode -> runTimeNode.getMethodType()==methodType &&
+                        !runTimeNode.getMethodName().contains("lambda$") )
                 .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
     }

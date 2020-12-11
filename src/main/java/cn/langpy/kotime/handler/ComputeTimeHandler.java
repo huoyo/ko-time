@@ -27,6 +27,7 @@ public class ComputeTimeHandler {
         long begin = System.nanoTime();
         Object obj=pjp.proceed();
         long end =System.nanoTime();
+        StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
         if ("chinese".equals(computeTime.value())) {
             log.info("调用方法={}，耗时={}毫秒",pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName(),(end-begin)/1000000);
         }else{

@@ -2,8 +2,7 @@ package cn.langpy.kotime.handler;
 
 
 import cn.langpy.kotime.model.RunTimeNode;
-import cn.langpy.kotime.util.Common;
-import cn.langpy.kotime.util.Context;
+import cn.langpy.kotime.service.InvokeService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,7 +10,6 @@ import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
 public interface ComputeTimeHandlerInterface {
-
     @Pointcut("")
      void prog();
 
@@ -21,9 +19,9 @@ public interface ComputeTimeHandlerInterface {
         Object obj=pjp.proceed();
         long end =System.nanoTime();
         String packName = this.getClass().getPackage().getName();
-        RunTimeNode parent = Common.getParentRunTimeNode(packName);
-        RunTimeNode current = Common.getCurrentRunTimeNode(pjp,((end-begin)/1000000.0));
-        Context.set(parent,current);
+        RunTimeNode parent = InvokeService.getParentRunTimeNode(packName);
+        RunTimeNode current = InvokeService.getCurrentRunTimeNode(pjp,((end-begin)/1000000.0));
+        InvokeService.createGraph(parent,current);
         return obj;
     }
 

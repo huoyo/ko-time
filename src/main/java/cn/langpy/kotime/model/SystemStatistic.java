@@ -65,4 +65,17 @@ public class SystemStatistic {
     public void setNormalNum(Integer normalNum) {
         this.normalNum = normalNum;
     }
+
+    @Override
+    public String toString() {
+        return "SystemStatistic{" +
+                "name='" + name + '\'' +
+                ", avgRunTime=" + avgRunTime +
+                ", maxRunTime=" + maxRunTime +
+                ", minRunTime=" + minRunTime +
+                ", totalNum=" + totalNum +
+                ", delayNum=" + delayNum +
+                ", normalNum=" + normalNum +
+                '}';
+    }
 }

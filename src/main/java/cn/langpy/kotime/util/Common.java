@@ -1,52 +1,30 @@
 package cn.langpy.kotime.util;
 
 import cn.langpy.kotime.model.RunTimeNode;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-
+@Slf4j
 public class Common {
 
-    public static RunTimeNode getParentRunTimeNode(String packName) {
-        String parentClassName = "";
-        String parentMothodName = "";
-        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
+    public static StackTraceElement filter(StackTraceElement[] stacks,String packName) {
         String[] packNameSplit = packName.split("\\.");
         String filter = packNameSplit.length>1 ? packNameSplit[0]+"."+packNameSplit[1] : packNameSplit[0];
         int stacksLength = stacks.length;
         for (int i = 0; i < stacksLength; i++) {
             StackTraceElement stack = stacks[i];
             if (stack.getClassName().startsWith(filter)&& !stack.getClassName().contains("$")) {
-                parentClassName = stack.getClassName();
-                parentMothodName = stack.getMethodName();
-                break;
+                return stack;
             }
         }
-        RunTimeNode parent = new RunTimeNode();
-        parent.setClassName(parentClassName);
-        parent.setMethodName(parentMothodName);
-        parent.setName(parentClassName.substring(parentClassName.lastIndexOf(".")+1)+"."+parentMothodName);
-        parent.setMethodType(getMethodType(parentClassName));
-        parent.setChildren(new ArrayList<>());
-        return parent;
+        return null;
     }
 
-    public static RunTimeNode getCurrentRunTimeNode(ProceedingJoinPoint pjp,Double runTime) {
-        String className = pjp.getTarget().getClass().getName();
-        String methodName = pjp.getSignature().getName();
-        RunTimeNode current = new RunTimeNode();
-        current.setName(className.substring(className.lastIndexOf(".")+1)+"."+methodName);
-        current.setClassName(className);
-        current.setMethodName(methodName);
-        current.setAvgRunTime(runTime);
-        current.setChildren(new ArrayList<>());
-        current.setMethodType(getMethodType(pjp));
-        return current;
-    }
+
 
     public static MethodType getMethodType(ProceedingJoinPoint pjp) {
         MethodType methodType = null;
@@ -64,7 +42,7 @@ public class Common {
                 methodType = MethodType.Controller;
             }else if (className.contains("service")) {
                 methodType = MethodType.Service;
-            }else if (className.contains("dao") || className.contains("mapper")) {
+            }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
                 methodType = MethodType.Dao;
             }else{
                 methodType = MethodType.Others;
@@ -80,7 +58,7 @@ public class Common {
             methodType = MethodType.Controller;
         }else if (className.contains("service")) {
             methodType = MethodType.Service;
-        }else if (className.contains("dao") || className.contains("mapper")) {
+        }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
             methodType = MethodType.Dao;
         }else{
             methodType = MethodType.Others;
@@ -88,4 +66,14 @@ public class Common {
         return methodType;
     }
 
+    public static void showLog(RunTimeNode current) {
+        String currentKey = current.getClassName()+"."+current.getMethodName();
+        if (Context.getConfig().getLogEnable() && "chinese".equals(Context.getConfig().getLogLanguage())) {
+            log.info("调用方法="+currentKey+"，耗时="+current.getAvgRunTime()+"毫秒");
+        }else if (Context.getConfig().getLogEnable() && "english".equals(Context.getConfig().getLogLanguage())) {
+            log.info("method="+currentKey+"，runTime="+current.getAvgRunTime()+"ms");
+        }
+    }
+
 }
+

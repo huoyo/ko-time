@@ -2,8 +2,8 @@ package cn.langpy.kotime.controller;
 
 import cn.langpy.kotime.model.RunTimeNode;
 import cn.langpy.kotime.model.SystemStatistic;
+import cn.langpy.kotime.service.RunTimeNodeService;
 import cn.langpy.kotime.util.Context;
-import cn.langpy.kotime.util.MethodType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,16 +20,17 @@ import java.util.List;
 public class KoTimeController {
     @GetMapping
     public String index(Model model, HttpServletRequest request) {
-        List<RunTimeNode> list = Context.get(MethodType.Controller);
+        List<RunTimeNode> list = RunTimeNodeService.getControllers();
         model.addAttribute("list",list);
-        SystemStatistic system = Context.getStatistic();
+        SystemStatistic system = RunTimeNodeService.getRunStatistic();
         model.addAttribute("system",system);
+        model.addAttribute("config",Context.getConfig());
         return "index";
     }
     @GetMapping("/getTree")
     @ResponseBody
     public RunTimeNode getTree(String methodName,Model model, HttpServletRequest request) {
-        return Context.getTree(methodName);
+        return RunTimeNodeService.getGraph(methodName);
     }
 
 }

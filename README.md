@@ -34,9 +34,9 @@ http://huoyo.gitee.io/ko-time/
 在application.yml中配置
 ```
 spring.profiles.active=koTime
-koTime.log.enable:false  # 是否开启控制输出，默认false
-koTime.log.language=chinese # 控制台输出语言（english/chinese）
-koTime.time.threshold:800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色
+koTime.log.enable:false  # 是否开启控制输出，非必填，默认false
+koTime.log.language=chinese # 控制台输出语言（english/chinese）非必填，默认chinese
+koTime.time.threshold:800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，非必填，默认800
 ```
 
 

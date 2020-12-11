@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping("/koTime")
 @Slf4j
 public class KoTimeController {
+
     @GetMapping
     public String index(Model model, HttpServletRequest request) {
         List<RunTimeNode> list = RunTimeNodeService.getControllers();
@@ -27,6 +28,7 @@ public class KoTimeController {
         model.addAttribute("config",Context.getConfig());
         return "index";
     }
+
     @GetMapping("/getTree")
     @ResponseBody
     public RunTimeNode getTree(String methodName,Model model, HttpServletRequest request) {

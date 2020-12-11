@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GraphMap {
+
     /*只需保证可见性，无需保证线程安全*/
     private volatile static Map<String, RunTimeNode> runTimeNodeMap;
 
@@ -24,6 +25,7 @@ public class GraphMap {
     public static RunTimeNode put(String key, RunTimeNode runTimeNode) {
         return runTimeNodeMap.put(key,runTimeNode);
     }
+
     public static boolean containsKey(String key) {
         return GraphMap.runTimeNodeMap.containsKey(key);
     }

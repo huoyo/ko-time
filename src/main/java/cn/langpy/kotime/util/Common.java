@@ -25,45 +25,38 @@ public class Common {
     }
 
 
-
     public static MethodType getMethodType(ProceedingJoinPoint pjp) {
-        MethodType methodType = null;
         Class<?> targetClass = pjp.getTarget().getClass();
         if (targetClass.getAnnotation(Controller.class)!=null || targetClass.getAnnotation(RestController.class)!=null) {
-            methodType = MethodType.Controller;
+            return MethodType.Controller;
         }else if (targetClass.getAnnotation(Service.class)!=null) {
-            methodType = MethodType.Service;
+            return MethodType.Service;
         }else if (targetClass.getAnnotation(Repository.class)!=null) {
-            methodType = MethodType.Dao;
+            return MethodType.Dao;
         }
-        if (methodType == null) {
-            String className = pjp.getTarget().getClass().getName().toLowerCase();
-            if (className.contains("controller")) {
-                methodType = MethodType.Controller;
-            }else if (className.contains("service")) {
-                methodType = MethodType.Service;
-            }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
-                methodType = MethodType.Dao;
-            }else{
-                methodType = MethodType.Others;
-            }
+        String className = pjp.getTarget().getClass().getName().toLowerCase();
+        if (className.contains("controller")) {
+            return MethodType.Controller;
+        }else if (className.contains("service")) {
+            return MethodType.Service;
+        }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
+            return MethodType.Dao;
+        }else{
+            return MethodType.Others;
         }
-        return methodType;
     }
 
     public static MethodType getMethodType(String className) {
-        MethodType methodType = null;
         className = className.toLowerCase();
         if (className.contains("controller")) {
-            methodType = MethodType.Controller;
+            return MethodType.Controller;
         }else if (className.contains("service")) {
-            methodType = MethodType.Service;
+            return MethodType.Service;
         }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
-            methodType = MethodType.Dao;
+            return MethodType.Dao;
         }else{
-            methodType = MethodType.Others;
+            return MethodType.Others;
         }
-        return methodType;
     }
 
     public static void showLog(RunTimeNode current) {

@@ -26,6 +26,7 @@ public class RunTimeNodeService {
     public static boolean containsKey(String key) {
        return GraphMap.containsKey(key);
     }
+
     public static boolean containsNode(RunTimeNode node) {
         String key = node.getClassName()+"."+node.getMethodName();
         return GraphMap.containsKey(key);
@@ -63,6 +64,7 @@ public class RunTimeNodeService {
             }
         }
     }
+
     public static SystemStatistic getRunStatistic() {
         List<RunTimeNode> controllerApis = GraphMap.get(MethodType.Controller);
         SystemStatistic systemStatistic = new SystemStatistic();
@@ -85,6 +87,7 @@ public class RunTimeNodeService {
         List<RunTimeNode> list = GraphMap.get(MethodType.Controller);
         return list;
     }
+
     public static RunTimeNode getGraph(String methodName) {
         return GraphMap.getTree(methodName);
     }

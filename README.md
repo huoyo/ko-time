@@ -24,7 +24,7 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
   </dependency>
 ```
 2.  配置信息

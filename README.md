@@ -26,7 +26,7 @@ http://huoyo.gitee.io/ko-time/
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
   </dependency>
 ```
 2.  配置信息
@@ -86,6 +86,8 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 > V1.1：接口统计
 
-> V1.2：添加日志、时间阈值可配置
+> V1.2：不可用，错误版本
+
+> V1.3：添加日志、时间阈值可配置
 
 

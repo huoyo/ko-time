@@ -6,8 +6,8 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="http://huoyo.gitee.io/ko-time-origin/layui/css/layui.css" media="all">
-    <link rel="stylesheet" href="http://huoyo.gitee.io/ko-time-origin/layui/css/global.css" media="all">
+    <link rel="stylesheet" href="http://huoyo.gitee.io/ko-time/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="http://huoyo.gitee.io/ko-time/layui/css/global.css" media="all">
     <style>
         .site-doc-icon li{width: 222px;}
         .site-doc-icon li .layui-anim{width: 80px; height: 80px; line-height: 80px; margin: 0 auto 10px; text-align: center; background-color: #009688; cursor: pointer; color: #fff; border-radius: 50%;}
@@ -224,9 +224,9 @@
 </div>
 
 
-<script src="http://huoyo.gitee.io/ko-time-origin/layui/layui.js" charset="utf-8"></script>
-<script src="http://huoyo.gitee.io/ko-time-origin/jquery.min.js"></script>
-<script src="http://huoyo.gitee.io/ko-time-origin/echarts.min.js"></script>
+<script src="http://huoyo.gitee.io/ko-time/layui/layui.js" charset="utf-8"></script>
+<script src="http://huoyo.gitee.io/ko-time/jquery.min.js"></script>
+<script src="http://huoyo.gitee.io/ko-time/echarts.min.js"></script>
 <script >
     $(document).ready(function() {
 
@@ -244,7 +244,7 @@
         function show(element,name) {
             var myChart = echarts.init(element);
             myChart.showLoading();
-            $.get('http://huoyo.gitee.io/ko-time-origin/data.json', function (data) {
+            $.get('http://huoyo.gitee.io/ko-time/data.json', function (data) {
                 console.log(data)
                 myChart.hideLoading();
                 echarts.util.each(data.children, function (datum, index) {

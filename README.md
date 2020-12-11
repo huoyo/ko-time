@@ -32,6 +32,9 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
 在application.yml中配置
 ```
 spring.profiles.active=koTime
+koTime.log.enable:false  # 是否开启控制输出，默认false
+koTime.log.language=chinese # 控制台输出语言（english/chinese）
+koTime.time.threshold:800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色
 ```
 
 

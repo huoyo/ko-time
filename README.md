@@ -73,7 +73,7 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 点开接口时，会显示该接口的调用链路以及运行时长
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1210/192639_e49ad1fa_1625471.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1211/191651_15b5424b_1625471.png "屏幕截图.png")
 
 #### 版本说明
 

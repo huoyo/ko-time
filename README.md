@@ -26,7 +26,7 @@ http://huoyo.gitee.io/ko-time/
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
   </dependency>
 ```
 2.  配置信息
@@ -37,10 +37,14 @@ spring.profiles.active=koTime
 koTime.log.enable=false  # 是否开启控制输出，非必填，默认false
 koTime.log.language=chinese # 控制台输出语言（english/chinese）非必填，默认chinese
 koTime.time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，非必填，默认800
+koTime.pointcut=execution(* com.huoyo..*.*(..)) 需要监测的切面范围，参考aop的@pointcut  v1.4开始加入的功能，用来替代下面的步骤3
 ```
 
 
 3.  新建一个类，实现ComputeTimeHandlerInterface，并在 @Pointcut 写入 需要监测的范围
+
+`注意：v1.3之前需要该步骤，v1.4及以上使用koTime.pointcut配置即可，无需此步骤`
+
 ```java
 @Component
 @Aspect
@@ -89,5 +93,11 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 > V1.2：不可用，错误版本
 
 > V1.3：添加日志、时间阈值可配置
+
+> V1.4：添加koTime.pointcut配置
+
+#### 特别说明
+
+本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！
 
 

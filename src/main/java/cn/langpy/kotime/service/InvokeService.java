@@ -4,6 +4,7 @@ package cn.langpy.kotime.service;
 import cn.langpy.kotime.model.RunTimeNode;
 import cn.langpy.kotime.util.Common;
 import lombok.extern.slf4j.Slf4j;
+import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 import java.util.ArrayList;
@@ -30,6 +31,18 @@ public class InvokeService {
         return parent;
     }
 
+    public static RunTimeNode getCurrentRunTimeNode(MethodInvocation pjp, Double runTime) {
+        String className = pjp.getThis().getClass().getName();
+        String methodName = pjp.getMethod().getName();
+        RunTimeNode current = new RunTimeNode();
+        current.setName(className.substring(className.lastIndexOf(".")+1)+"."+methodName);
+        current.setClassName(className);
+        current.setMethodName(methodName);
+        current.setAvgRunTime(runTime);
+        current.setChildren(new ArrayList<>());
+        current.setMethodType(Common.getMethodType(pjp));
+        return current;
+    }
     public static RunTimeNode getCurrentRunTimeNode(ProceedingJoinPoint pjp, Double runTime) {
         String className = pjp.getTarget().getClass().getName();
         String methodName = pjp.getSignature().getName();

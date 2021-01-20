@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-@Aspect
 public interface ComputeTimeHandlerInterface {
     @Pointcut("")
      void prog();

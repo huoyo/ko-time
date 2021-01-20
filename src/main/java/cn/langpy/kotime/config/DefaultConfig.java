@@ -1,9 +1,12 @@
 package cn.langpy.kotime.config;
 
 
+import cn.langpy.kotime.handler.RunTimeHandler;
 import cn.langpy.kotime.model.KoTimeConfig;
 import cn.langpy.kotime.util.Context;
+import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +19,8 @@ public class DefaultConfig {
     private Boolean logEnable;
     @Value("${koTime.time.threshold:800.0}")
     private Double timeThreshold;
+    @Value("${koTime.pointcut:execution(* cn.langpy.kotime.controller.KoTimeController.*(..))}")
+    private String pointcut;
 
     @PostConstruct
     public void function() {
@@ -24,6 +29,14 @@ public class DefaultConfig {
         config.setLogLanguage(logLanguage);
         config.setTimeThreshold(timeThreshold);
         Context.setConfig(config);
+    }
+
+    @Bean
+    public AspectJExpressionPointcutAdvisor configurabledvisor() {
+        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
+        advisor.setExpression(pointcut);
+        advisor.setAdvice(new RunTimeHandler());
+        return advisor;
     }
 
     public Double getTimeThreshold() {

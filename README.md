@@ -16,7 +16,7 @@ http://huoyo.gitee.io/ko-time/
 
 
 缺点：
-> * 仅支撑单体应用
+> * 对项目中每个方法进行监控，在性能层面会有一定的影响，建议在开发阶段使用
 
 
 #### 使用教程
@@ -63,6 +63,16 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 比如：`http://localhost:8080/koTime`
 如果项目自定义的contextpath，访问如`http://localhost:8080/xxx服务/koTime`
 
+5.  其他使用
+
+对于单个方法的监测，可以使用@ComputeTime注解
+
+```java
+    @ComputeTime
+    public void test() {
+
+    }
+```
 
 #### 可视化展示
 

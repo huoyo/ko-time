@@ -26,7 +26,7 @@ http://huoyo.gitee.io/ko-time/
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
   </dependency>
 ```
 2.  配置信息
@@ -106,6 +106,7 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 > V1.4：添加koTime.pointcut配置
 
+> V1.5：剔除lombok
 #### 特别说明
 
 本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！

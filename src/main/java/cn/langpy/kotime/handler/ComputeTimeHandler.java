@@ -1,7 +1,6 @@
 package cn.langpy.kotime.handler;
 
 import cn.langpy.kotime.annotation.ComputeTime;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -9,13 +8,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
 
-@Slf4j
+
 @Aspect
 @Component
 public class ComputeTimeHandler {
-
-
+    public static Logger log = Logger.getLogger(ComputeTimeHandler.class.toString());
 
     @Pointcut("@annotation(cn.langpy.kotime.annotation.ComputeTime)")
     public void preProcess(){
@@ -29,9 +28,9 @@ public class ComputeTimeHandler {
         long end =System.nanoTime();
         StackTraceElement stacks[] = Thread.currentThread().getStackTrace();
         if ("chinese".equals(computeTime.value())) {
-            log.info("调用方法={}，耗时={}毫秒",pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName(),(end-begin)/1000000);
+            log.info("调用方法="+pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName()+"，耗时="+((end-begin)/1000000)+"毫秒");
         }else{
-            log.info("method={},runTime={}ms",pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName(),(end-begin)/1000000);
+            log.info("method="+pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName()+"，runTime="+((end-begin)/1000000)+"毫秒");
         }
         return obj;
     }

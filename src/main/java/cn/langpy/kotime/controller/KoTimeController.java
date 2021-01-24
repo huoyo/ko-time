@@ -4,7 +4,6 @@ import cn.langpy.kotime.model.RunTimeNode;
 import cn.langpy.kotime.model.SystemStatistic;
 import cn.langpy.kotime.service.RunTimeNodeService;
 import cn.langpy.kotime.util.Context;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/koTime")
-@Slf4j
 public class KoTimeController {
 
     @GetMapping

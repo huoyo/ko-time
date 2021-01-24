@@ -1,6 +1,7 @@
 package cn.langpy.kotime.service;
 
 
+import cn.langpy.kotime.handler.ComputeTimeHandler;
 import cn.langpy.kotime.model.RunTimeNode;
 import cn.langpy.kotime.util.Common;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +10,11 @@ import org.aspectj.lang.ProceedingJoinPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-@Slf4j
+
 public class InvokeService {
+    public static Logger log = Logger.getLogger(InvokeService.class.toString());
 
     public static RunTimeNode getParentRunTimeNode(String packName) {
         String parentClassName = "";

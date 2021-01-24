@@ -6,7 +6,7 @@
 
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <name>koTime</name>
     <description>koTime</description>
     <licenses>
@@ -38,19 +38,6 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>1.9.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

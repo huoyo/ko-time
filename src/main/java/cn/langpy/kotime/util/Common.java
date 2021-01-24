@@ -1,7 +1,6 @@
 package cn.langpy.kotime.util;
 
 import cn.langpy.kotime.model.RunTimeNode;
-import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Controller;
@@ -9,8 +8,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
+import java.util.logging.Logger;
+
 public class Common {
+    public static Logger log = Logger.getLogger(Common.class.toString());
 
     public static StackTraceElement filter(StackTraceElement[] stacks,String packName) {
         String[] packNameSplit = packName.split("\\.");

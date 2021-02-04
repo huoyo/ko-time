@@ -107,8 +107,19 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 > V1.4：添加koTime.pointcut配置
 
 > V1.5：剔除lombok
+
 #### 特别说明
 
-本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！
+1.本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！
+
+2.项目中使用了freemarker模板，v1.5及一下版本需要自行引入
+
+```
+  <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-freemarker</artifactId>
+        <version>xxxx</version>
+  </dependency>
+```
 
 

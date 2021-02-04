@@ -112,7 +112,7 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 1.本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！
 
-2.项目中使用了freemarker模板，v1.5及一下版本需要自行引入
+2.项目中使用了freemarker模板，v1.5及以下版本需要自行引入
 
 ```
   <dependency>

@@ -26,8 +26,15 @@ http://huoyo.gitee.io/ko-time/
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
   </dependency>
+```
+
+```
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-${freemarker或者thymeleaf任选一个}</artifactId>
+    </dependency>
 ```
 2.  配置信息
 
@@ -38,6 +45,7 @@ koTime.log.enable=false  # 是否开启控制输出，非必填，默认false
 koTime.log.language=chinese # 控制台输出语言（english/chinese）非必填，默认chinese
 koTime.time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，非必填，默认800
 koTime.pointcut=execution(* com.huoyo..*.*(..)) 需要监测的切面范围，参考aop的@pointcut  v1.4开始加入的功能，用来替代下面的步骤3
+koTime.ui.template=thymeleaf  前端页面模板，默认为freemarker，可选thymeleaf 与引入的pom依赖对应
 ```
 
 
@@ -108,11 +116,13 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 > V1.5：剔除lombok
 
+> V1.6：兼容thymeleaf
+
 #### 特别说明
 
 1.本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！
 
-2.项目中使用了freemarker模板，v1.5及以下版本需要自行引入
+2.v1.5及以下版本默认使用了freemarker模板（其余版本可选用thymeleaf），需要自行引入
 
 ```
   <dependency>

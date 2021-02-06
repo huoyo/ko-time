@@ -1,4 +1,4 @@
-function getOption(data){
+function getOption(data,threshold){
     return  {
         tooltip: {
             trigger: 'item',
@@ -23,7 +23,7 @@ function getOption(data){
                     position: 'right',
                     formatter: function(params){
                         var bg = "titleBgGreen"
-                        if (params.value>800) {
+                        if (params.value>threshold) {
                             bg = "titleBgRed"
                         }
                         return [

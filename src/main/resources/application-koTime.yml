@@ -3,7 +3,7 @@ spring:
     static-path-pattern: /static/**
   freemarker:
     allow-request-override: false
-    cache: true
+    cache: false
     check-template-location: true
     charset: UTF-8
     content-type: text/html
@@ -13,3 +13,10 @@ spring:
     expose-session-attributes: false
     expose-spring-macro-helpers: false
     request-context-attribute: ctx
+
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+    content-type: text/html

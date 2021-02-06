@@ -4,6 +4,7 @@ import cn.langpy.kotime.model.RunTimeNode;
 import cn.langpy.kotime.model.SystemStatistic;
 import cn.langpy.kotime.service.RunTimeNodeService;
 import cn.langpy.kotime.util.Context;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/koTime")
 public class KoTimeController {
+    @Value("${koTime.ui.template:freemarker}")
+    private String showTemplate;
 
     @GetMapping
     public String index(Model model, HttpServletRequest request) {
@@ -24,7 +27,11 @@ public class KoTimeController {
         SystemStatistic system = RunTimeNodeService.getRunStatistic();
         model.addAttribute("system",system);
         model.addAttribute("config",Context.getConfig());
-        return "index";
+        String template = "index-freemarker";
+        if ("thymeleaf".equals(showTemplate)) {
+            template = "index-thymeleaf";
+        }
+        return template   ;
     }
 
     @GetMapping("/getTree")

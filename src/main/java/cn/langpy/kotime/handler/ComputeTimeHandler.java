@@ -30,7 +30,7 @@ public class ComputeTimeHandler {
         if ("chinese".equals(computeTime.value())) {
             log.info("调用方法="+pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName()+"，耗时="+((end-begin)/1000000)+"毫秒");
         }else{
-            log.info("method="+pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName()+"，runTime="+((end-begin)/1000000)+"毫秒");
+            log.info("method="+pjp.getTarget().getClass().getName()+"."+pjp.getSignature().getName()+"，runTime="+((end-begin)/1000000)+"ms");
         }
         return obj;
     }

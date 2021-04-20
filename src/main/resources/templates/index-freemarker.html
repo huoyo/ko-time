@@ -60,6 +60,9 @@
                     <div class="code">最小响应（ms）</div>
                 </li>
             </ul>
+            <ul>
+                <blockquote class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
+            </ul>
         </div>
 
         <div class="layui-tab-item">
@@ -127,7 +130,7 @@
                 echarts.util.each(data.children, function (datum, index) {
                     index % 2 === 0 && (datum.collapsed = true);
                 });
-                myChart.setOption(option = getOption(data));
+                myChart.setOption(option = getOption(data,threshold));
             });
         }
 

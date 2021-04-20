@@ -66,8 +66,11 @@ public class RunTimeNodeService {
     }
 
     public static SystemStatistic getRunStatistic() {
-        List<RunTimeNode> controllerApis = GraphMap.get(MethodType.Controller);
         SystemStatistic systemStatistic = new SystemStatistic();
+        List<RunTimeNode> controllerApis = GraphMap.get(MethodType.Controller);
+        if (null==controllerApis || controllerApis.size()==0 ) {
+            return systemStatistic;
+        }
         int delayNum = (int)controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() >= Context.getConfig().getTimeThreshold()).count();
         systemStatistic.setDelayNum(delayNum);
         int normalNum = (int)controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() < Context.getConfig().getTimeThreshold()).count();

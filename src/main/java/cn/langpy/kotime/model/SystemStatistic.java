@@ -6,9 +6,9 @@ public class SystemStatistic {
     private Double avgRunTime = 0.0;
     private Double maxRunTime = 0.0;
     private Double minRunTime = 0.0;
-    private Integer totalNum;
-    private Integer delayNum;
-    private Integer normalNum;
+    private Integer totalNum = 0 ;
+    private Integer delayNum = 0;
+    private Integer normalNum = 0;
 
     public String getName() {
         return name;

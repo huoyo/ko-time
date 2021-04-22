@@ -30,9 +30,13 @@ function getOption(data,threshold){
                             '{'+bg+'|  指标}',
                             '  {aa|}方法：'+params.name+" ",
                             '{hr|}',
-                            '  {aa|}耗时： '+params.data.avgRunTime+" ms ",
+                            '  {aa|}类型： '+params.data.methodType+" ",
                             '{hr|}',
-                            '  {aa|}类型： '+params.data.methodType+" "
+                            '  {aa|}平均耗时： '+params.data.avgRunTime+" ms ",
+                            '{hr|}',
+                            '  {aa|}最大耗时： '+params.data.maxRunTime+" ms ",
+                            '{hr|}',
+                            '  {aa|}最小耗时： '+params.data.minRunTime+" ms "
                         ].join('\n');
                     },
                     backgroundColor: '#ddd',

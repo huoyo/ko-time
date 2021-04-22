@@ -12,7 +12,8 @@ public class RunTimeHandler implements MethodInterceptor {
         long begin = System.nanoTime();
         Object obj=invocation.proceed();
         long end =System.nanoTime();
-        String packName = invocation.getThis().getClass().getPackage().getName();
+//        String packName = invocation.getThis().getClass().getPackage().getName();
+        String packName = invocation.getMethod().getDeclaringClass().getPackage().getName();
         RunTimeNode parent = InvokeService.getParentRunTimeNode(packName);
         RunTimeNode current = InvokeService.getCurrentRunTimeNode(invocation,((end-begin)/1000000.0));
         InvokeService.createGraph(parent,current);

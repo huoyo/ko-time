@@ -5,6 +5,7 @@ import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.GraphMap;
 import cn.langpy.kotime.util.MethodType;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,16 @@ public class RunTimeNodeService {
 
     public static void addOrUpdate(String key, RunTimeNode runTimeNode) {
         if (GraphMap.containsKey(key)) {
-            GraphMap.get(key).setAvgRunTime(runTimeNode.getAvgRunTime());
+            RunTimeNode oldNode = GraphMap.get(key);
+            if (0 == oldNode.getAvgRunTime()) {
+                GraphMap.get(key).setAvgRunTime((runTimeNode.getAvgRunTime()));
+            } else {
+                BigDecimal bg = new BigDecimal((runTimeNode.getAvgRunTime()+oldNode.getAvgRunTime())/2.0);
+                double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                GraphMap.get(key).setAvgRunTime(avg);
+            }
+            GraphMap.get(key).setMaxRunTime(runTimeNode.getMaxRunTime()>oldNode.getMaxRunTime()?runTimeNode.getMaxRunTime():oldNode.getMaxRunTime());
+            GraphMap.get(key).setMinRunTime(runTimeNode.getMinRunTime()<oldNode.getMinRunTime()?runTimeNode.getMinRunTime():oldNode.getMinRunTime());
         }else{
             GraphMap.put(key,runTimeNode);
         }
@@ -57,8 +67,18 @@ public class RunTimeNodeService {
     public static void updateChildren(RunTimeNode child, List<RunTimeNode> hisRunTimeNodeChildren) {
         int hisLength = hisRunTimeNodeChildren.size();
         for (int i = 0; i < hisLength; i++) {
-            if (hisRunTimeNodeChildren.get(i)==child) {
-                child.setAvgRunTime((child.getAvgRunTime()+hisRunTimeNodeChildren.get(i).getAvgRunTime())/2.0);
+            RunTimeNode hisRunTimeNodeChild = hisRunTimeNodeChildren.get(i);
+            if (hisRunTimeNodeChild.equals(child)) {
+                double avg = (child.getAvgRunTime()+hisRunTimeNodeChild.getAvgRunTime())/2.0;
+                BigDecimal bg = new BigDecimal(avg);
+                avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                child.setAvgRunTime(avg);
+                if (hisRunTimeNodeChild.getMaxRunTime()>child.getMaxRunTime()) {
+                    child.setMaxRunTime(hisRunTimeNodeChild.getMaxRunTime());
+                }
+                if (hisRunTimeNodeChild.getMinRunTime()<child.getMinRunTime()) {
+                    child.setMinRunTime(hisRunTimeNodeChild.getMinRunTime());
+                }
                 hisRunTimeNodeChildren.set(i,child) ;
                 break;
             }
@@ -80,6 +100,8 @@ public class RunTimeNodeService {
         Double max = controllerApis.stream().map(api->api.getAvgRunTime()).max(Double::compareTo).get();
         Double min = controllerApis.stream().map(api->api.getAvgRunTime()).min(Double::compareTo).get();
         Double avg = controllerApis.stream().map(api->api.getAvgRunTime()).collect(Collectors.averagingDouble(Double::doubleValue));
+        BigDecimal bg = new BigDecimal(avg);
+        avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         systemStatistic.setMaxRunTime(max);
         systemStatistic.setMinRunTime(min);
         systemStatistic.setAvgRunTime(avg);

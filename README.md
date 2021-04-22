@@ -16,7 +16,7 @@ http://huoyo.gitee.io/ko-time/
 
 
 缺点：
-> * 对项目中每个方法进行监控，在性能层面会有一定的影响，建议在开发阶段使用
+> * 由于对项目中每个方法进行监控，在性能层面会有一点影响，建议在开发阶段使用
 
 
 #### 使用教程
@@ -26,7 +26,7 @@ http://huoyo.gitee.io/ko-time/
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.7</version>
+    <version>1.8</version>
   </dependency>
 ```
 
@@ -45,10 +45,9 @@ koTime.log.enable=false  # 是否开启控制输出，非必填，默认false
 koTime.log.language=chinese # 控制台输出语言（english/chinese）非必填，默认chinese
 koTime.time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，非必填，默认800
 koTime.pointcut=execution(* com.huoyo.demo.controller.*(..)) || execution(* com.huoyo.demo.service.*(..)) 需要监测的切面范围（比如监测controller层和service层），参考aop的@pointcut  v1.4开始加入的功能，用来替代下面的步骤3
-koTime.ui.template=thymeleaf  前端页面模板，默认为freemarker，可选thymeleaf 与引入的pom依赖对应
+koTime.ui.template=thymeleaf  前端页面模板，非必填，默认为freemarker，可选thymeleaf 与引入的pom依赖对应
 ```
 
-`注意：暂不支持mybatis的mapper监测`
 
 
 3.  新建一个类，实现ComputeTimeHandlerInterface，并在 @Pointcut 写入 需要监测的范围
@@ -121,6 +120,8 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 > V1.6：兼容thymeleaf
 
 > V1.7：修复未调用接口时No value present异常
+
+> V1.8：支持Mybatis的Mapper监测、新增最大/最小运行时间、修复小数位数过长页面边界溢出的bug
 
 #### 特别说明
 

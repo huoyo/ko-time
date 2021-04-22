@@ -36,7 +36,7 @@ public class Common {
         }else if (targetClass.getAnnotation(Repository.class)!=null) {
             return MethodType.Dao;
         }
-        String className = pjp.getThis().getClass().getName().toLowerCase();
+        String className = pjp.getMethod().getDeclaringClass().getName().toLowerCase();
         if (className.contains("controller")) {
             return MethodType.Controller;
         }else if (className.contains("service")) {

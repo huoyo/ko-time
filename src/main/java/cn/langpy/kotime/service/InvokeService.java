@@ -6,6 +6,7 @@ import cn.langpy.kotime.util.Common;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -33,13 +34,18 @@ public class InvokeService {
     }
 
     public static RunTimeNode getCurrentRunTimeNode(MethodInvocation pjp, Double runTime) {
-        String className = pjp.getThis().getClass().getName();
+//        String className = pjp.getThis().getClass().getName();
+        String className = pjp.getMethod().getDeclaringClass().getName();
         String methodName = pjp.getMethod().getName();
         RunTimeNode current = new RunTimeNode();
         current.setName(className.substring(className.lastIndexOf(".")+1)+"."+methodName);
         current.setClassName(className);
         current.setMethodName(methodName);
+        BigDecimal bg = new BigDecimal(runTime);
+        runTime = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         current.setAvgRunTime(runTime);
+        current.setMaxRunTime(runTime);
+        current.setMinRunTime(runTime);
         current.setChildren(new ArrayList<>());
         current.setMethodType(Common.getMethodType(pjp));
         return current;

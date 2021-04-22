@@ -11,6 +11,8 @@ public class RunTimeNode implements Comparable<RunTimeNode> {
     private String className;
     private String methodName;
     private Double avgRunTime = 0.0;
+    private Double maxRunTime = 0.0;
+    private Double minRunTime = 10000.0;
     private Double value = 0.0;
     private String avgRunTimeUnit = "ms";
     private MethodType methodType;
@@ -79,6 +81,21 @@ public class RunTimeNode implements Comparable<RunTimeNode> {
         this.avgRunTime = avgRunTime;
     }
 
+    public Double getMaxRunTime() {
+        return maxRunTime;
+    }
+
+    public void setMaxRunTime(Double maxRunTime) {
+        this.maxRunTime = maxRunTime;
+    }
+
+    public Double getMinRunTime() {
+        return minRunTime;
+    }
+
+    public void setMinRunTime(Double minRunTime) {
+        this.minRunTime = minRunTime;
+    }
 
     public List<RunTimeNode> getChildren() {
         return children;
@@ -112,6 +129,8 @@ public class RunTimeNode implements Comparable<RunTimeNode> {
                 "className='" + className + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", avgRunTime=" + avgRunTime +
+                ", maxRunTime=" + maxRunTime +
+                ", minRunTime=" + minRunTime +
                 ", avgRunTimeUnit='" + avgRunTimeUnit + '\'' +
                 ", methodType=" + methodType +
                 ", children=" + children +

@@ -9,4 +9,5 @@
 
 
 [Gitee](https://gitee.com/huoyo/ko-time)
+[预览](http://huoyo.gitee.io/ko-time/example/)
 [文档教程](introduce)

@@ -7,6 +7,9 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
 
 http://huoyo.gitee.io/ko-time/
 
+## 文档
+
+http://huoyo.gitee.io/ko-time
 
 
 优点：

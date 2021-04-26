@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>koTime</title>
+    <meta name="keywords" content="链路追踪,方法调用链路,springboot,性能分析,调用可视化,耗时统计,运行时长">
+    <meta name="description" content="koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="layui/css/global.css" media="all">
+    <style>
+        .site-doc-icon li{width: 222px;}
+        .site-doc-icon li .layui-anim{width: 80px; height: 80px; line-height: 80px; margin: 0 auto 10px; text-align: center; background-color: #009688; cursor: pointer; color: #fff; border-radius: 50%;}
+    </style>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>koTime调用链路追踪</legend>
+</fieldset>
+
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">总览</li>
+        <li>接口列表</li>
+        <li>联系我</li>
+    </ul>
+    <div class="layui-tab-content" style="height: 100px;">
+        <div class="layui-tab-item layui-show">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>接口统计</legend>
+            </fieldset>
+            <ul class="site-doc-icon site-doc-anim">
+                <li>
+                    <div class="layui-anim" data-anim="layui-anim-up">15</div>
+                    <div class="code">接口数</div>
+                </li>
+                <li>
+                    <div class="layui-anim" style=" background-color: #da3f0b;" data-anim="layui-anim-upbit">1</div>
+                    <div class="code">延迟响应数</div>
+                </li>
+                <li>
+                    <div class="layui-anim" data-anim="layui-anim-scale">14</div>
+                    <div class="code">正常响应数</div>
+                </li>
+            </ul>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>响应统计</legend>
+            </fieldset>
+            <ul class="site-doc-icon site-doc-anim">
+                <li>
+                    <div class="layui-anim" style=" " data-anim="layui-anim-up">73.309</div>
+                    <div class="code">平均响应（ms）</div>
+                </li>
+                <li>
+                    <div class="layui-anim" style=" background-color: #da3f0b;" data-anim="layui-anim-upbit">3843.575</div>
+                    <div class="code">最大响应（ms）</div>
+                </li>
+                <li>
+                    <div class="layui-anim" style=" " data-anim="layui-anim-scale">0</div>
+                    <div class="code">最小响应（ms）</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-tab-item">
+            <div class="layui-collapse" lay-filter="test">
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.AuthController.getUserId">
+                        cn.langpy.demo.controller.AuthController#getUserId&nbsp
+                        <span class="layui-badge layui-bg-red
+                ">平均响应 3843.575 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.AuthController.getJsapi">
+                        cn.langpy.demo.controller.AuthController#getJsapi&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 187.908 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getDraftDetail">
+                        cn.langpy.demo.controller.DemoInfoController#getDraftDetail&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 17.465 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getRenewings">
+                        cn.langpy.demo.controller.DemoInfoController#getRenewings&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 9.046 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getRunnings">
+                        cn.langpy.demo.controller.DemoInfoController#getRunnings&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 5.79 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.statistic">
+                        cn.langpy.demo.controller.DemoInfoController#statistic&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 5.672 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getEarlyStops">
+                        cn.langpy.demo.controller.DemoInfoController#getEarlyStops&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 5.332 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getWaitConfirms">
+                        cn.langpy.demo.controller.DemoInfoController#getWaitConfirms&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 5.284 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getDemoInfos">
+                        cn.langpy.demo.controller.DemoInfoController#getDemoInfos&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 5.196 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getRunneds">
+                        cn.langpy.demo.controller.DemoInfoController#getRunneds&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 5.049 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.ApproveProcessController.getProcesses">
+                        cn.langpy.demo.controller.ApproveProcessController#getProcesses&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 4.55 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoInfoController.getDrafts">
+                        cn.langpy.demo.controller.DemoInfoController#getDrafts&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 3.551 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoTypeController.getTree">
+                        cn.langpy.demo.controller.DemoTypeController#getTree&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 1.22 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoTypeController.lambda$getTree$1">
+                        cn.langpy.demo.controller.DemoTypeController#lambda$getTree$1&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 0 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" id="cn.langpy.demo.controller.DemoTypeController.lambda$null$0">
+                        cn.langpy.demo.controller.DemoTypeController#lambda$null$0&nbsp
+                        <span class="layui-badge layui-bg-green
+                ">平均响应 0 毫秒</span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 1500px;height:600px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--联系我-->
+        <div class="layui-tab-item">
+
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                <legend>@zhangchang#1729913829@qq.com</legend>
+            </fieldset>
+            <script src='https://gitee.com/huoyo/ko-time/widget_preview' async defer></script>
+            <div id="osc-gitee-widget-tag"></div>
+            <style>
+                .osc_pro_color {color: #ffffff !important;}
+                .osc_panel_color {background-color: #1e252b !important;}
+                .osc_background_color {background-color: #323d47 !important;}
+                .osc_border_color {border-color: #455059 !important;}
+                .osc_desc_color {color: #d7deea !important;}
+                .osc_link_color * {color: #99a0ae !important;}
+            </style>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="jquery.min.js"></script>
+<script src="echarts.min.js"></script>
+<script >
+    $(document).ready(function() {
+
+        layui.use(['element', 'layer'], function () {
+            var element = layui.element;
+            var layer = layui.layer;
+
+            //监听折叠
+            element.on('collapse(test)', function (data) {
+                id = data.title['0'].id
+                show(data.content['0'],id)
+            });
+        });
+
+        function show(element,name) {
+            var myChart = echarts.init(element);
+            myChart.showLoading();
+            $.get('data.json', function (data) {
+                console.log(data)
+                myChart.hideLoading();
+                echarts.util.each(data.children, function (datum, index) {
+                    index % 2 === 0 && (datum.collapsed = true);
+                });
+                myChart.setOption(option = getOption(data));
+            });
+        }
+
+        $('.site-doc-icon').delegate("li",'click', function(data){
+        });
+        function getOption(data){
+            return  {
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
+                },
+                series: [
+                    {
+                        type: 'tree',
+                        // initialTreeDepth: 3,
+                        data: [data],
+                        top: '1%',
+                        left: '15%',
+                        bottom: '1%',
+                        right: '10%',
+                        roam: true,
+                        symbolSize: 20,
+                        itemStyle: {
+                            borderColor: 'green'
+                        },
+
+                        label: {
+                            position: 'right',
+                            formatter: function(params){
+                                var bg = "titleBgGreen"
+                                if (params.value>800) {
+                                    bg = "titleBgRed"
+                                }
+                                return [
+                                    '{'+bg+'|  指标}',
+                                    '  {aa|}方法：'+params.name+" ",
+                                    '{hr|}',
+                                    '  {aa|}耗时： '+params.data.avgRunTime+" ms ",
+                                    '{hr|}',
+                                    '  {aa|}类型： '+params.data.methodType+" "
+                                ].join('\n');
+                            },
+                            backgroundColor: '#ddd',
+                            borderColor: '#88e781',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            color: '#000',
+                            fontSize: 12,
+                            rich: {
+                                titleBgGreen: {
+                                    align: 'left',
+                                    backgroundColor: '#59977e',
+                                    height: 20,
+                                    borderRadius: [5, 5, 0, 0],
+                                    padding: [0, 0, 0, 0],
+                                    width: '100%',
+                                    color: '#eee'
+                                },
+                                titleBgRed: {
+                                    align: 'left',
+                                    backgroundColor: '#dc1d16',
+                                    height: 20,
+                                    borderRadius: [5, 5, 0, 0],
+                                    padding: [0, 0, 0, 0],
+                                    width: '100%',
+                                    color: '#eee'
+                                },
+                                hr: {
+                                    borderColor: '#777',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                aa: {
+                                    lineHeight: 20,
+                                    borderColor: '#111111',
+                                    height: 20,
+                                    borderRadius: [5, 5, 0, 0],
+                                    padding: [0, 0, 0, 0],
+                                    width: '0%'
+
+                                },
+                                t: {
+                                    align: 'center'
+                                }
+                            }
+                        },
+
+                        leaves: {
+                            label: {
+                                position: 'right',
+                                verticalAlign: 'middle',
+                                align: 'left'
+                            }
+                        },
+                        expandAndCollapse: true,
+                        animationDuration: 550,
+                        animationDurationUpdate: 750
+                    }
+                ]
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

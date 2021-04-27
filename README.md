@@ -22,69 +22,6 @@ http://huoyo.gitee.io/ko-time
 > * 由于对项目中每个方法进行监控，在性能层面会有一点影响，建议在开发阶段使用
 
 
-#### 使用教程
-
-1.  引入依赖 或者 下载发行版本
-```
- <dependency>
-    <groupId>cn.langpy</groupId>
-    <artifactId>ko-time</artifactId>
-    <version>1.8</version>
-  </dependency>
-```
-
-```
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-${freemarker或者thymeleaf任选一个}</artifactId>
-</dependency>
-```
-2.  配置信息
-
-在application.yml中配置
-```
-spring.profiles.active=koTime
-koTime.log.enable=false  # 是否开启控制输出，非必填，默认false
-koTime.log.language=chinese # 控制台输出语言（english/chinese）非必填，默认chinese
-koTime.time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，非必填，默认800
-koTime.pointcut=execution(* com.huoyo.demo.controller.*(..)) || execution(* com.huoyo.demo.service.*(..)) 需要监测的切面范围（比如监测controller层和service层），参考aop的@pointcut  v1.4开始加入的功能，用来替代下面的步骤3
-koTime.ui.template=thymeleaf  前端页面模板，非必填，默认为freemarker，可选thymeleaf 与引入的pom依赖对应
-```
-
-
-
-3.  新建一个类，实现ComputeTimeHandlerInterface，并在 @Pointcut 写入 需要监测的范围
-
-`注意：v1.3之前需要该步骤，v1.4及以上使用koTime.pointcut配置即可，无需此步骤`
-
-```java
-@Component
-@Aspect
-public class RunTimeHandler implements ComputeTimeHandlerInterface {
-    @Override
-    @Pointcut("execution(* com.huoyo..*.*(..))")
-    public void prog() {
-
-    }
-}
-
-```
-
-4.  启动项目访问 `/koTime` 路径即可
-
-比如：`http://localhost:8080/koTime`
-如果项目自定义的contextpath，访问如`http://localhost:8080/xxx服务/koTime`
-
-5.  其他使用
-
-对于单个方法的监测，可以使用@ComputeTime注解
-
-```java
-    @ComputeTime
-    public void test() {
-
-    }
-```
 
 #### 可视化展示
 
@@ -130,16 +67,5 @@ public class RunTimeHandler implements ComputeTimeHandlerInterface {
 
 1.本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！
 
-2.v1.5及以下版本默认使用了freemarker模板（其余版本可选用thymeleaf），需要自行引入
-
-```
-  <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-freemarker</artifactId>
-        <version>xxxx</version>
-  </dependency>
-```
-
-3.项目使用@Aspect注解，未引入 aop相关包的自行引入，如aspectj或者spring-boot-starter-aop
 
 

@@ -39,6 +39,12 @@
 
 ## 访问
 
+> 注意：    
+> 1.引入了上面的依赖和配置以后，确认项目中是否有aop相关的包，koTime使用了@Aspect注解，未引入的自行引入，如aspectj或者spring-boot-starter-aop        
+> 2.做完前面的步骤，koTime的集成已经完毕，无需进行其他配置   
+                                   
+
+
 * 启动项目访问 `/koTime` 路径即可
 
 

@@ -4,9 +4,18 @@ koTime使用了@Aspect注解，未引入 aop相关包的自行引入，如aspect
 
 ## 前端展示模板冲突
 
-koTime提供freemark和thymeleaf两种模板，根据自身项目的模板进行选择
+* 前后端分离的项目
+
+koTime提供freemark和thymeleaf两种模板，可根据自己的爱好自由选择，如果喜欢其他的，koTime暂不支持你的喜欢
+
+* 前后端不分离的项目
 
 如果项目中使用了除了freemarker和thymeleaf之外的模板，那么koTime暂时不支持
+
+如果发生资源文件和配置的冲突，可取消`spring.profiles.active=koTime`这一步配置
+然后将koTime中对于freemarker和thymeleaf的配置与自身的进行合并
+
+
 
 ## 是否支持前后端分离项目
 

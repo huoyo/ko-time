@@ -1,9 +1,11 @@
 package cn.langpy.kotime.util;
+
 import cn.langpy.kotime.model.KoTimeConfig;
 
 public class Context {
 
     private static KoTimeConfig config;
+
     static {
         config = new KoTimeConfig();
         config.setLogEnable(false);
@@ -15,7 +17,7 @@ public class Context {
     }
 
     public static KoTimeConfig getConfig() {
-        return config ;
+        return config;
     }
 
 }

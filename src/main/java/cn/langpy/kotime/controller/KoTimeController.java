@@ -1,8 +1,9 @@
 package cn.langpy.kotime.controller;
 
-import cn.langpy.kotime.model.RunTimeNode;
+import cn.langpy.kotime.model.KoTimeConfig;
+import cn.langpy.kotime.model.MethodInfo;
 import cn.langpy.kotime.model.SystemStatistic;
-import cn.langpy.kotime.service.RunTimeNodeService;
+import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Context;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -21,23 +22,48 @@ public class KoTimeController {
     private String showTemplate;
 
     @GetMapping
-    public String index(Model model, HttpServletRequest request) {
-        List<RunTimeNode> list = RunTimeNodeService.getControllers();
-        model.addAttribute("list",list);
-        SystemStatistic system = RunTimeNodeService.getRunStatistic();
-        model.addAttribute("system",system);
-        model.addAttribute("config",Context.getConfig());
+    public String index(Model model) {
+        GraphService graphService = GraphService.getInstance();
+        List<MethodInfo> list = graphService.getControllers();
+        Collections.sort(list);
+        model.addAttribute("list", list);
+        SystemStatistic system = graphService.getRunStatistic();
+        model.addAttribute("system", system);
+        model.addAttribute("config", Context.getConfig());
         String template = "index-freemarker";
         if ("thymeleaf".equals(showTemplate)) {
             template = "index-thymeleaf";
         }
-        return template   ;
+        return template;
+    }
+
+    @GetMapping("/getConfig")
+    @ResponseBody
+    public KoTimeConfig getConfig() {
+        return Context.getConfig();
+    }
+
+    @GetMapping("/getStatistic")
+    @ResponseBody
+    public SystemStatistic getStatistic() {
+        GraphService graphService = GraphService.getInstance();
+        SystemStatistic system = graphService.getRunStatistic();
+        return system;
+    }
+
+    @GetMapping("/getApis")
+    @ResponseBody
+    public List<MethodInfo> getApis() {
+        GraphService graphService = GraphService.getInstance();
+        List<MethodInfo> list = graphService.getControllers();
+        Collections.sort(list);
+        return list;
     }
 
     @GetMapping("/getTree")
     @ResponseBody
-    public RunTimeNode getTree(String methodName,Model model, HttpServletRequest request) {
-        return RunTimeNodeService.getGraph(methodName);
+    public MethodInfo getTree(String methodName) {
+        GraphService graphService = GraphService.getInstance();
+        return graphService.getTree(methodName);
     }
-
 }

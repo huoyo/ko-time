@@ -17,11 +17,29 @@ public class MethodInfo implements Comparable<MethodInfo> {
     private Double maxRunTime = 0.0;
     private Double minRunTime = 0.0;
     private MethodType methodType;
+    private Integer exceptionNum = 0;
     private List<MethodInfo> children = new ArrayList<>();
+    private List<ExceptionInfo> exceptions = new ArrayList<>();
 
     @Override
     public int compareTo(MethodInfo o) {
         return -this.avgRunTime.compareTo(o.getAvgRunTime());
+    }
+
+    public List<ExceptionInfo> getExceptions() {
+        return exceptions;
+    }
+
+    public void setExceptions(List<ExceptionInfo> exceptions) {
+        this.exceptions = exceptions;
+    }
+
+    public Integer getExceptionNum() {
+        return exceptionNum;
+    }
+
+    public void setExceptionNum(Integer exceptionNum) {
+        this.exceptionNum = exceptionNum;
     }
 
     public Double getValue() {

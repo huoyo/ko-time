@@ -26,7 +26,7 @@ function getOption(data,threshold){
                         if (params.value>threshold) {
                             bg = "titleBgRed"
                         }
-                        return [
+                        showList =  [
                             '{'+bg+'|  指标}',
                             '  {aa|}方法：'+params.name+" ",
                             '{hr|}',
@@ -36,8 +36,19 @@ function getOption(data,threshold){
                             '{hr|}',
                             '  {aa|}最大耗时： '+params.data.maxRunTime+" ms ",
                             '{hr|}',
-                            '  {aa|}最小耗时： '+params.data.minRunTime+" ms "
-                        ].join('\n');
+                            '  {aa|}最小耗时： '+params.data.minRunTime+" ms ",
+                            '{hr|}',
+                            '  {aa|}异常数目： '+params.data.exceptionNum+" 个 ",
+                        ]
+                        if (params.data.exceptionNum>0) {
+                            for (let i = 0; i < params.data.exceptions.length; i++) {
+                                var exception = params.data.exceptions[i]
+                                showList.push('{hr|}')
+                                showList.push('  {warn|}异常详情：'+exception.name+' ('+exception.location+'行)'+' '+exception.message+' ')
+                            }
+                        }
+
+                        return showList.join('\n');
                     },
                     backgroundColor: '#ddd',
                     borderColor: '#88e781',
@@ -73,6 +84,16 @@ function getOption(data,threshold){
                         aa: {
                             lineHeight: 20,
                             borderColor: '#111111',
+                            height: 20,
+                            borderRadius: [5, 5, 0, 0],
+                            padding: [0, 0, 0, 0],
+                            width: '0%'
+
+                        },
+                        warn: {
+                            lineHeight: 20,
+                            borderColor: '#111111',
+                            backgroundColor: '#7e8d5b',
                             height: 20,
                             borderRadius: [5, 5, 0, 0],
                             padding: [0, 0, 0, 0],

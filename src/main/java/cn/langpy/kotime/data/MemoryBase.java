@@ -1,6 +1,7 @@
-package cn.langpy.kotime.service;
+package cn.langpy.kotime.data;
 
 import cn.langpy.kotime.model.*;
+import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
@@ -69,13 +70,12 @@ public class MemoryBase implements GraphService {
         exceptionRelation.setId(sourceMethodNode.getId() + exceptionNode.getId());
         exceptionRelation.setSourceId(sourceMethodNode.getId());
         exceptionRelation.setTargetId(exceptionNode.getId());
-        exceptionRelation.setExceptionNum(1);
+        exceptionRelation.setLocation(exceptionNode.getLocation());
         ExceptionRelation old = exceptionRelations.get(exceptionRelation.getId());
         if (null == old) {
             exceptionRelations.put(exceptionRelation.getId(), exceptionRelation);
             return exceptionRelation;
         } else {
-            old.setExceptionNum(old.getExceptionNum() + 1);
             return old;
         }
     }
@@ -95,14 +95,21 @@ public class MemoryBase implements GraphService {
             String exceptionId = relation.getTargetId();
             ExceptionNode exceptionNode = exceptions.get(exceptionId);
             ExceptionInfo exceptionInfo = new ExceptionInfo();
+            exceptionInfo.setId(exceptionNode.getId());
             exceptionInfo.setName(exceptionNode.getName());
             exceptionInfo.setClassName(exceptionNode.getClassName());
-            exceptionInfo.setLocation(exceptionNode.getLocation());
             exceptionInfo.setMessage(exceptionNode.getMessage());
-            exceptionInfo.setExceptionNum(relation.getExceptionNum());
-            exceptionInfos.add(exceptionInfo);
+            exceptionInfo.setLocation(relation.getLocation());
+            if (!exceptionInfos.contains(exceptionInfo)) {
+                exceptionInfos.add(exceptionInfo);
+            }
         }
         return exceptionInfos;
+    }
+
+    @Override
+    public List<ExceptionNode> getExceptions() {
+        return exceptions.values().stream().distinct().collect(toList());
     }
 
     @Override
@@ -113,6 +120,7 @@ public class MemoryBase implements GraphService {
                 String id = methodNode.getId();
                 MethodRelation relation = methodRelations.values().stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst().get();
                 MethodInfo methodInfo = new MethodInfo();
+                methodInfo.setId(methodNode.getId());
                 methodInfo.setName(methodNode.getName());
                 methodInfo.setClassName(methodNode.getClassName());
                 methodInfo.setMethodName(methodNode.getMethodName());
@@ -121,10 +129,37 @@ public class MemoryBase implements GraphService {
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
                 methodInfo.setMinRunTime(relation.getMinRunTime());
-                methodInfos.add(methodInfo);
+                if (!methodInfos.contains(methodInfo)) {
+                    methodInfos.add(methodInfo);
+                }
             }
         }
         return methodInfos;
+    }
+
+    @Override
+    public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
+        List<ExceptionInfo> exceptionInfos = new ArrayList<>();
+        for (ExceptionRelation relation : exceptionRelations.values()) {
+            if (relation.getTargetId().equals(exceptionId)) {
+                String sourceMethodId = relation.getSourceId();
+                MethodNode methodNode = methodNodes.get(sourceMethodId);
+                ExceptionNode exceptionNode = exceptions.get(exceptionId);
+
+                ExceptionInfo exceptionInfo = new ExceptionInfo();
+                exceptionInfo.setId(exceptionNode.getId());
+                exceptionInfo.setName(exceptionNode.getName());
+                exceptionInfo.setClassName(exceptionNode.getClassName());
+                exceptionInfo.setLocation(relation.getLocation());
+                exceptionInfo.setMessage(exceptionNode.getMessage());
+                exceptionInfo.setMethodName(methodNode.getMethodName());
+                exceptionInfo.setOccurClassName(methodNode.getClassName());
+                if (!exceptionInfos.contains(exceptionInfo)) {
+                    exceptionInfos.add(exceptionInfo);
+                }
+            }
+        }
+        return exceptionInfos;
     }
 
     @Override
@@ -144,7 +179,13 @@ public class MemoryBase implements GraphService {
                 methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
                 methodInfo.setMaxRunTime(methodRelation.getMaxRunTime());
                 methodInfo.setMinRunTime(methodRelation.getMinRunTime());
-                methodInfos.add(methodInfo);
+
+                List<ExceptionInfo> exceptionInfos = getExceptions(methodNode.getId());
+                methodInfo.setExceptionNum(exceptionInfos.size());
+                methodInfo.setExceptions(exceptionInfos);
+                if (!methodInfos.contains(methodInfo)) {
+                    methodInfos.add(methodInfo);
+                }
             }
         }
         return methodInfos;
@@ -165,7 +206,7 @@ public class MemoryBase implements GraphService {
         Double max = controllerApis.stream().map(api -> api.getAvgRunTime()).max(Double::compareTo).get();
         Double min = controllerApis.stream().map(api -> api.getAvgRunTime()).min(Double::compareTo).get();
         Double avg = controllerApis.stream().map(api -> api.getAvgRunTime()).collect(Collectors.averagingDouble(Double::doubleValue));
-        BigDecimal bg = new BigDecimal(avg);
+        BigDecimal bg = BigDecimal.valueOf(avg);
         avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         systemStatistic.setMaxRunTime(max);
         systemStatistic.setMinRunTime(min);
@@ -187,6 +228,9 @@ public class MemoryBase implements GraphService {
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());
         rootInfo.setMinRunTime(methodRelation.getMinRunTime());
+        List<ExceptionInfo> exceptionInfos = getExceptions(methodId);
+        rootInfo.setExceptionNum(exceptionInfos.size());
+        rootInfo.setExceptions(exceptionInfos);
         recursionMethod(rootInfo);
         return rootInfo;
     }

@@ -1,6 +1,6 @@
 package cn.langpy.kotime.util;
 
-import cn.langpy.kotime.model.RunTimeNode;
+import cn.langpy.kotime.model.MethodRelation;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Controller;
@@ -13,13 +13,13 @@ import java.util.logging.Logger;
 public class Common {
     public static Logger log = Logger.getLogger(Common.class.toString());
 
-    public static StackTraceElement filter(StackTraceElement[] stacks,String packName) {
+    public static StackTraceElement filter(StackTraceElement[] stacks, String packName) {
         String[] packNameSplit = packName.split("\\.");
-        String filter = packNameSplit.length>1 ? packNameSplit[0]+"."+packNameSplit[1] : packNameSplit[0];
+        String filter = packNameSplit.length > 1 ? packNameSplit[0] + "." + packNameSplit[1] : packNameSplit[0];
         int stacksLength = stacks.length;
         for (int i = 0; i < stacksLength; i++) {
             StackTraceElement stack = stacks[i];
-            if (stack.getClassName().startsWith(filter)&& !stack.getClassName().contains("$")) {
+            if (stack.getClassName().startsWith(filter) && !stack.getClassName().contains("$")) {
                 return stack;
             }
         }
@@ -29,41 +29,42 @@ public class Common {
 
     public static MethodType getMethodType(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
-        if (targetClass.getAnnotation(Controller.class)!=null || targetClass.getAnnotation(RestController.class)!=null) {
+        if (targetClass.getAnnotation(Controller.class) != null || targetClass.getAnnotation(RestController.class) != null) {
             return MethodType.Controller;
-        }else if (targetClass.getAnnotation(Service.class)!=null) {
+        } else if (targetClass.getAnnotation(Service.class) != null) {
             return MethodType.Service;
-        }else if (targetClass.getAnnotation(Repository.class)!=null) {
+        } else if (targetClass.getAnnotation(Repository.class) != null) {
             return MethodType.Dao;
         }
         String className = pjp.getMethod().getDeclaringClass().getName().toLowerCase();
         if (className.contains("controller")) {
             return MethodType.Controller;
-        }else if (className.contains("service")) {
+        } else if (className.contains("service")) {
             return MethodType.Service;
-        }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
+        } else if (className.contains("dao") || className.contains("mapper") || className.contains("com.sun.proxy.$Proxy")) {
             return MethodType.Dao;
-        }else{
+        } else {
             return MethodType.Others;
         }
     }
+
     public static MethodType getMethodType(ProceedingJoinPoint pjp) {
         Class<?> targetClass = pjp.getTarget().getClass();
-        if (targetClass.getAnnotation(Controller.class)!=null || targetClass.getAnnotation(RestController.class)!=null) {
+        if (targetClass.getAnnotation(Controller.class) != null || targetClass.getAnnotation(RestController.class) != null) {
             return MethodType.Controller;
-        }else if (targetClass.getAnnotation(Service.class)!=null) {
+        } else if (targetClass.getAnnotation(Service.class) != null) {
             return MethodType.Service;
-        }else if (targetClass.getAnnotation(Repository.class)!=null) {
+        } else if (targetClass.getAnnotation(Repository.class) != null) {
             return MethodType.Dao;
         }
         String className = pjp.getTarget().getClass().getName().toLowerCase();
         if (className.contains("controller")) {
             return MethodType.Controller;
-        }else if (className.contains("service")) {
+        } else if (className.contains("service")) {
             return MethodType.Service;
-        }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
+        } else if (className.contains("dao") || className.contains("mapper") || className.contains("com.sun.proxy.$Proxy")) {
             return MethodType.Dao;
-        }else{
+        } else {
             return MethodType.Others;
         }
     }
@@ -72,23 +73,23 @@ public class Common {
         className = className.toLowerCase();
         if (className.contains("controller")) {
             return MethodType.Controller;
-        }else if (className.contains("service")) {
+        } else if (className.contains("service")) {
             return MethodType.Service;
-        }else if (className.contains("dao") || className.contains("mapper")|| className.contains( "com.sun.proxy.$Proxy")) {
+        } else if (className.contains("dao") || className.contains("mapper") || className.contains("com.sun.proxy.$Proxy")) {
             return MethodType.Dao;
-        }else{
+        } else {
             return MethodType.Others;
         }
     }
 
-    public static void showLog(RunTimeNode current) {
-        String currentKey = current.getClassName()+"."+current.getMethodName();
+    public static void showLog(String method, MethodRelation current) {
         if (Context.getConfig().getLogEnable() && "chinese".equals(Context.getConfig().getLogLanguage())) {
-            log.info("调用方法="+currentKey+"，耗时="+current.getAvgRunTime()+"毫秒");
-        }else if (Context.getConfig().getLogEnable() && "english".equals(Context.getConfig().getLogLanguage())) {
-            log.info("method="+currentKey+"，runTime="+current.getAvgRunTime()+"ms");
+            log.info("调用方法=" + method + "，耗时=" + current.getAvgRunTime() + "毫秒");
+        } else if (Context.getConfig().getLogEnable() && "english".equals(Context.getConfig().getLogLanguage())) {
+            log.info("method=" + method + "，runTime=" + current.getAvgRunTime() + "ms");
         }
     }
+
 
 }
 

@@ -1,5 +1,7 @@
 package cn.langpy.kotime.service;
 
+import cn.langpy.kotime.data.MemoryBase;
+import cn.langpy.kotime.data.MysqlBase;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.util.Context;
 
@@ -29,7 +31,11 @@ public interface GraphService {
 
     List<MethodInfo> getChildren(String methodId);
 
+    List<ExceptionInfo> getExceptionInfos(String exceptionId);
+
     List<ExceptionInfo> getExceptions(String methodId);
+
+    List<ExceptionNode> getExceptions();
 
     MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode);
 

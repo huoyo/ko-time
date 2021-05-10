@@ -1,6 +1,4 @@
 spring:
-  mvc:
-    static-path-pattern: /static/**
   freemarker:
     allow-request-override: false
     cache: false

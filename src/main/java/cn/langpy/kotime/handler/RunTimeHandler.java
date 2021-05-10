@@ -12,6 +12,10 @@ public class RunTimeHandler implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
+        boolean kotimeEnable = Context.getConfig().getKotimeEnable();
+        if (!kotimeEnable) {
+            return invocation.proceed();
+        }
         boolean exceptionEnable = Context.getConfig().getExceptionEnable();
         long begin = System.nanoTime();
         Object obj = null;

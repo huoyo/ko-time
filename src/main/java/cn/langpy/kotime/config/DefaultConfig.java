@@ -13,6 +13,8 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 public class DefaultConfig {
+    @Value("${koTime.enable:true}")
+    private Boolean kotimeEnable;
     @Value("${koTime.log.language:chinese}")
     private String logLanguage;
     @Value("${koTime.log.enable:false}")
@@ -21,6 +23,15 @@ public class DefaultConfig {
     private Double timeThreshold;
     @Value("${koTime.pointcut:execution(* cn.langpy.kotime.controller.KoTimeController.*(..))}")
     private String pointcut;
+    @Value("${koTime.exception.enable:false}")
+    private Boolean exceptionEnable;
+    @Value("${koTime.save.saver:memory}")
+    private String saveSaver;
+    @Value("${koTime.save.async:false}")
+    private Boolean saveAsync;
+    @Value("${koTime.save.thread-num:4}")
+    private Integer threadNum;
+
 
     @PostConstruct
     public void function() {
@@ -28,6 +39,9 @@ public class DefaultConfig {
         config.setLogEnable(logEnable);
         config.setLogLanguage(logLanguage);
         config.setTimeThreshold(timeThreshold);
+        config.setExceptionEnable(exceptionEnable);
+        config.setDataSaver(saveSaver);
+        config.setKotimeEnable(kotimeEnable);
         Context.setConfig(config);
     }
 
@@ -62,4 +76,6 @@ public class DefaultConfig {
     public void setLogEnable(Boolean logEnable) {
         this.logEnable = logEnable;
     }
+
+
 }

@@ -6,7 +6,15 @@ public class ExceptionRelation {
     private String id;
     private String sourceId;
     private String targetId;
-    private Integer exceptionNum = 0;
+    private Integer location = 0;
+
+    public Integer getLocation() {
+        return location;
+    }
+
+    public void setLocation(Integer location) {
+        this.location = location;
+    }
 
     public String getId() {
         return id;
@@ -30,14 +38,6 @@ public class ExceptionRelation {
 
     public void setTargetId(String targetId) {
         this.targetId = targetId;
-    }
-
-    public Integer getExceptionNum() {
-        return exceptionNum;
-    }
-
-    public void setExceptionNum(Integer exceptionNum) {
-        this.exceptionNum = exceptionNum;
     }
 
     @Override

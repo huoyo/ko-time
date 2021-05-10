@@ -22,6 +22,8 @@
     <ul class="layui-tab-title">
         <li class="layui-this">总览</li>
         <li>接口列表</li>
+        <li  th:if="${config.exceptionEnable==true}">异常列表</li>
+        <li>配置</li>
         <li>联系我</li>
     </ul>
     <div class="layui-tab-content" style="height: 100px;">
@@ -67,27 +69,53 @@
                 </li>
             </ul>
             <ul>
-                <blockquote class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
+                <blockquote th:if="${config.kotimeEnable==true}" class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
+                <blockquote th:if="${config.kotimeEnable==false}" class="layui-elem-quote">方法调用监测已关闭，数据将不会更新，需要开启请到配置面板</blockquote>
             </ul>
         </div>
 
         <div class="layui-tab-item">
-
-            <div class="layui-collapse" lay-filter="test" th:each="runtime : ${list}">
+            <div class="layui-collapse" lay-filter="test" th:each="runtime : ${methodList}">
                 <div class="layui-colla-item" >
                     <h2 class="layui-colla-title" th:id="${runtime.className}+'.'+${runtime.methodName}">
                         <span th:text="${runtime.className}+'#'+${runtime.methodName}+'&nbsp'"></span>
                         <span th:if="${runtime.avgRunTime ge config.timeThreshold}" class="'layui-badge layui-bg-red" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
                         <span th:if="${runtime.avgRunTime lt config.timeThreshold}" class="'layui-badge layui-bg-green" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
                     </h2>
-                    <div  class="layui-colla-content viewer" style="width: 98%;height:600px;"> </div>
                 </div>
+             </div>
+        </div>
+
+        <div th:if="${config.exceptionEnable==true}" class="layui-tab-item">
+            <div class="layui-collapse" lay-filter="exception" th:each="runtime : ${exceptionList}">
+                <div class="layui-colla-item" >
+                    <h2 class="layui-colla-title" th:id="${runtime.id}">
+                        <span th:text="${runtime.className}+'&nbsp'"></span>
+                        <span  class="'layui-badge layui-bg-red" th:text="${runtime.message?:'-'}"></span>
+                    </h2>
+                    <div  class="layui-colla-content viewer" style="width: 98%;height:98%;"> </div>
+                </div>
+            </div>
+        </div>
+
+        <!--配置-->
+        <div class="layui-tab-item">
+            <label >开启koTime：</label> <input id='kotimeEnable' type="checkbox" checked>
+            <br>
+            <label >开启异常监测：</label> <input id='exceptionEnable' type="checkbox">
+            <br>
+            <label >开启控制台日志：</label> <input id='logEnable' type="checkbox">
+            <br>
+            <label >方法运行时间阈值：</label> <input id='timeThreshold' type="input"><button id="timeThresholdYes">确认</button>
+            <br>
+            <br>
+            <blockquote  class="layui-elem-quote">变更配置以后请重新刷新页面</blockquote>
+
         </div>
 
 
-    </div>
 
-    <!--联系我-->
+        <!--联系我-->
     <div class="layui-tab-item">
 
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
@@ -111,37 +139,129 @@
 
 <script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
 <script th:src="@{/static/jquery.min.js}"></script>
-<script th:src="@{/static/echarts.min.js}"></script>
-<script th:src="@{/static/config.js}"></script>
+<script th:src="@{/static/graph.js}"></script>
 <script th:inline="javascript" type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         var threshold = [[${config.timeThreshold}]];
         var contextPath = [[${#servletContext.contextPath}]]
+
+        var kotimeEnable = [[${config.kotimeEnable}]]
+        var logEnable = [[${config.logEnable}]]
+        var exceptionEnable = [[${config.exceptionEnable}]]
+
+        let kotimeEnableDom = document.getElementById('kotimeEnable')
+        kotimeEnableDom.checked = kotimeEnable
+
+        let exceptionEnableDom = document.getElementById('exceptionEnable')
+        exceptionEnableDom.checked = exceptionEnable
+
+        let timeThresholdDom = document.getElementById('timeThreshold')
+        timeThresholdDom.value = threshold
+
+        let logEnableDom = document.getElementById('logEnable')
+        logEnableDom.checked = logEnable
+
+        kotimeEnableDom.onclick = function(){
+            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({kotimeEnable:kotimeEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+        }
+
+        exceptionEnableDom.onclick = function(){
+            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({exceptionEnable:exceptionEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+
+        };
+
+        logEnableDom.onclick = function(){
+            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({logEnable:logEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+        };
+
+
+        document.getElementById("timeThresholdYes").onclick = function(){
+            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({timeThreshold:timeThresholdDom.value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+        };
+
+        var graph
+        var rootX = 100
+        var rootY = $(window).get(0).innerHeight / 2-50
+        var d = 180
         layui.use(['element', 'layer'], function () {
             var element = layui.element;
             var layer = layui.layer;
-
             element.on('collapse(test)', function (data) {
                 id = data.title['0'].id
-                show(data.content['0'],id)
+                showMethods(data.content['0'], id)
+            });
+            element.on('collapse(exception)', function (data) {
+                id = data.title['0'].id
+                showExceptions(data.content['0'], id)
             });
         });
-
-        function show(element,name) {
-            var myChart = echarts.init(element);
-            myChart.showLoading();
-            $.get(contextPath+'/koTime/getTree?methodName=' + name, function (data) {
-                console.log(data)
-                myChart.hideLoading();
-                echarts.util.each(data.children, function (datum, index) {
-                    index % 2 === 0 && (datum.collapsed = true);
-                });
-                myChart.setOption(option = getOption(data,threshold));
+        function showExceptions(element,id) {
+            $.get(contextPath+'/koTime/getMethodsByExceptionId?exceptionId=' + id, function (data) {
+                html = ''
+                for (let i = 0; i < data.length; i++) {
+                    html +="<ul class=\"layui-timeline\">\n" +
+                        "                                <li class=\"layui-timeline-item\">\n" +
+                        "                                    <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
+                        "                                    <div class=\"layui-timeline-content layui-text\">\n" +
+                        "                                        <h3 class=\"layui-timeline-title\">"+data[i].occurClassName+"</h3>\n" +
+                        "                                        <ul>\n" +
+                        "                                            <li>异常消息："+data[i].message+"</li>\n" +
+                        "                                            <li>异常发生位置："+data[i].location+" 行</li>\n" +
+                        "                                            <li>异常所在方法："+data[i].methodName+"</li>\n" +
+                        "                                        </ul>\n" +
+                        "                                    </div>\n" +
+                        "                                </li>\n" +
+                        "                            </ul>"
+                }
+                element.innerHTML = html
             });
         }
 
-        $('.site-doc-icon').delegate("li",'click', function(data){
-        });
+        function showMethods(element, name) {
+            layer.open({
+                type: 1
+                , area: ['98%', '98%']
+                , offset: 'auto' //
+                , id: 'layerDemo'
+                , content: ''
+                , btn: '关闭'
+                , btnAlign: 'c'
+                , shade: 0
+                , yes: function () {
+                    layer.closeAll();
+                    document.getElementById('layerDemo').remove()
+                }
+            });
+            graph = new MethodGraph("layerDemo")
+            graph.threshold = threshold
+            $.get(contextPath+'/koTime/getTree?methodName=' + name, function (data) {
+                let root = graph.createMethodNode(data, rootX, rootY)
+                if (data['children'].length > 0) {
+                    createNode(root, data, rootX, rootY)
+                }
+            });
+
+        }
+
+        function createNode(root, data, x, y) {
+            let children = data['children']
+            for (let i = 0; i < children.length; i++) {
+                let childData = children[i]
+                let child
+                if (children.length == 1) {
+                    x1 = x + 1.5 * d
+                    y1 = y
+                } else {
+                    x1 = x + 1.5 * d
+                    y1 = y - 2 * d + 3 * d * (i + 1) / children.length
+                }
+                child = graph.createMethodNode(childData, x1, y1);
+                let link = graph.createMethodLink(root, child);
+                if (childData['children'].length > 0) {
+                    createNode(child, childData, x1 , y1 )
+                }
+            }
+        }
     })
 </script>
 

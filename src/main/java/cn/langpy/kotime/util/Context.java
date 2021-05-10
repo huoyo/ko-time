@@ -9,6 +9,7 @@ public class Context {
     static {
         config = new KoTimeConfig();
         config.setLogEnable(false);
+        config.setKotimeEnable(true);
         config.setLogLanguage("chinese");
     }
 

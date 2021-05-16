@@ -79,8 +79,8 @@
                 <div class="layui-colla-item" >
                     <h2 class="layui-colla-title" th:id="${runtime.className}+'.'+${runtime.methodName}">
                         <span th:text="${runtime.className}+'#'+${runtime.methodName}+'&nbsp'"></span>
-                        <span th:if="${runtime.avgRunTime ge config.timeThreshold}" class="'layui-badge layui-bg-red" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
-                        <span th:if="${runtime.avgRunTime lt config.timeThreshold}" class="'layui-badge layui-bg-green" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
+                        <span style="font-size: 12px;" th:if="${runtime.avgRunTime ge config.timeThreshold}" class="'layui-badge layui-bg-red" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
+                        <span style="font-size: 12px;" th:if="${runtime.avgRunTime lt config.timeThreshold}" class="'layui-badge layui-bg-green" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
                     </h2>
                 </div>
              </div>

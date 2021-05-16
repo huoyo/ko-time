@@ -7,10 +7,7 @@ import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -70,7 +67,7 @@ public class MemoryBase implements GraphService {
         exceptionRelation.setId(sourceMethodNode.getId() + exceptionNode.getId());
         exceptionRelation.setSourceId(sourceMethodNode.getId());
         exceptionRelation.setTargetId(exceptionNode.getId());
-        exceptionRelation.setLocation(exceptionNode.getLocation());
+        exceptionRelation.setLocation(exceptionNode.getValue());
         ExceptionRelation old = exceptionRelations.get(exceptionRelation.getId());
         if (null == old) {
             exceptionRelations.put(exceptionRelation.getId(), exceptionRelation);
@@ -118,7 +115,13 @@ public class MemoryBase implements GraphService {
         for (MethodNode methodNode : methodNodes.values()) {
             if (MethodType.Controller == methodNode.getMethodType()) {
                 String id = methodNode.getId();
-                MethodRelation relation = methodRelations.values().stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst().get();
+                Optional<MethodRelation> relations = methodRelations.values().stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
+                MethodRelation relation = null;
+                if (relations.isPresent()) {
+                    relation = relations.get();
+                }else{
+                    continue;
+                }
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
                 methodInfo.setName(methodNode.getName());

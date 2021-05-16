@@ -22,13 +22,13 @@ function MethodGraph(canvas) {
             }
             let $info = "\n" +
                 "<ul id=\"" + name + "\"  class='node' style=\"z-index:1;position: absolute;background-color: #636c6c;list-style: none;box-shadow: 5px 1px 5px #888888;cursor:default\">\n" +
-                "    <li class='nodeli' style=\"position:relative;background-color: "+bkColor+";padding-left:10px;padding-right:10px\"><a style=\"color: white;font-size: 12px\">指标</a></li>\n" +
+                "    <li class='nodeli' style=\"position:relative;background-color: "+bkColor+";padding-left:10px;padding-right:10px\"><a style=\"color: white;font-size: 12px;border-radius:10px 10px 0px 0px;\">指标</a></li>\n" +
                 "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: #636c6c\"><a style=\"color: white;font-size: 9px\">方法：" + data.name + "</a></li>\n" +
                 "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: #636c6c\"><a style=\"color: white;font-size: 9px\">类型：" + data.methodType + "</a></li>\n" +
                 "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: #636c6c\"><a style=\"color: white;font-size: 9px\">平均耗时：" + data.avgRunTime + " ms</a></li>\n" +
                 "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: #636c6c\"><a style=\"color: white;font-size: 9px\">最大耗时：" + data.maxRunTime + " ms</a></li>\n" +
                 "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: #636c6c\"><a style=\"color: white;font-size: 9px\">最小耗时：" + data.minRunTime + " ms</a></li>\n" +
-                "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: "+exceptionColor+"\"><a style=\"color: white;font-size: 9px\">异常数目：" + data.exceptionNum + " 个</a></li>\n" +
+                "    <li class='nodeli' style=\"position:relative;padding-left:10px;padding-right:10px;border-bottom: 1px solid lightslategrey;background-color: "+exceptionColor+"\"><a style=\"color: white;font-size: 9px;border-radius:0px 0px 10px 10px;\">异常数目：" + data.exceptionNum + " 个</a></li>\n" +
                 "</ul>";
             $('#layerDemo').append($info)
             $("#" + name).css({
@@ -147,14 +147,14 @@ function MethodGraph(canvas) {
                 let pmoveNode = document.getElementById(nodeKey)
                 let nl = nx - o.moveNodeX ;
                 let nt = ny - o.moveNodeY ;
-                if (nl>6) {
+                if (nl>10) {
                     pmoveNode.style.left = Number(pmoveNode.style.left.replace('px',''))+10 + 'px';
-                }else if(nl<-6){
+                }else if(nl<-10){
                     pmoveNode.style.left = Number(pmoveNode.style.left.replace('px',''))-10 + 'px';
                 }
-                if (nt>4) {
+                if (nt>6) {
                     pmoveNode.style.top = Number(pmoveNode.style.top.replace('px',''))+10 + 'px';
-                }else if (nt<-4){
+                }else if (nt<-6){
                     pmoveNode.style.top = Number(pmoveNode.style.top.replace('px',''))-10 + 'px';
                 }
                 let childrenId = o.allNodeEnds.get(nodeKey)

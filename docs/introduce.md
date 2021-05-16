@@ -37,7 +37,9 @@ http://huoyo.gitee.io/ko-time/example
 
 > V1.8：支持Mybatis的Mapper监测、新增最大/最小运行时间、修复小数位数过长页面边界溢出的bug
 
-> V1.9：添加异常监测，开放数据接口，修复与swagger冲突bug，添加配置动态更新功能以及重构数据存储机制
+> V1.9：过度版本
+
+> V2.0.0：添加异常监测，开放数据接口，修复与swagger冲突bug，添加配置动态更新功能以及重构数据存储机制
 
 ## 作者
 > Huoyo/Zhang Chang

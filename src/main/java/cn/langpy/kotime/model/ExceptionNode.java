@@ -7,7 +7,7 @@ public class ExceptionNode {
     private String name;
     private String className;
     private String message;
-    private Integer location;
+    private Integer value;
 
     public String getId() {
         return id;
@@ -41,12 +41,12 @@ public class ExceptionNode {
         this.message = message;
     }
 
-    public Integer getLocation() {
-        return location;
+    public Integer getValue() {
+        return value;
     }
 
-    public void setLocation(Integer location) {
-        this.location = location;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
     @Override

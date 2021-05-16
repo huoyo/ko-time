@@ -1,3 +1,5 @@
 * [简介](introduce)
 * [快速上手](getstart)
+* [UI页面说明](uiguide)
+* [API数据接口](apiintro)
 * [常见问题](questions)

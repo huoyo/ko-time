@@ -7,7 +7,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>1.9</version>
+    <version>2.0.0</version>
   </dependency>
   
   <dependency>
@@ -30,12 +30,12 @@
 * 可选配置
 
 > 
-> koTime.enable=false  # 是否开启koTime，默认开启，当为false时，关闭koTime
+> koTime.enable=true  # 是否开启koTime，默认开启，当为false时，关闭koTime   
 > koTime.log.enable=false  # 是否开启控制输出，默认false  
 > koTime.log.language=chinese # 控制台输出语言（english/chinese）默认chinese  
 > koTime.time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
-> koTime.ui.template=thymeleaf # 前端页面模板，默认为freemarker，可选thymeleaf 与引入的pom依赖对应  
-> koTime.exception.enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v1.9开始支持  
+> koTime.ui.template=freemarker # 前端页面模板，默认为freemarker，可选thymeleaf 与引入的pom依赖对应  
+> koTime.exception.enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  
 
 
 ## 访问

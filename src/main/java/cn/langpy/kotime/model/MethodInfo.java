@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class MethodInfo implements Comparable<MethodInfo> {
+public class   MethodInfo implements Comparable<MethodInfo> {
     private String id;
     private String name;
     private String className;

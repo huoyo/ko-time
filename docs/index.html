@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta charset="UTF-8">
   <link rel="stylesheet" href="//unpkg.com/docsify/themes/vue.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-126K368TJ1"></script>
 </head>
 <body>
   <nav>
@@ -21,6 +22,11 @@
 		subMaxLevel: 3
 
     }
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-126K368TJ1');
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
 </body>

@@ -1,27 +1,34 @@
 package cn.langpy.kotime.service;
 
-
 import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.util.Common;
+import cn.langpy.kotime.util.MethodStack;
+import cn.langpy.kotime.util.MethodType;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.math.BigDecimal;
+import java.util.Stack;
 import java.util.logging.Logger;
 
 
 public class InvokeService {
     public static Logger log = Logger.getLogger(InvokeService.class.toString());
 
-
-    public static MethodNode getParentMethodNode(String packName) {
-        String parentClassName = "";
-        String parentMothodName = "";
-        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
-        StackTraceElement stack = Common.filter(stacks, packName);
-        if (stack != null) {
-            parentClassName = stack.getClassName();
-            parentMothodName = stack.getMethodName();
+    public static MethodNode getParentMethodNode() {
+        Stack<String> stack = MethodStack.get();
+        if (null==stack) {
+            MethodNode parent = new MethodNode();
+            parent.setId("com.langpy.kotime.Cotroller.dispatch");
+            parent.setClassName("Cotroller");
+            parent.setMethodName("dispatch");
+            parent.setName("Cotroller.dispatch");
+            parent.setMethodType(MethodType.Others);
+            return parent;
         }
+        String classMethod = stack.peek();
+        String[] classMethodSplit = classMethod.split("#");
+        String parentClassName = classMethodSplit[0];
+        String parentMothodName = classMethodSplit[1];
         MethodNode parent = new MethodNode();
         parent.setId(parentClassName + "." + parentMothodName);
         parent.setClassName(parentClassName);

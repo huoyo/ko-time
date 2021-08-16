@@ -1,23 +1,23 @@
 package cn.langpy.kotime.util;
 
-import cn.langpy.kotime.model.KoTimeConfig;
+import cn.langpy.kotime.config.DefaultConfig;
 
 public class Context {
 
-    private static KoTimeConfig config;
+    private static DefaultConfig config;
 
     static {
-        config = new KoTimeConfig();
+        config = new DefaultConfig();
         config.setLogEnable(false);
-        config.setKotimeEnable(true);
+        config.setEnable(true);
         config.setLogLanguage("chinese");
     }
 
-    public static void setConfig(KoTimeConfig koTimeConfig) {
+    public static void setConfig(DefaultConfig koTimeConfig) {
         config = koTimeConfig;
     }
 
-    public static KoTimeConfig getConfig() {
+    public static DefaultConfig getConfig() {
         return config;
     }
 

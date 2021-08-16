@@ -1,64 +1,30 @@
 package cn.langpy.kotime.config;
 
 
-import cn.langpy.kotime.handler.RunTimeHandler;
-import cn.langpy.kotime.model.KoTimeConfig;
-import cn.langpy.kotime.util.Context;
-import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
+@ConfigurationProperties(prefix = "ko-time")
 public class DefaultConfig {
-    @Value("${koTime.enable:true}")
-    private Boolean kotimeEnable;
-    @Value("${koTime.log.language:chinese}")
+    private Boolean enable;
     private String logLanguage;
-    @Value("${koTime.log.enable:false}")
     private Boolean logEnable;
-    @Value("${koTime.time.threshold:800.0}")
-    private Double timeThreshold;
-    @Value("${koTime.pointcut:execution(* cn.langpy.kotime.controller.KoTimeController.*(..))}")
+    private Double threshold;
     private String pointcut;
-    @Value("${koTime.exception.enable:false}")
     private Boolean exceptionEnable;
-    @Value("${koTime.save.saver:memory}")
     private String saveSaver;
-    @Value("${koTime.save.async:false}")
     private Boolean saveAsync;
-    @Value("${koTime.save.thread-num:4}")
     private Integer threadNum;
+    private String uiTemplate;
 
-
-    @PostConstruct
-    public void function() {
-        KoTimeConfig config = new KoTimeConfig();
-        config.setLogEnable(logEnable);
-        config.setLogLanguage(logLanguage);
-        config.setTimeThreshold(timeThreshold);
-        config.setExceptionEnable(exceptionEnable);
-        config.setDataSaver(saveSaver);
-        config.setKotimeEnable(kotimeEnable);
-        Context.setConfig(config);
+    public Boolean getEnable() {
+        return enable;
     }
 
-    @Bean
-    public AspectJExpressionPointcutAdvisor configurabledvisor() {
-        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
-        advisor.setExpression(pointcut);
-        advisor.setAdvice(new RunTimeHandler());
-        return advisor;
-    }
-
-    public Double getTimeThreshold() {
-        return timeThreshold;
-    }
-
-    public void setTimeThreshold(Double timeThreshold) {
-        this.timeThreshold = timeThreshold;
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 
     public String getLogLanguage() {
@@ -77,5 +43,59 @@ public class DefaultConfig {
         this.logEnable = logEnable;
     }
 
+    public Double getThreshold() {
+        return threshold;
+    }
 
+    public void setThreshold(Double threshold) {
+        this.threshold = threshold;
+    }
+
+    public String getPointcut() {
+        return pointcut;
+    }
+
+    public void setPointcut(String pointcut) {
+        this.pointcut = pointcut;
+    }
+
+    public Boolean getExceptionEnable() {
+        return exceptionEnable;
+    }
+
+    public void setExceptionEnable(Boolean exceptionEnable) {
+        this.exceptionEnable = exceptionEnable;
+    }
+
+    public String getSaveSaver() {
+        return saveSaver;
+    }
+
+    public void setSaveSaver(String saveSaver) {
+        this.saveSaver = saveSaver;
+    }
+
+    public Boolean getSaveAsync() {
+        return saveAsync;
+    }
+
+    public void setSaveAsync(Boolean saveAsync) {
+        this.saveAsync = saveAsync;
+    }
+
+    public Integer getThreadNum() {
+        return threadNum;
+    }
+
+    public void setThreadNum(Integer threadNum) {
+        this.threadNum = threadNum;
+    }
+
+    public String getUiTemplate() {
+        return uiTemplate;
+    }
+
+    public void setUiTemplate(String uiTemplate) {
+        this.uiTemplate = uiTemplate;
+    }
 }

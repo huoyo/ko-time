@@ -1,9 +1,9 @@
 package cn.langpy.kotime.controller;
 
+import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Context;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +14,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/koTime")
 public class KoTimeController {
-    @Value("${koTime.ui.template:freemarker}")
-    private String showTemplate;
+
 
     @GetMapping
     public String index(Model model) {
@@ -29,7 +28,7 @@ public class KoTimeController {
         model.addAttribute("system", system);
         model.addAttribute("config", Context.getConfig());
         String template = "index-freemarker";
-        if ("thymeleaf".equals(showTemplate)) {
+        if ("thymeleaf".equals(Context.getConfig().getUiTemplate())) {
             template = "index-thymeleaf";
         }
         return template;
@@ -37,7 +36,7 @@ public class KoTimeController {
 
     @GetMapping("/getConfig")
     @ResponseBody
-    public KoTimeConfig getConfig() {
+    public DefaultConfig getConfig() {
         return Context.getConfig();
     }
 
@@ -84,9 +83,9 @@ public class KoTimeController {
     @PostMapping("/updateConfig")
     @ResponseBody
     public boolean updateConfig(@RequestBody KoTimeConfig config) {
-        KoTimeConfig koTimeConfig = Context.getConfig();
+        DefaultConfig koTimeConfig = Context.getConfig();
         if (config.getKotimeEnable()!=null) {
-            koTimeConfig.setKotimeEnable(config.getKotimeEnable());
+            koTimeConfig.setEnable(config.getKotimeEnable());
         }
         if (config.getExceptionEnable()!=null) {
             koTimeConfig.setExceptionEnable(config.getExceptionEnable());
@@ -95,7 +94,7 @@ public class KoTimeController {
             koTimeConfig.setLogEnable(config.getLogEnable());
         }
         if (config.getTimeThreshold()!=null) {
-            koTimeConfig.setTimeThreshold(config.getTimeThreshold());
+            koTimeConfig.setThreshold(config.getTimeThreshold());
         }
         return true;
     }

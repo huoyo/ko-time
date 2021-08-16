@@ -31,6 +31,9 @@ public class MemoryBase implements GraphService {
 
     @Override
     public void addMethodNode(MethodNode methodNode) {
+        if (null==methodNode) {
+            return;
+        }
         if (!methodNodes.containsKey(methodNode.getId())) {
             methodNodes.put(methodNode.getId(), methodNode);
         }
@@ -200,9 +203,9 @@ public class MemoryBase implements GraphService {
         if (null == controllerApis || controllerApis.size() == 0) {
             return systemStatistic;
         }
-        int delayNum = (int) controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() >= Context.getConfig().getTimeThreshold()).count();
+        int delayNum = (int) controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() >= Context.getConfig().getThreshold()).count();
         systemStatistic.setDelayNum(delayNum);
-        int normalNum = (int) controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() < Context.getConfig().getTimeThreshold()).count();
+        int normalNum = (int) controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() < Context.getConfig().getThreshold()).count();
         systemStatistic.setNormalNum(normalNum);
         int totalNum = (int) controllerApis.stream().count();
         systemStatistic.setTotalNum(totalNum);

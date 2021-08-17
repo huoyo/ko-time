@@ -56,3 +56,9 @@ shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 ## 问题咨询
 
 访问[koTime开源地址](https://gitee.com/huoyo/ko-time)进行咨询
+
+---
+
+**我觉得作者列的问题太少了，不能满足我，我准备用金钱对他进行鞭笞，并备注上本大爷的要求**
+
+<img src="pay.jpg"  width="15%" height="15%">

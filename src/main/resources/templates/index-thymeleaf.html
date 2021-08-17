@@ -50,27 +50,27 @@
             </fieldset>
             <ul class="site-doc-icon site-doc-anim">
                 <li>
-                    <div th:if="${system.avgRunTime ge config.timeThreshold}" class="layui-anim" style="background-color: #da3f0b;" data-anim="layui-anim-up" th:text="${system.avgRunTime}"></div>
-                    <div th:if="${system.avgRunTime lt config.timeThreshold}" class="layui-anim"  data-anim="layui-anim-up" th:text="${system.avgRunTime}"></div>
+                    <div th:if="${system.avgRunTime ge config.threshold}" class="layui-anim" style="background-color: #da3f0b;" data-anim="layui-anim-up" th:text="${system.avgRunTime}"></div>
+                    <div th:if="${system.avgRunTime lt config.threshold}" class="layui-anim"  data-anim="layui-anim-up" th:text="${system.avgRunTime}"></div>
 
                     <div class="code">平均响应（ms）</div>
                 </li>
                 <li>
-                    <div th:if="${system.maxRunTime ge config.timeThreshold}" class="layui-anim" style="background-color: #da3f0b;" data-anim="layui-anim-up" th:text="${system.maxRunTime}"></div>
-                    <div th:if="${system.maxRunTime lt config.timeThreshold}" class="layui-anim"  data-anim="layui-anim-up" th:text="${system.maxRunTime}"></div>
+                    <div th:if="${system.maxRunTime ge config.threshold}" class="layui-anim" style="background-color: #da3f0b;" data-anim="layui-anim-up" th:text="${system.maxRunTime}"></div>
+                    <div th:if="${system.maxRunTime lt config.threshold}" class="layui-anim"  data-anim="layui-anim-up" th:text="${system.maxRunTime}"></div>
 
                     <div class="code">最大响应（ms）</div>
                 </li>
                 <li>
-                    <div th:if="${system.minRunTime ge config.timeThreshold}" class="layui-anim" style="background-color: #da3f0b;" data-anim="layui-anim-up" th:text="${system.minRunTime}"></div>
-                    <div th:if="${system.minRunTime lt config.timeThreshold}" class="layui-anim"  data-anim="layui-anim-up" th:text="${system.minRunTime}"></div>
+                    <div th:if="${system.minRunTime ge config.threshold}" class="layui-anim" style="background-color: #da3f0b;" data-anim="layui-anim-up" th:text="${system.minRunTime}"></div>
+                    <div th:if="${system.minRunTime lt config.threshold}" class="layui-anim"  data-anim="layui-anim-up" th:text="${system.minRunTime}"></div>
 
                     <div class="code">最小响应（ms）</div>
                 </li>
             </ul>
             <ul>
-                <blockquote th:if="${config.kotimeEnable==true}" class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
-                <blockquote th:if="${config.kotimeEnable==false}" class="layui-elem-quote">方法调用监测已关闭，数据将不会更新，需要开启请到配置面板</blockquote>
+                <blockquote th:if="${config.enable==true}" class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
+                <blockquote th:if="${config.enable==false}" class="layui-elem-quote">方法调用监测已关闭，数据将不会更新，需要开启请到配置面板</blockquote>
             </ul>
         </div>
 
@@ -79,8 +79,8 @@
                 <div class="layui-colla-item" >
                     <h2 class="layui-colla-title" th:id="${runtime.className}+'.'+${runtime.methodName}">
                         <span th:text="${runtime.className}+'#'+${runtime.methodName}+'&nbsp'"></span>
-                        <span style="font-size: 12px;" th:if="${runtime.avgRunTime ge config.timeThreshold}" class="'layui-badge layui-bg-red" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
-                        <span style="font-size: 12px;" th:if="${runtime.avgRunTime lt config.timeThreshold}" class="'layui-badge layui-bg-green" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
+                        <span style="font-size: 12px;" th:if="${runtime.avgRunTime ge config.threshold}" class="'layui-badge layui-bg-red" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
+                        <span style="font-size: 12px;" th:if="${runtime.avgRunTime lt config.threshold}" class="'layui-badge layui-bg-green" th:text="'平均响应 '+${runtime.avgRunTime}+' 毫秒'"></span>
                     </h2>
                 </div>
              </div>
@@ -142,10 +142,10 @@
 <script th:src="@{/static/graph.js}"></script>
 <script th:inline="javascript" type="text/javascript">
     $(document).ready(function () {
-        var threshold = [[${config.timeThreshold}]];
+        var threshold = [[${config.threshold}]];
         var contextPath = [[${#servletContext.contextPath}]]
 
-        var kotimeEnable = [[${config.kotimeEnable}]]
+        var kotimeEnable = [[${config.enable}]]
         var logEnable = [[${config.logEnable}]]
         var exceptionEnable = [[${config.exceptionEnable}]]
 
@@ -162,7 +162,7 @@
         logEnableDom.checked = logEnable
 
         kotimeEnableDom.onclick = function(){
-            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({kotimeEnable:kotimeEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({enable:kotimeEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
         }
 
         exceptionEnableDom.onclick = function(){
@@ -176,7 +176,7 @@
 
 
         document.getElementById("timeThresholdYes").onclick = function(){
-            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({timeThreshold:timeThresholdDom.value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig',data:JSON.stringify({threshold:timeThresholdDom.value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
         };
 
         var graph

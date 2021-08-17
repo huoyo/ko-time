@@ -11,9 +11,9 @@ public interface GraphService {
 
     static GraphService getInstance() {
         GraphService graphService = null;
-        if (Context.getConfig().getDataSaver().equals("memory")) {
+        if (Context.getConfig().getSaveSaver().equals("memory")) {
             graphService = new MemoryBase();
-        } else if (Context.getConfig().getDataSaver().equals("mysql")) {
+        } else if (Context.getConfig().getSaveSaver().equals("mysql")) {
             graphService = new MysqlBase();
         }
         return graphService;

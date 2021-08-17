@@ -50,21 +50,21 @@
             </fieldset>
             <ul class="site-doc-icon site-doc-anim">
                 <li>
-                    <div class="layui-anim" style=" <#if system.avgRunTime gt config.timeThreshold >background-color: #da3f0b;</#if>" data-anim="layui-anim-up">${system.avgRunTime}</div>
+                    <div class="layui-anim" style=" <#if system.avgRunTime gt config.threshold >background-color: #da3f0b;</#if>" data-anim="layui-anim-up">${system.avgRunTime}</div>
                     <div class="code">平均响应（ms）</div>
                 </li>
                 <li>
-                    <div class="layui-anim" style=" <#if system.maxRunTime gt config.timeThreshold >background-color: #da3f0b;</#if>" data-anim="layui-anim-upbit">${system.maxRunTime}</div>
+                    <div class="layui-anim" style=" <#if system.maxRunTime gt config.threshold >background-color: #da3f0b;</#if>" data-anim="layui-anim-upbit">${system.maxRunTime}</div>
                     <div class="code">最大响应（ms）</div>
                 </li>
                 <li>
-                    <div class="layui-anim" style=" <#if system.minRunTime gt config.timeThreshold >background-color: #da3f0b;</#if>" data-anim="layui-anim-scale">${system.minRunTime}</div>
+                    <div class="layui-anim" style=" <#if system.minRunTime gt config.threshold >background-color: #da3f0b;</#if>" data-anim="layui-anim-scale">${system.minRunTime}</div>
                     <div class="code">最小响应（ms）</div>
                 </li>
             </ul>
             <ul>
-                <blockquote style="<#if config.kotimeEnable==false>display:none</#if>" class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
-                <blockquote style="<#if config.kotimeEnable==true>display:none</#if>" class="layui-elem-quote">方法调用监测已关闭，数据将不会更新，需要开启请到配置面板</blockquote>
+                <blockquote style="<#if config.enable==false>display:none</#if>" class="layui-elem-quote">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</blockquote>
+                <blockquote style="<#if config.enable==true>display:none</#if>" class="layui-elem-quote">方法调用监测已关闭，数据将不会更新，需要开启请到配置面板</blockquote>
             </ul>
         </div>
 
@@ -74,7 +74,7 @@
                 <div class="layui-colla-item" >
                     <h2 class="layui-colla-title" id="${runtime.className}.${runtime.methodName}">
                         ${runtime.className}#${runtime.methodName}&nbsp
-                        <span class="layui-badge <#if runtime.avgRunTime gt config.timeThreshold >layui-bg-red
+                        <span class="layui-badge <#if runtime.avgRunTime gt config.threshold >layui-bg-red
                 <#else>layui-bg-green
                 </#if>">平均响应 ${runtime.avgRunTime} 毫秒</span>
                     </h2>
@@ -142,8 +142,8 @@
 <script src="${ctx.contextPath}/static/graph.js"></script>
 <script>
     $(document).ready(function () {
-        var threshold = "${config.timeThreshold}"
-        var kotimeEnable = "${config.kotimeEnable?string('true','false')}"
+        var threshold = "${config.threshold}"
+        var kotimeEnable = "${config.enable?string('true','false')}"
         var logEnable = "${config.logEnable?string('true','false')}"
         var exceptionEnable = "${config.exceptionEnable?string('true','false')}"
 
@@ -160,7 +160,7 @@
         logEnableDom.checked = logEnable=='true'?true:false
 
         kotimeEnableDom.onclick = function(){
-            $.ajax({type:'POST',url:'${ctx.contextPath}/koTime/updateConfig',data:JSON.stringify({kotimeEnable:kotimeEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            $.ajax({type:'POST',url:'${ctx.contextPath}/koTime/updateConfig',data:JSON.stringify({enable:kotimeEnableDom.checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
         }
 
         exceptionEnableDom.onclick = function(){
@@ -174,7 +174,7 @@
 
 
         document.getElementById("timeThresholdYes").onclick = function(){
-            $.ajax({type:'POST',url:'${ctx.contextPath}/koTime/updateConfig',data:JSON.stringify({timeThreshold:timeThresholdDom.value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            $.ajax({type:'POST',url:'${ctx.contextPath}/koTime/updateConfig',data:JSON.stringify({threshold:timeThresholdDom.value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
         };
 
 

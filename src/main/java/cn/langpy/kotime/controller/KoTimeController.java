@@ -82,10 +82,10 @@ public class KoTimeController {
 
     @PostMapping("/updateConfig")
     @ResponseBody
-    public boolean updateConfig(@RequestBody KoTimeConfig config) {
+    public boolean updateConfig(@RequestBody DefaultConfig config) {
         DefaultConfig koTimeConfig = Context.getConfig();
-        if (config.getKotimeEnable()!=null) {
-            koTimeConfig.setEnable(config.getKotimeEnable());
+        if (config.getEnable()!=null) {
+            koTimeConfig.setEnable(config.getEnable());
         }
         if (config.getExceptionEnable()!=null) {
             koTimeConfig.setExceptionEnable(config.getExceptionEnable());
@@ -93,8 +93,8 @@ public class KoTimeController {
         if (config.getLogEnable()!=null) {
             koTimeConfig.setLogEnable(config.getLogEnable());
         }
-        if (config.getTimeThreshold()!=null) {
-            koTimeConfig.setThreshold(config.getTimeThreshold());
+        if (config.getThreshold()!=null) {
+            koTimeConfig.setThreshold(config.getThreshold());
         }
         return true;
     }

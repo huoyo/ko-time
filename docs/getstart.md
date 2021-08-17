@@ -53,3 +53,11 @@
 
 如：application.properties中定义了 `server.servlet.context-path=myservice`，那么访问路径为`http://localhost:8080/myservice/koTime`
 
+
+---
+
+**为了让作者不要偷懒，督促他好好维护和开发，我准备用金钱对他进行鞭笞**
+
+<img src="pay.jpg"  width="15%" height="15%">
+
+

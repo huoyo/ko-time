@@ -17,7 +17,6 @@ public class DefaultConfig {
     private String saveSaver;
     private Boolean saveAsync;
     private Integer threadNum;
-    private String uiTemplate;
 
     public Boolean getEnable() {
         return enable;
@@ -89,13 +88,5 @@ public class DefaultConfig {
 
     public void setThreadNum(Integer threadNum) {
         this.threadNum = threadNum;
-    }
-
-    public String getUiTemplate() {
-        return uiTemplate;
-    }
-
-    public void setUiTemplate(String uiTemplate) {
-        this.uiTemplate = uiTemplate;
     }
 }

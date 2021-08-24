@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Logger;
 
 public class Common {
@@ -54,6 +58,27 @@ public class Common {
         }
     }
 
+    public static boolean testUrl(String httpUrl) {
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(httpUrl);
+            urlConnection = (HttpURLConnection)url.openConnection();
+            urlConnection.connect();
+            urlConnection.setConnectTimeout(500);
+            if (urlConnection.getResponseCode() == 200) {
+                return true;
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            log.warning("kotime=>invalid context="+httpUrl);
+        }catch (IOException e){
+            e.printStackTrace();
+            log.warning("kotime=>invalid context="+httpUrl);
+        }finally {
+            urlConnection.disconnect();
+        }
+        return false;
+    }
 
 }
 

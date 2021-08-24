@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 @ComponentScan("cn.langpy.kotime")
 @Configuration
 public class LoadConfig {
-    public static Logger log = Logger.getLogger(Common.class.toString());
+    public static Logger log = Logger.getLogger(LoadConfig.class.toString());
 
     @Value("${koTime.enable:true}")
     private Boolean kotimeEnable;
@@ -29,8 +29,6 @@ public class LoadConfig {
     private String pointcut;
     @Value("${koTime.exception.enable:false}")
     private Boolean exceptionEnable;
-    @Value("${koTime.ui.template:freemarker}")
-    private String uiTemplate;
     @Value("${koTime.save.saver:memory}")
     private String saveSaver;
     @Value("${koTime.save.async:false}")
@@ -52,28 +50,13 @@ public class LoadConfig {
         config.setExceptionEnable(defaultConfig.getExceptionEnable()==null?exceptionEnable:defaultConfig.getExceptionEnable());
         config.setSaveSaver(defaultConfig.getSaveSaver()==null?saveSaver:defaultConfig.getSaveSaver());
         config.setEnable(defaultConfig.getEnable()==null?kotimeEnable:defaultConfig.getEnable());
-        config.setUiTemplate(defaultConfig.getUiTemplate()==null?(uiTemplate.equals("freemarker")?getUiTemplate():uiTemplate):defaultConfig.getUiTemplate());
         Context.setConfig(config);
-    }
-
-    public String getUiTemplate() {
-        try {
-            LoadConfig.class.getClassLoader().loadClass("freemarker.template.Configuration");
-            log.info("KoTime=>loaded freemarker");
-            return "freemarker";
-        } catch (ClassNotFoundException e) {
-        }
-        try {
-            LoadConfig.class.getClassLoader().loadClass("org.thymeleaf.Thymeleaf");
-            log.info("KoTime=>loaded thymeleaf");
-        } catch (ClassNotFoundException e) {
-            throw  new RuntimeException("KoTime=>cannot find any ui-template,please add spring-boot-starter-freemarker(or thymeleaf) to pom.xml ");
-        }
-        return "thymeleaf";
+        log.info("kotime=>loading config");
     }
 
     @Bean
     public AspectJExpressionPointcutAdvisor configurabledvisor() {
+        log.info("kotime=>loading method listener");
         AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
         advisor.setExpression(defaultConfig.getPointcut()==null?pointcut:defaultConfig.getPointcut());
         advisor.setAdvice(new RunTimeHandler());

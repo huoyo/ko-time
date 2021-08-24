@@ -3,36 +3,73 @@ package cn.langpy.kotime.controller;
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.GraphService;
+import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/koTime")
 public class KoTimeController {
-
+    public static Logger log = Logger.getLogger(KoTimeController.class.toString());
 
     @GetMapping
-    public String index(Model model) {
-        GraphService graphService = GraphService.getInstance();
-        List<MethodInfo> methodList = graphService.getControllers();
-        List<ExceptionNode> exceptionList = graphService.getExceptions();
-        Collections.sort(methodList);
-        model.addAttribute("methodList", methodList);
-        model.addAttribute("exceptionList", exceptionList);
-        SystemStatistic system = graphService.getRunStatistic();
-        model.addAttribute("system", system);
-        model.addAttribute("config", Context.getConfig());
-        String template = "index-freemarker";
-        if ("thymeleaf".equals(Context.getConfig().getUiTemplate())) {
-            template = "index-thymeleaf";
+    public void index(String test,HttpServletResponse response, HttpServletRequest request) throws Exception {
+        if (null!=test) {
+            return;
         }
-        return template;
+        response.setContentType("text/html;charset=utf-8");
+        ClassPathResource classPathResource = new ClassPathResource("kotime.html");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(),"utf-8"));
+        PrintWriter out = response.getWriter();
+        String context = getContextPath(request);
+        log.info("kotime=>context="+context);
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = "";
+        while((line = reader.readLine()) != null) {
+            stringBuilder.append(line+"\n");
+        }
+        line = stringBuilder.toString()
+                .replace("globalThresholdValue",Context.getConfig().getThreshold()+"")
+                .replace("contextPath",context)
+                .replace("exceptionTitleStyle",Context.getConfig().getExceptionEnable()==true?"":"display:none;");
+        out.write(line);
+        out.close();
     }
+
+    public String getContextPath(HttpServletRequest request) {
+        String context = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()+request.getContextPath();
+        boolean ok = Common.testUrl(String.format("%s/koTime?test=test",context));
+        if (ok) {
+            return context;
+        }
+        context = request.getScheme() + "://" + request.getLocalAddr() + ":" + request.getServerPort()+request.getContextPath();
+        ok = Common.testUrl(String.format("%s/koTime?test=test",context));
+        if (ok) {
+            return context;
+        }
+
+        try {
+            context = request.getScheme() + "://" + InetAddress.getLocalHost().getHostAddress() + ":" + request.getServerPort()+request.getContextPath();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        ok = Common.testUrl(String.format("%s/koTime?test=test",context));
+        if (ok) {
+            return context;
+        }
+        return null;
+    }
+
 
     @GetMapping("/getConfig")
     @ResponseBody

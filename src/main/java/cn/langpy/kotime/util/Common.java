@@ -69,13 +69,13 @@ public class Common {
                 return true;
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             log.warning("kotime=>invalid context="+httpUrl);
         }catch (IOException e){
-            e.printStackTrace();
             log.warning("kotime=>invalid context="+httpUrl);
         }finally {
-            urlConnection.disconnect();
+            if (null!=urlConnection) {
+                urlConnection.disconnect();
+            }
         }
         return false;
     }

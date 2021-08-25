@@ -4,7 +4,6 @@ package cn.langpy.kotime.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
 @Component
 @ConfigurationProperties(prefix = "ko-time")
 public class DefaultConfig {
@@ -17,6 +16,7 @@ public class DefaultConfig {
     private String saveSaver;
     private Boolean saveAsync;
     private Integer threadNum;
+    private String contextPath;
 
     public Boolean getEnable() {
         return enable;
@@ -88,5 +88,13 @@ public class DefaultConfig {
 
     public void setThreadNum(Integer threadNum) {
         this.threadNum = threadNum;
+    }
+
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;
     }
 }

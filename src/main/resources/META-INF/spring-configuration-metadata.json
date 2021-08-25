@@ -1,0 +1,82 @@
+{
+  "groups": [
+    {
+      "name": "ko-time",
+      "type": "cn.langpy.kotime.config.DefaultConfig",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ko-time.context-path",
+      "type": "java.lang.String",
+      "defaultValue": "http://localhost:8080",
+      "description": "server url for static resources",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.enable",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "to enable kotime",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.exception-enable",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "to enable exception listener",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.log-enable",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "to print log in console",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.log-language",
+      "defaultValue": "chinese",
+      "type": "java.lang.String",
+      "description": "to select language for log printed",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.pointcut",
+      "type": "java.lang.String",
+      "description": "pointcut for aop",
+      "defaultValue": "execution(* com.example..*.*(..))",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.save-async",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "waiting to implement",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.save-saver",
+      "type": "java.lang.String",
+      "defaultValue": "memory",
+      "description": "waiting to implement",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.thread-num",
+      "type": "java.lang.Integer",
+      "defaultValue": 4,
+      "description": "waiting to implement",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.threshold",
+      "type": "java.lang.Double",
+      "defaultValue": 800.0,
+      "description": "red will appear if avgRunTime>threshold",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    }
+  ],
+  "hints": []
+}

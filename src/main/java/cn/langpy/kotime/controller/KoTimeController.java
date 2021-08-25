@@ -7,6 +7,7 @@ import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class KoTimeController {
         ClassPathResource classPathResource = new ClassPathResource("kotime.html");
         BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(),"utf-8"));
         PrintWriter out = response.getWriter();
-        String context = getContextPath(request);
+        String context = StringUtils.hasText(Context.getConfig().getContextPath())?Context.getConfig().getContextPath():getContextPath(request);
         log.info("kotime=>context="+context);
         StringBuilder stringBuilder = new StringBuilder();
         String line = "";
@@ -47,12 +48,12 @@ public class KoTimeController {
     }
 
     public String getContextPath(HttpServletRequest request) {
-        String context = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()+request.getContextPath();
+        String context = request.getScheme() + "://" + request.getLocalAddr() + ":" + request.getServerPort()+request.getContextPath();
         boolean ok = Common.testUrl(String.format("%s/koTime?test=test",context));
         if (ok) {
             return context;
         }
-        context = request.getScheme() + "://" + request.getLocalAddr() + ":" + request.getServerPort()+request.getContextPath();
+        context = request.getScheme() + "://" + request.getServerName()+ ":" + request.getServerPort()+request.getContextPath();
         ok = Common.testUrl(String.format("%s/koTime?test=test",context));
         if (ok) {
             return context;

@@ -1,6 +1,5 @@
 package cn.langpy.kotime.config;
 import cn.langpy.kotime.handler.RunTimeHandler;
-import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,6 +49,7 @@ public class LoadConfig {
         config.setExceptionEnable(defaultConfig.getExceptionEnable()==null?exceptionEnable:defaultConfig.getExceptionEnable());
         config.setSaveSaver(defaultConfig.getSaveSaver()==null?saveSaver:defaultConfig.getSaveSaver());
         config.setEnable(defaultConfig.getEnable()==null?kotimeEnable:defaultConfig.getEnable());
+        config.setContextPath(defaultConfig.getContextPath());
         Context.setConfig(config);
         log.info("kotime=>loading config");
     }

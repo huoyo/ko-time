@@ -6,9 +6,6 @@
 #### 介绍
 koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈：
 
-#### 预览
-
-http://huoyo.gitee.io/ko-time/example
 
 ## 文档
 
@@ -44,7 +41,7 @@ http://huoyo.gitee.io/ko-time
 
 点开接口时，会显示该接口的调用链路以及运行时长
 
-![输入图片说明](docs/ff.png)
+![输入图片说明](docs/v200/ff.png)
 
 #### 版本说明
 
@@ -69,6 +66,10 @@ http://huoyo.gitee.io/ko-time
 > V1.9：过度版本
 
 > V2.0.0：添加异常监测，开放数据接口，修复与swagger冲突bug，添加配置动态更新功能以及重构数据存储机制
+
+> V2.0.1：移除freemarker与thymeleaf；移除`spring.profiles.active=koTime`配置；优化方法链路获取机制(移除getAllStackTraces())
+
+
 #### 特别说明
 
 1.本项目使用java8开发，其他版本未曾试验，如有什么bug还请告知！

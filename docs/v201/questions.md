@@ -2,20 +2,6 @@
 
 koTime使用了@Aspect注解，未引入 aop相关包的自行引入，如aspectj或者spring-boot-starter-aop
 
-## 前端展示模板冲突
-
-* 前后端分离的项目
-
-koTime提供freemark和thymeleaf两种模板，可根据自己的爱好自由选择，如果喜欢其他的，koTime暂不支持你的喜欢
-
-* 前后端不分离的项目
-
-如果项目中使用了除了freemarker和thymeleaf之外的模板，那么koTime暂时不支持
-
-如果发生资源文件和配置的冲突，可取消`spring.profiles.active=koTime`这一步配置
-然后将koTime中对于freemarker和thymeleaf的配置与自身的进行合并
-
-
 
 ## 是否支持前后端分离项目
 
@@ -52,6 +38,10 @@ shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 ## 集成是否需要复制资源文件
 
 不需要复制  static和template 等资源文件，引入依赖时已自动集成
+
+## 能正常启动但是页面样式不对
+
+打开f12查看静态资源路径加载是否正确，如果不正确，手动配置属性`ko-time.context-path=http://ip:port/contextPath`
 
 ## 问题咨询
 

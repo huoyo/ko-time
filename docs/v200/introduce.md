@@ -41,6 +41,9 @@ http://huoyo.gitee.io/ko-time/example
 
 > V2.0.0：添加异常监测，开放数据接口，修复与swagger冲突bug，添加配置动态更新功能以及重构数据存储机制
 
+> V2.0.1：移除freemarker与thymeleaf；移除`spring.profiles.active=koTime`配置；优化方法链路获取机制(移除getAllStackTraces())
+
+
 ## 作者
 > Huoyo/Zhang Chang
 

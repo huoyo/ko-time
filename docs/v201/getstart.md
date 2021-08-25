@@ -56,6 +56,6 @@
 
 **为了让作者不要偷懒，督促他好好维护和开发，我准备用金钱对他进行鞭笞**
 
-<img src="pay.jpg"  width="15%" height="15%">
+<img src="v201/pay.jpg"  width="15%" height="15%">
 
 

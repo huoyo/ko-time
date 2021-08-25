@@ -68,4 +68,4 @@ shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
 **我觉得作者列的问题太少了，不能满足我，我准备用金钱对他进行鞭笞，并备注上本大爷的要求**
 
-<img src="pay.jpg"  width="15%" height="15%">
+<img src="v200/pay.jpg"  width="15%" height="15%">

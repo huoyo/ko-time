@@ -58,27 +58,5 @@ public class Common {
         }
     }
 
-    public static boolean testUrl(String httpUrl) {
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(httpUrl);
-            urlConnection = (HttpURLConnection)url.openConnection();
-            urlConnection.connect();
-            urlConnection.setConnectTimeout(500);
-            if (urlConnection.getResponseCode() == 200) {
-                return true;
-            }
-        } catch (MalformedURLException e) {
-            log.warning("kotime=>invalid context="+httpUrl);
-        }catch (IOException e){
-            log.warning("kotime=>invalid context="+httpUrl);
-        }finally {
-            if (null!=urlConnection) {
-                urlConnection.disconnect();
-            }
-        }
-        return false;
-    }
-
 }
 

@@ -32,8 +32,11 @@ public class KoTimeController {
         ClassPathResource classPathResource = new ClassPathResource("kotime.html");
         BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(),"utf-8"));
         PrintWriter out = response.getWriter();
-        String context = StringUtils.hasText(Context.getConfig().getContextPath())?Context.getConfig().getContextPath():getContextPath(request);
-        log.info("kotime=>context="+context);
+
+        String context = request.getContextPath();
+        if (StringUtils.hasText(Context.getConfig().getContextPath())) {
+            context = Context.getConfig().getContextPath();
+        }
         StringBuilder stringBuilder = new StringBuilder();
         String line = "";
         while((line = reader.readLine()) != null) {
@@ -45,30 +48,6 @@ public class KoTimeController {
                 .replace("exceptionTitleStyle",Context.getConfig().getExceptionEnable()==true?"":"display:none;");
         out.write(line);
         out.close();
-    }
-
-    public String getContextPath(HttpServletRequest request) {
-        String context = request.getScheme() + "://" + request.getLocalAddr() + ":" + request.getServerPort()+request.getContextPath();
-        boolean ok = Common.testUrl(String.format("%s/koTime?test=test",context));
-        if (ok) {
-            return context;
-        }
-        context = request.getScheme() + "://" + request.getServerName()+ ":" + request.getServerPort()+request.getContextPath();
-        ok = Common.testUrl(String.format("%s/koTime?test=test",context));
-        if (ok) {
-            return context;
-        }
-
-        try {
-            context = request.getScheme() + "://" + InetAddress.getLocalHost().getHostAddress() + ":" + request.getServerPort()+request.getContextPath();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        ok = Common.testUrl(String.format("%s/koTime?test=test",context));
-        if (ok) {
-            return context;
-        }
-        return null;
     }
 
 

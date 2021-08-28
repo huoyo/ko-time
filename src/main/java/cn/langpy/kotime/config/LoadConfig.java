@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -34,6 +35,10 @@ public class LoadConfig {
     private Boolean saveAsync;
     @Value("${koTime.save.thread-num:4}")
     private Integer threadNum;
+    @Value("${server.port:8080}")
+    private Integer serverPort;
+    @Value("${server.servlet.context-path:}")
+    private String serverContext;
 
     @Resource
     private DefaultConfig defaultConfig;
@@ -52,6 +57,12 @@ public class LoadConfig {
         config.setContextPath(defaultConfig.getContextPath());
         Context.setConfig(config);
         log.info("kotime=>loading config");
+
+        if (StringUtils.hasText(config.getContextPath())) {
+            log.info("kotime=>view:"+Context.getConfig().getContextPath()+"/koTime");
+        }else {
+            log.info("kotime=>view:http://localhost:" + serverPort+serverContext+"/koTime");
+        }
     }
 
     @Bean

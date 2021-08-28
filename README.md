@@ -34,19 +34,17 @@ http://huoyo.gitee.io/ko-time
 
 根据颜色判断需要优化的接口数，红色为待优化，绿色为正常
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1210/192544_932c9e75_1625471.png "屏幕截图.png")
-
+![输入图片说明](docs/v201/zl.png)
 2.接口列表总览
 
 在列表中会显示该接口的运行耗时，如果为绿色则无需优化，如果为红色，需要详细查看问题所在
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1210/192615_192e1123_1625471.png "屏幕截图.png")
-
+![输入图片说明](docs/v201/apis.png)
 3.调用详情
 
 点开接口时，会显示该接口的调用链路以及运行时长
 
-![输入图片说明](docs/v200/ff.png)
+![输入图片说明](docs/v201/ff.png)
 
 #### 版本说明
 

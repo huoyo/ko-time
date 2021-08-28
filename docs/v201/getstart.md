@@ -3,7 +3,6 @@
 
 在pom.xml文件中引入
 
-> 近期将发版，如有需要可自行前往开源地址打包
 
 ```
  <dependency>
@@ -32,7 +31,7 @@
 > ko-time.log-enable=false  # 是否开启控制输出，默认false  
 > ko-time.log-language=chinese # 控制台输出语言（english/chinese）默认chinese  
 > ko-time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
-> ko-time.context-path=http://localhost:80 # 前端页面获取静态资源的上下文环境，无法自动获取的时候手动配置  
+> ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置  
 > ko-time.exception-enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  
 >
 
@@ -49,7 +48,9 @@
 
 如果项目自定义的contextpath，访问如`http://localhost:8080/xxx服务/koTime`
 
-如：application.properties中定义了 `server.servlet.context-path=myservice`，那么访问路径为`http://localhost:8080/myservice/koTime`
+如：application.properties中定义了 `server.servlet.context-path=/myservice`，那么访问路径为`http://localhost:8080/myservice/koTime`
+
+如果页面能正常显示，但是无法获取方法链路，可配置`ko-time.context-path=http://localhost:8080/myservice`
 
 
 ---

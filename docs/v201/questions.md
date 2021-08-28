@@ -43,6 +43,10 @@ shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
 打开f12查看静态资源路径加载是否正确，如果不正确，手动配置属性`ko-time.context-path=http://ip:port/contextPath`
 
+## V2.0.1开始更改了配置，V2.0.0的配置方式是否可用
+
+V2.0.1开始，两种配置均生效，建议使用新的配置方式
+
 ## 问题咨询
 
 访问[koTime开源地址](https://gitee.com/huoyo/ko-time)进行咨询

@@ -1,6 +1,7 @@
 package cn.langpy.kotime.handler;
 
 import cn.langpy.kotime.annotation.ComputeTime;
+import cn.langpy.kotime.constant.KoConstant;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
 public class ComputeTimeHandler {
     public static Logger log = Logger.getLogger(ComputeTimeHandler.class.toString());
 
-    @Pointcut("@annotation(cn.langpy.kotime.annotation.ComputeTime)")
+    @Pointcut(KoConstant.comMethodRange)
     public void preProcess() {
     }
 

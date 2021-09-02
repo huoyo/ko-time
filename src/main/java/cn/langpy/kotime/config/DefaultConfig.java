@@ -17,6 +17,9 @@ public class DefaultConfig {
     private Boolean saveAsync;
     private Integer threadNum;
     private String contextPath;
+    private Boolean authEnable;
+    private String userName;
+    private String password;
 
     public Boolean getEnable() {
         return enable;
@@ -96,5 +99,29 @@ public class DefaultConfig {
 
     public void setContextPath(String contextPath) {
         this.contextPath = contextPath;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean getAuthEnable() {
+        return authEnable;
+    }
+
+    public void setAuthEnable(Boolean authEnable) {
+        this.authEnable = authEnable;
     }
 }

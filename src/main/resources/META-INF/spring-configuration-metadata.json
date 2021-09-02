@@ -76,6 +76,27 @@
       "defaultValue": 800.0,
       "description": "red will appear if avgRunTime>threshold",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.auth-enable",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "to enable authentication",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.user-name",
+      "type": "java.lang.String",
+      "defaultValue": "",
+      "description": "userName for authentication",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.password",
+      "type": "java.lang.String",
+      "defaultValue": "",
+      "description": "password for authentication",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     }
   ],
   "hints": []

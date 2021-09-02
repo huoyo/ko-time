@@ -237,17 +237,23 @@ public class MemoryBase implements GraphService {
         List<ExceptionInfo> exceptionInfos = getExceptions(methodId);
         rootInfo.setExceptionNum(exceptionInfos.size());
         rootInfo.setExceptions(exceptionInfos);
-        recursionMethod(rootInfo);
+        List<String> methodInfos = new ArrayList<>();
+        recursionMethod(rootInfo,methodInfos);
+        methodInfos.clear();
         return rootInfo;
     }
 
-    public void recursionMethod(MethodInfo rootInfo) {
+    public void recursionMethod(MethodInfo rootInfo,List<String> methodInfos) {
         List<MethodInfo> children = getChildren(rootInfo.getId());
         if (children != null && children.size() > 0) {
-            rootInfo.setChildren(children);
-            for (MethodInfo child : children) {
-                recursionMethod(child);
+            if (!methodInfos.contains(rootInfo.getId())) {
+                methodInfos.add(rootInfo.getId());
+                rootInfo.setChildren(children);
+                for (MethodInfo child : children) {
+                    recursionMethod(child,methodInfos);
+                }
             }
+
         }
 
     }

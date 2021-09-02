@@ -55,6 +55,7 @@ public class LoadConfig {
         config.setSaveSaver(defaultConfig.getSaveSaver()==null?saveSaver:defaultConfig.getSaveSaver());
         config.setEnable(defaultConfig.getEnable()==null?kotimeEnable:defaultConfig.getEnable());
         config.setContextPath(defaultConfig.getContextPath());
+        config.setAuthEnable(defaultConfig.getAuthEnable()==null?false:defaultConfig.getAuthEnable());
         Context.setConfig(config);
         log.info("kotime=>loading config");
 

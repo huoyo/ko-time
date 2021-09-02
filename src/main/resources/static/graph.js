@@ -168,22 +168,34 @@ function MethodGraph(canvas,timeThreshold) {
     document.getElementById(o.background).onmousedown = function (e) {
         o.moveNodeX = e.clientX;
         o.moveNodeY = e.clientY;
-        let clssName = e.path[0].getAttribute('class');
-        if (clssName == 'node') {
-            o.moveNode = e.path[0];
-            o.isDragNode = true;
-            o.l = o.moveNode.offsetLeft;
-            o.t = o.moveNode.offsetTop;
-            o.moveNode.style.cursor = 'move';
-        } else if (clssName == 'nodeli') {
-            o.moveNode = e.path[1];
-            o.isDragNode = true;
-            o.l = o.moveNode.offsetLeft;
-            o.t = o.moveNode.offsetTop;
-            o.moveNode.style.cursor = 'move';
+        if (e.path) {
+            let clssName = e.path[0].getAttribute('class');
+            if (clssName == 'node') {
+                o.moveNode = e.path[0];
+                o.isDragNode = true;
+                o.l = o.moveNode.offsetLeft;
+                o.t = o.moveNode.offsetTop;
+                o.moveNode.style.cursor = 'move';
+            } else if (clssName == 'nodeli') {
+                o.moveNode = e.path[1];
+                o.isDragNode = true;
+                o.l = o.moveNode.offsetLeft;
+                o.t = o.moveNode.offsetTop;
+                o.moveNode.style.cursor = 'move';
+            }else{
+                o.isDragBack = true;
+            };
         }else{
-            o.isDragBack = true;
+            let clssName = e.target.getAttribute('class');
+            if (clssName == 'nodeli') {
+                o.moveNode = e.target.parentNode;
+                o.isDragNode = true;
+                o.l = o.moveNode.offsetLeft;
+                o.t = o.moveNode.offsetTop;
+                o.moveNode.style.cursor = 'move';
+            };
         };
+
     };
     document.getElementById(o.background).onmousemove = function (e) {
         var nx = e.clientX;

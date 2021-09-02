@@ -45,6 +45,7 @@
 
 * 启动项目访问 `/koTime` 路径即可
 
+> 建议使用谷歌浏览器或者Edge浏览器，IE是不可能支持
 
 如果项目自定义的contextpath，访问如`http://localhost:8080/xxx服务/koTime`
 

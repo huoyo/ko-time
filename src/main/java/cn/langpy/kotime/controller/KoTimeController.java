@@ -67,22 +67,33 @@ public class KoTimeController {
         ClassPathResource classPathResource = new ClassPathResource(KoConstant.kotimeViewer);
         BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(),"utf-8"));
         PrintWriter out = response.getWriter();
-
         String context = request.getContextPath();
         if (StringUtils.hasText(Context.getConfig().getContextPath())) {
             context = Context.getConfig().getContextPath();
         }
         StringBuilder stringBuilder = new StringBuilder();
         String line = "";
+        int n = 0;
         while((line = reader.readLine()) != null) {
-            stringBuilder.append(line+"\n");
+            if (n>14) {
+                if (line.indexOf(KoConstant.globalThreshold)>-1) {
+                    line = line.replace(KoConstant.globalThreshold,Context.getConfig().getThreshold()+"");
+                }else  if (line.indexOf(KoConstant.globalNeedLogin)>-1) {
+                    line = line.replace(KoConstant.globalNeedLogin,Context.getConfig().getAuthEnable()+"");
+                }else  if (line.indexOf(KoConstant.globalIsLogin)>-1) {
+                    line = line.replace(KoConstant.globalIsLogin,KoUtil.isLogin()+"");
+                }else  if (line.indexOf(KoConstant.contextPath)>-1) {
+                    line = line.replace(KoConstant.contextPath,context);
+                }else  if (line.indexOf(KoConstant.exceptionTitleStyle)>-1) {
+                    line = line.replace(KoConstant.exceptionTitleStyle,Context.getConfig().getExceptionEnable()==true?"":"display:none;");
+                }
+                stringBuilder.append(line+"\n");
+            }else {
+                stringBuilder.append(line+"\n");
+            }
+            n++;
         }
-        line = stringBuilder.toString()
-                .replace(KoConstant.globalThreshold,Context.getConfig().getThreshold()+"")
-                .replace(KoConstant.globalNeedLogin,Context.getConfig().getAuthEnable()+"")
-                .replace(KoConstant.globalIsLogin, KoUtil.isLogin()+"")
-                .replace(KoConstant.contextPath,context)
-                .replace(KoConstant.exceptionTitleStyle,Context.getConfig().getExceptionEnable()==true?"":"display:none;");
+        line = stringBuilder.toString();
         out.write(line);
         out.close();
     }

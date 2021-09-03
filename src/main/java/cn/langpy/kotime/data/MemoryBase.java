@@ -42,6 +42,9 @@ public class MemoryBase implements GraphService {
 
     @Override
     public MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode) {
+        if (null!=sourceMethodNode && null!=targetMethodNode && sourceMethodNode.getId().equals(targetMethodNode.getId())) {
+            return null;
+        }
         MethodRelation methodRelation = new MethodRelation();
         methodRelation.setSourceId(sourceMethodNode.getId());
         methodRelation.setTargetId(targetMethodNode.getId());

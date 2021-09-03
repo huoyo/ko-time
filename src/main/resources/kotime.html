@@ -207,7 +207,6 @@
                 dataType:'json',
                 headers: {'Content-Type': 'application/json' },
                 success:function (re) {
-                    console.log(re)
                     if (re['state']==1) {
                         UIkit.notification("<font color='green'>登录成功</font>",{});
                         UIkit.notification.closeAll()

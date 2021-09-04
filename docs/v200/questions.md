@@ -2,6 +2,43 @@
 
 koTime使用了@Aspect注解，未引入 aop相关包的自行引入，如aspectj或者spring-boot-starter-aop
 
+## pointcut写法参考
+
+pointcut直接引用了aop中的写法，下面简要提供几个写法：
+
+假设项目的包路径为：
+
+```
+cn.langpy.demo
+        |-controller
+        |-service
+        |-mapper
+        |-others
+            |-other1
+            |-other2
+            |-Test.java
+        
+```
+
+想要切`cn.langpy.demo`下面的所有方法（包括子包中的）,可以写：
+
+> `execution(public * com.huoyo.demo..*.*(..))` #切记，是两个点.
+
+
+只想要切`cn.langpy.demo.controller`下面的类的所有方法（不包括子包的）,可以写：
+
+> `execution(public * com.huoyo.demo.controller.*.*(..))` #切记，是一个点.
+
+只想要切`cn.langpy.demo.others`下面的类的所有方法（不包括other1和other2下面的）,可以写：
+
+> `execution(public * com.huoyo.demo.others.*.*(..))` 
+
+只想要切`cn.langpy.demo.others`下面的类的所有方法（包括other1和other2）,可以写：
+
+> `execution(public * com.huoyo.demo.others..*.*(..))`
+
+更多写法请详细参考aop
+
 ## 前端展示模板冲突
 
 > 该问题可升级v2.0.1+解决

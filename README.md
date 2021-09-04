@@ -1,12 +1,9 @@
 # koTime
 
 
-> `V2.0.1` 1.移除freemarker与thymeleaf；
-           2.移除spring.profiles.active=koTime配置；
-           3.优化方法链路获取机制(移除getAllStackTraces())；
-           4.替换layui
-           5.优化配置方式
-           6.优化页面显示
+> `V2.0.2` 1.新增登录认证；
+           2.优化页面加载；
+           3.修复方法循环调用栈溢出的bug
 
 
 
@@ -79,6 +76,10 @@ http://huoyo.gitee.io/ko-time
          替换layui；
          优化配置方式；
          优化页面显示；
+
+> V2.0.2：新增登录认证；
+          优化页面加载；
+          修复方法循环调用栈溢出的bug
 
 
 ## 特别说明

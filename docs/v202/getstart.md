@@ -8,7 +8,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
   </dependency>
   
 ```
@@ -31,8 +31,11 @@
 > ko-time.log-enable=false  # 是否开启控制输出，默认false  
 > ko-time.log-language=chinese # 控制台输出语言（english/chinese）默认chinese  
 > ko-time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
-> ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置  
+> ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置   v2.0.1开始支持  
 > ko-time.exception-enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  
+> ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要登录才能访问调用链路 v2.0.2开始支持  
+> ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
+> ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
 >
 
 ## 访问
@@ -58,6 +61,6 @@
 
 **为了让作者不要偷懒，督促他好好维护和开发，我准备用金钱对他进行鞭笞**
 
-<img src="v201/pay.jpg"  width="15%" height="15%">
+<img src="v202/pay.jpg"  width="15%" height="15%">
 
 

@@ -46,6 +46,9 @@ http://huoyo.gitee.io/ko-time/example
          优化配置方式；
          优化页面显示
 
+> V2.0.2：新增登录认证；
+          优化页面加载；
+          修复方法循环调用栈溢出的bug
 
 ## 作者
 > Huoyo/Zhang Chang

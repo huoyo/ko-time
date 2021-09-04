@@ -9,7 +9,7 @@ pointcut直接引用了aop中的写法，下面简要提供几个写法：
 假设项目的包路径为：
 
 ```
-cn.langpy.demo
+com.huoyo.demo
         |-controller
         |-service
         |-mapper

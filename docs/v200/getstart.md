@@ -24,7 +24,7 @@
 
 > 
 > spring.profiles.active=koTime # 如果项目中还有其他配置请用英文逗号分隔，如：koTime,dev     
-> koTime.pointcut=execution(* com.huoyo..*(..)) # 需要监测的切面范围，参考aop的@pointcut 或者左侧常见问题  v1.4开始加入的功能
+> koTime.pointcut=execution(public * com.huoyo..*(..)) # 需要监测的切面范围，参考aop的@pointcut 或者左侧常见问题  v1.4开始加入的功能
 
 
 * 可选配置

@@ -11,6 +11,7 @@
     <version>2.0.2</version>
   </dependency>
   
+<!-- 或者尝试 2.0.3-PREPARE 更好的体验-->
 ```
 
 ## 配置

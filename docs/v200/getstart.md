@@ -14,6 +14,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-${freemarker或者thymeleaf任选一个}</artifactId>
 </dependency>
+ <!--可到右上角选择最新版本，体验新功能-->
 ```
 
 ## 配置

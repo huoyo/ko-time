@@ -147,6 +147,53 @@ public class MemoryBase implements GraphService {
     }
 
     @Override
+    public List<MethodInfo> searchMethods(String question) {
+        List<MethodInfo> methodInfos = new ArrayList<>();
+        for (MethodNode methodNode : methodNodes.values()) {
+            if (methodNode.getName().toLowerCase().contains(question.toLowerCase())) {
+                String id = methodNode.getId();
+                Optional<MethodRelation> relations = methodRelations.values().stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
+                MethodRelation relation = null;
+                if (relations.isPresent()) {
+                    relation = relations.get();
+                }else{
+                    continue;
+                }
+                MethodInfo methodInfo = new MethodInfo();
+                methodInfo.setId(methodNode.getId());
+                methodInfo.setName(methodNode.getName());
+                methodInfo.setClassName(methodNode.getClassName());
+                methodInfo.setMethodName(methodNode.getMethodName());
+                methodInfo.setMethodType(methodNode.getMethodType());
+                methodInfo.setValue(relation.getAvgRunTime());
+                methodInfo.setAvgRunTime(relation.getAvgRunTime());
+                methodInfo.setMaxRunTime(relation.getMaxRunTime());
+                methodInfo.setMinRunTime(relation.getMinRunTime());
+                if (!methodInfos.contains(methodInfo)) {
+                    methodInfos.add(methodInfo);
+                }
+            }
+        }
+        return methodInfos;
+    }
+
+    @Override
+    public List<String> getCondidates(String question) {
+        List<String> methodInfos = new ArrayList<>();
+        for (MethodNode methodNode : methodNodes.values()) {
+            if (methodNode.getName().toLowerCase().contains(question.toLowerCase())) {
+                if (!methodInfos.contains(methodNode.getName())) {
+                    methodInfos.add(methodNode.getName());
+                }
+            }
+            if (methodInfos.size()>=10) {
+                break;
+            }
+        }
+        return methodInfos;
+    }
+
+    @Override
     public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
         for (ExceptionRelation relation : exceptionRelations.values()) {
@@ -260,4 +307,5 @@ public class MemoryBase implements GraphService {
         }
 
     }
+
 }

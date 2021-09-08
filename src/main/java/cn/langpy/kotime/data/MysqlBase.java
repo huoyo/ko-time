@@ -33,6 +33,16 @@ public class MysqlBase implements GraphService {
     }
 
     @Override
+    public List<String> getCondidates(String question) {
+        return null;
+    }
+
+    @Override
+    public List<MethodInfo> searchMethods(String question) {
+        return null;
+    }
+
+    @Override
     public List<MethodInfo> getChildren(String methodId) {
         return null;
     }

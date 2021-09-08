@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface GraphService {
 
+
     static GraphService getInstance() {
         GraphService graphService = null;
         if (Context.getConfig().getSaveSaver().equals("memory")) {
@@ -27,7 +28,11 @@ public interface GraphService {
 
     SystemStatistic getRunStatistic();
 
+    List<MethodInfo> searchMethods(String question);
+
     List<MethodInfo> getControllers();
+
+    List<String> getCondidates(String question);
 
     List<MethodInfo> getChildren(String methodId);
 

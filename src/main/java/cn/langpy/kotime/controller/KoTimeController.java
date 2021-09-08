@@ -118,10 +118,23 @@ public class KoTimeController {
     @GetMapping("/getApis")
     @ResponseBody
     @Auth
-    public List<MethodInfo> getApis() {
+    public List<MethodInfo> getApis(String question) {
         GraphService graphService = GraphService.getInstance();
-        List<MethodInfo> list = graphService.getControllers();
+        List<MethodInfo> list = null;
+        if (StringUtils.hasText(question)) {
+            list = graphService.searchMethods(question);
+        }else {
+            list = graphService.getControllers();
+        }
         Collections.sort(list);
+        return list;
+    }
+    @GetMapping("/getApiTips")
+    @ResponseBody
+    @Auth
+    public List<String> getApiTips(String question) {
+        GraphService graphService = GraphService.getInstance();
+        List<String> list = graphService.getCondidates(question);
         return list;
     }
 

@@ -11,7 +11,9 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.logging.Logger;
-
+/**
+ * zhangchang
+ */
 @ComponentScan("cn.langpy.kotime")
 @Configuration
 public class LoadConfig {

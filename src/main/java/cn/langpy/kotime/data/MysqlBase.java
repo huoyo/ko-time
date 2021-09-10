@@ -5,6 +5,9 @@ import cn.langpy.kotime.service.GraphService;
 
 import java.util.List;
 
+/**
+ * zhangchang
+ */
 // TODO: 2021-05-04 waiting to code
 public class MysqlBase implements GraphService {
     @Override

@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
-
+/**
+ * zhangchang
+ */
 @Aspect
 @Component
 public class AuthHandler {

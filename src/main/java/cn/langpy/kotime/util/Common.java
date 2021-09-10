@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.logging.Logger;
 
+/**
+ * zhangchang
+ */
 public class Common {
     public static Logger log = Logger.getLogger(Common.class.toString());
 

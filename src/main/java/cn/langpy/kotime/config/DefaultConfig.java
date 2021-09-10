@@ -4,6 +4,9 @@ package cn.langpy.kotime.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+/**
+ * zhangchang
+ */
 @Component
 @ConfigurationProperties(prefix = "ko-time")
 public class DefaultConfig {

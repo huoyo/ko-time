@@ -9,6 +9,9 @@ import cn.langpy.kotime.util.MethodStack;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+/**
+ * zhangchang
+ */
 public class RunTimeHandler implements MethodInterceptor {
 
     @Override

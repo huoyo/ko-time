@@ -7,6 +7,9 @@ import cn.langpy.kotime.util.Context;
 
 import java.util.List;
 
+/**
+ * zhangchang
+ */
 public interface GraphService {
 
 

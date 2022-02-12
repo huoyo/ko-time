@@ -20,13 +20,19 @@
         var d = 180;
         var globalThreshold = globalThresholdValue;
         var globalNeedLogin = globalNeedLoginValue;
-        var globalIsLogin = globalIsLoginValue;
+        var globalToken = sessionStorage.getItem("kotimeToken")
         $(document).ready(function () {
+            let globalIsLogin = false;
+            $.ajaxSettings.async = false;
+            $.get('contextPath/koTime/isLogin?token='+globalToken, function (data) {
+                globalIsLogin  = data['isLogin']==1?true:false;
+            });
+            $.ajaxSettings.async = true;
             if (globalNeedLogin==true && globalIsLogin == false) {
                 UIkit.modal(document.getElementById("modal-login")).show();
                 return;
             };
-            $.get('contextPath/koTime/getConfig', function (data) {
+            $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
                 let exceptionEnable = data['exceptionEnable'];
 
                 let exceptionEnableDom = document.getElementById('exceptionEnable');
@@ -51,24 +57,24 @@
             });
 
             document.getElementById('kotimeEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig',data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
             };
 
             document.getElementById('exceptionEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig',data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
 
             };
 
             document.getElementById('logEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig',data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
             };
 
 
             document.getElementById("timeThresholdYes").onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig',data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
             };
 
-            $.get('contextPath/koTime/getStatistic', function (data) {
+            $.get('contextPath/koTime/getStatistic?token='+globalToken, function (data) {
                 let totalNum = data['totalNum'];
                 let systemTotalNum = document.getElementById("systemTotalNum");
                 systemTotalNum.innerHTML=systemTotalNum.innerHTML+"<br>"+totalNum;
@@ -108,7 +114,7 @@
             });
             $.ajaxSettings.async = false;
             let searchText = $("#searchText").val();
-            $.get('contextPath/koTime/getApis?question='+searchText, function (data) {
+            $.get('contextPath/koTime/getApis?question='+searchText+'&token='+globalToken, function (data) {
                 let element = document.getElementById('apiList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
@@ -121,7 +127,7 @@
                 };
                 element.innerHTML = html;
             });
-            $.get('contextPath/koTime/getExceptions', function (data) {
+            $.get('contextPath/koTime/getExceptions?token='+globalToken, function (data) {
                 let element = document.getElementById('exceptionList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
@@ -171,7 +177,7 @@
             UIkit.notification.closeAll();
             UIkit.modal(document.getElementById("modal-method")).show();
 
-            $.get('contextPath/koTime/getTree?methodName=' + name, function (data) {
+            $.get('contextPath/koTime/getTree?methodName=' + name+'&token='+globalToken, function (data) {
                 let rootX = 100;
                 let rootY = $(window).get(0).innerHeight / 2-50;
                 data['x'] = rootX;
@@ -183,7 +189,7 @@
         };
 
         function showExceptions(id) {
-            $.get('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id, function (data) {
+            $.get('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id+'&token='+globalToken, function (data) {
                 let html = '';
                 for (let i = 0; i < data.length; i++) {
                     html +=
@@ -223,6 +229,7 @@
                     if (re['state']==1) {
                         UIkit.notification("<font color='green'>登录成功</font>",{});
                         UIkit.notification.closeAll()
+                        sessionStorage.setItem("kotimeToken", re["token"]);
                         location.reload();
                     }else {
                         UIkit.notification("<font color='red'>用户名或密码错误</font>",{});
@@ -235,7 +242,7 @@
         }
         function searchTip(e){
             let question =  $('#searchText').val()
-            $.get('contextPath/koTime/getApiTips?question='+question, function (data) {
+            $.get('contextPath/koTime/getApiTips?question='+question+'&token='+globalToken, function (data) {
                 $("#condidates").html("")
                 for (let i = 0; i < data.length; i++) {
                     let name = data[i];
@@ -247,7 +254,7 @@
         function searchApis(e) {
             if (e.keyCode == 13) {
                 let question =  $('#searchText').val()
-                $.get('contextPath/koTime/getApis?question='+question, function (data) {
+                $.get('contextPath/koTime/getApis?question='+question+'&token='+globalToken, function (data) {
                     let element = document.getElementById('apiList');
                     html = '';
                     for (let i = 0; i < data.length; i++) {

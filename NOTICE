@@ -3,4 +3,6 @@ Copyright 2020 KoTime
 
 This product contains UIkit developed by YOOtheme.
 
+This product uses Java JWT(com.auth0:java-jwt:3.16.0).
+
 This product includes software developed at The Apache Software Foundation (http://www.apache.org/).

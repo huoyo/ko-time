@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
 /**
  * zhangchang
  */
@@ -37,37 +38,40 @@ public class KoTimeController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Map login(@RequestBody UserInfo userInfo)  {
-        if (null==userInfo || !StringUtils.hasText(userInfo.getUserName()) || !StringUtils.hasText(userInfo.getPassword())) {
+    public Map login(@RequestBody UserInfo userInfo) {
+        if (null == userInfo || !StringUtils.hasText(userInfo.getUserName()) || !StringUtils.hasText(userInfo.getPassword())) {
             throw new InvalidAuthInfoException("failed to login for kotime,please fill userName and password!");
         }
         Map map = new HashMap();
         if (userName.equals(userInfo.getUserName()) && password.equals(userInfo.getPassword())) {
-            KoUtil.login(userInfo.getUserName());
-            map.put("state",1);
+            String token = KoUtil.login(userInfo.getUserName());
+            map.put("state", 1);
+            map.put("token", token);
             return map;
         }
-        map.put("state",0);
+        map.put("state", 0);
         return map;
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/isLogin")
     @ResponseBody
-    public Map logout()  {
-        KoUtil.logout();
+    public Map isLogin(String token) {
         Map map = new HashMap();
-        map.put("state",1);
+        map.put("state", 1);
+        boolean checkLogin = KoUtil.isLogin(token);
+        map.put("isLogin", checkLogin ? 1 : 0);
         return map;
     }
+
 
     @GetMapping
-    public void index(String test,HttpServletResponse response, HttpServletRequest request) throws Exception {
-        if (null!=test) {
+    public void index(String test, HttpServletResponse response, HttpServletRequest request) throws Exception {
+        if (null != test) {
             return;
         }
         response.setContentType("text/html;charset=utf-8");
         ClassPathResource classPathResource = new ClassPathResource(KoConstant.kotimeViewer);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(),"utf-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(), "utf-8"));
         PrintWriter out = response.getWriter();
         String context = request.getContextPath();
         if (StringUtils.hasText(Context.getConfig().getContextPath())) {
@@ -76,22 +80,20 @@ public class KoTimeController {
         StringBuilder stringBuilder = new StringBuilder();
         String line = "";
         int n = 0;
-        while((line = reader.readLine()) != null) {
-            if (n>14) {
-                if (line.indexOf(KoConstant.globalThreshold)>-1) {
-                    line = line.replace(KoConstant.globalThreshold,Context.getConfig().getThreshold()+"");
-                }else  if (line.indexOf(KoConstant.globalNeedLogin)>-1) {
-                    line = line.replace(KoConstant.globalNeedLogin,Context.getConfig().getAuthEnable()+"");
-                }else  if (line.indexOf(KoConstant.globalIsLogin)>-1) {
-                    line = line.replace(KoConstant.globalIsLogin,KoUtil.isLogin()+"");
-                }else  if (line.indexOf(KoConstant.contextPath)>-1) {
-                    line = line.replace(KoConstant.contextPath,context);
-                }else  if (line.indexOf(KoConstant.exceptionTitleStyle)>-1) {
-                    line = line.replace(KoConstant.exceptionTitleStyle,Context.getConfig().getExceptionEnable()==true?"":"display:none;");
+        while ((line = reader.readLine()) != null) {
+            if (n > 14) {
+                if (line.indexOf(KoConstant.globalThreshold) > -1) {
+                    line = line.replace(KoConstant.globalThreshold, Context.getConfig().getThreshold() + "");
+                } else if (line.indexOf(KoConstant.globalNeedLogin) > -1) {
+                    line = line.replace(KoConstant.globalNeedLogin, Context.getConfig().getAuthEnable() + "");
+                } else if (line.indexOf(KoConstant.contextPath) > -1) {
+                    line = line.replace(KoConstant.contextPath, context);
+                } else if (line.indexOf(KoConstant.exceptionTitleStyle) > -1) {
+                    line = line.replace(KoConstant.exceptionTitleStyle, Context.getConfig().getExceptionEnable() == true ? "" : "display:none;");
                 }
-                stringBuilder.append(line+"\n");
-            }else {
-                stringBuilder.append(line+"\n");
+                stringBuilder.append(line + "\n");
+            } else {
+                stringBuilder.append(line + "\n");
             }
             n++;
         }
@@ -125,12 +127,13 @@ public class KoTimeController {
         List<MethodInfo> list = null;
         if (StringUtils.hasText(question)) {
             list = graphService.searchMethods(question);
-        }else {
+        } else {
             list = graphService.getControllers();
         }
         Collections.sort(list);
         return list;
     }
+
     @GetMapping("/getApiTips")
     @ResponseBody
     @Auth
@@ -171,16 +174,16 @@ public class KoTimeController {
     @Auth
     public boolean updateConfig(@RequestBody DefaultConfig config) {
         DefaultConfig koTimeConfig = Context.getConfig();
-        if (config.getEnable()!=null) {
+        if (config.getEnable() != null) {
             koTimeConfig.setEnable(config.getEnable());
         }
-        if (config.getExceptionEnable()!=null) {
+        if (config.getExceptionEnable() != null) {
             koTimeConfig.setExceptionEnable(config.getExceptionEnable());
         }
-        if (config.getLogEnable()!=null) {
+        if (config.getLogEnable() != null) {
             koTimeConfig.setLogEnable(config.getLogEnable());
         }
-        if (config.getThreshold()!=null) {
+        if (config.getThreshold() != null) {
             koTimeConfig.setThreshold(config.getThreshold());
         }
         return true;

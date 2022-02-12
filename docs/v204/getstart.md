@@ -31,7 +31,7 @@
 > ko-time.log-enable=false  # 是否开启控制输出，默认false  
 > ko-time.log-language=chinese # 控制台输出语言（english/chinese）默认chinese  
 > ko-time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
-> ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置   v2.0.1开始支持  
+> ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置，一般情况切记不要配置   v2.0.1开始支持  
 > ko-time.exception-enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  
 > ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要登录才能访问调用链路 v2.0.2开始支持  
 > ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
@@ -43,6 +43,7 @@
 > 注意：    
 > 1.引入了上面的依赖和配置以后，确认项目中是否有aop相关的包，koTime使用了@Aspect注解，未引入的自行引入，如aspectj或者spring-boot-starter-aop        
 > 2.做完前面的步骤，koTime的集成已经完毕，无需进行其他配置   
+> 3.如果后台有权限认证，需要放开`/koTime`和`/koTime/**`
                                    
 
 

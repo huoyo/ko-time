@@ -1,6 +1,6 @@
 ![logo](v200/kotime.png)
 
-<small>v2.0.5@Huoyo</small>
+<small>v2.0.6@Huoyo</small>
 
 > koTime是一个springboot方法调用链路追踪和运行时长统计工具
 

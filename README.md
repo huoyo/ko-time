@@ -1,5 +1,6 @@
-# koTime
+# KoTime
 
+[英文简介/ENGLISH](README-EN.md)
 
 <div >
     <img src='https://shields.io/badge/version-2.0.6-green.svg'>

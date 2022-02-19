@@ -1,13 +1,12 @@
 # koTime
 
 
-> `V2.0.6` 
-
-
-
-## 介绍
-
-koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈：
+<div >
+    <img src='https://shields.io/badge/version-2.0.6-green.svg'>
+    <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
+    <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat-r.svg'>
+    <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
+</div>
 
 
 ## 文档
@@ -15,15 +14,9 @@ koTime是一个springboot项目性能分析工具，通过追踪方法调用链�
 http://huoyo.gitee.io/ko-time
 
 
-优点：
+特点：
 > * 实时监听方法，统计运行时长
 > * web展示方法调用链路，瓶颈可视化追踪
-
-
-
-缺点：
-> * 由于对项目中每个方法进行监控，在性能层面会有一点影响，建议在开发阶段使用，系统稳定后关闭
-
 
 
 ## 可视化展示
@@ -33,14 +26,16 @@ http://huoyo.gitee.io/ko-time
 根据颜色判断需要优化的接口数，红色为待优化，绿色为正常
 
 ![输入图片说明](docs/v201/zl.png)
+
 2.接口列表总览
 
 在列表中会显示该接口的运行耗时，如果为绿色则无需优化，如果为红色，需要详细查看问题所在
 
 ![输入图片说明](docs/v201/apis.png)
+
 3.调用详情
 
-点开接口时，会显示该接口的调用链路以及运行时长
+点开接口时，会显示该接口的调用链路以及运行时长，红色节点即为需要优化的节点
 
 ![输入图片说明](docs/v203/ff.png)
 

@@ -17,27 +17,27 @@ http://huoyo.gitee.io/ko-time
 
 Features：
 
-> * tracking the Java methods and calculating execution time
-> * show the paths of the methods
+> * Tracking the Java methods and calculating their execution times
+> * Show the paths of the methods
 
 
 ## Display
 
-1.calculating the execution times of Java methods
+1.Calculating the execution times of Java methods
 
-finding the methods that need optimize
+Finding the methods that need optimize
 
 ![输入图片说明](docs/v201/zl.png)
 
-2. interface methods can be seen as follows
+2. Interface methods can be seen as follows
 
-you can see every interface method that were called, and you need optimize them when they are red
+You can see every interface method that was called, and you need optimize them when they are red
 
 ![输入图片说明](docs/v201/apis.png)
 
-3.calling details
+3.Calling details
 
-after clicking the inteface method,you can find paths of the methods
+After clicking the inteface method,you can find paths of the methods
 
 ![输入图片说明](docs/v203/ff.png)
 

@@ -37,7 +37,7 @@ You can see every interface method that was called, and you need optimize them w
 
 3.Calling details
 
-After clicking the inteface method,you can find paths of the methods
+After clicking a inteface method,you can find paths of the method
 
 ![输入图片说明](docs/v203/ff.png)
 

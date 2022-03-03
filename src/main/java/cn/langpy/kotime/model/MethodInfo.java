@@ -12,6 +12,7 @@ public class   MethodInfo implements Comparable<MethodInfo> {
     private String name;
     private String className;
     private String methodName;
+    private String routeName;
     private Double value = 0.0;
     private Double avgRunTime = 0.0;
     private Double maxRunTime = 0.0;
@@ -24,6 +25,14 @@ public class   MethodInfo implements Comparable<MethodInfo> {
     @Override
     public int compareTo(MethodInfo o) {
         return -this.avgRunTime.compareTo(o.getAvgRunTime());
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
     }
 
     public List<ExceptionInfo> getExceptions() {

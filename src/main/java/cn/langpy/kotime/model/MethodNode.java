@@ -10,6 +10,7 @@ public class MethodNode{
     private String name;
     private String className;
     private String methodName;
+    private String routeName;
     private Double value = 0.0;
     private MethodType methodType;
 
@@ -72,6 +73,14 @@ public class MethodNode{
 
     public void setMethodType(MethodType methodType) {
         this.methodType = methodType;
+    }
+
+    public String getRouteName() {
+        return routeName;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
     }
 
     @Override

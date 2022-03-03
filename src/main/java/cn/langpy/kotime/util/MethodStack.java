@@ -21,7 +21,8 @@ public class MethodStack {
         }else {
              queue = threadMethods.get();
         }
-        queue.add(className+"#"+methodName);
+        MethodType methodType = Common.getMethodType(pjp);
+        queue.add(className+"#"+methodName+"#"+methodType);
         threadMethods.set(queue);
     }
 

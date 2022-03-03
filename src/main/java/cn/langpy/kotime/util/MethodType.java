@@ -7,5 +7,6 @@ public enum MethodType {
     Controller,
     Service,
     Dao,
+    Dispatcher,
     Others;
 }

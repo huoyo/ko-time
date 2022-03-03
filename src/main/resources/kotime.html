@@ -121,9 +121,16 @@
                     let className = data[i]['className'];
                     let methodName = data[i]['methodName'];
                     let avgRunTime = data[i]['avgRunTime'];
+                    let methodType = data[i]['methodType'];
+                    let routeName = data[i]['routeName'];
+
                     let apiId = className+"."+methodName;
                     let  color = avgRunTime>globalThreshold?'danger':'success';
-                    html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" 毫秒</span></li>";
+                    if (methodType=='Controller' && routeName!=null && routeName!='') {
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" 毫秒</span></li>";
+                    }else{
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" 毫秒</span></li>";
+                    }
                 };
                 element.innerHTML = html;
             });
@@ -261,9 +268,16 @@
                         let className = data[i]['className'];
                         let methodName = data[i]['methodName'];
                         let avgRunTime = data[i]['avgRunTime'];
+                        let methodType = data[i]['methodType'];
+                        let routeName = data[i]['routeName'];
                         let apiId = className+"."+methodName;
                         let  color = avgRunTime>globalThreshold?'danger':'success';
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" 毫秒</span></li>";
+
+                        if (methodType=='Controller' && routeName!=null && routeName!='') {
+                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" 毫秒</span></li>";
+                        }else{
+                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" 毫秒</span></li>";
+                        }
                     };
                     element.innerHTML = html;
                 });

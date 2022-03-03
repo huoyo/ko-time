@@ -5,6 +5,7 @@ import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -39,6 +40,12 @@ public class MemoryBase implements GraphService {
         }
         if (!methodNodes.containsKey(methodNode.getId())) {
             methodNodes.put(methodNode.getId(), methodNode);
+        }else {
+            if (methodNode.getMethodType()==MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
+                MethodNode controller = methodNodes.get(methodNode.getId());
+                controller.setRouteName(methodNode.getRouteName());
+                methodNodes.put(methodNode.getId(), controller);
+            }
         }
     }
 
@@ -137,6 +144,7 @@ public class MemoryBase implements GraphService {
                 methodInfo.setClassName(methodNode.getClassName());
                 methodInfo.setMethodName(methodNode.getMethodName());
                 methodInfo.setMethodType(methodNode.getMethodType());
+                methodInfo.setRouteName(methodNode.getRouteName());
                 methodInfo.setValue(relation.getAvgRunTime());
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
@@ -168,6 +176,7 @@ public class MemoryBase implements GraphService {
                 methodInfo.setClassName(methodNode.getClassName());
                 methodInfo.setMethodName(methodNode.getMethodName());
                 methodInfo.setMethodType(methodNode.getMethodType());
+                methodInfo.setRouteName(methodNode.getRouteName());
                 methodInfo.setValue(relation.getAvgRunTime());
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
@@ -233,6 +242,7 @@ public class MemoryBase implements GraphService {
                 methodInfo.setName(methodNode.getName());
                 methodInfo.setClassName(methodNode.getClassName());
                 methodInfo.setMethodName(methodNode.getMethodName());
+                methodInfo.setRouteName(methodNode.getRouteName());
                 methodInfo.setMethodType(methodNode.getMethodType());
                 methodInfo.setValue(methodRelation.getAvgRunTime());
                 methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
@@ -282,6 +292,7 @@ public class MemoryBase implements GraphService {
         rootInfo.setClassName(methodNode.getClassName());
         rootInfo.setMethodName(methodNode.getMethodName());
         rootInfo.setMethodType(methodNode.getMethodType());
+        rootInfo.setRouteName(methodNode.getRouteName());
         MethodRelation methodRelation = methodRelations.values().stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst().get();
         rootInfo.setValue(methodRelation.getAvgRunTime());
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());

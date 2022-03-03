@@ -20,23 +20,24 @@ public class InvokeService {
         Stack<String> stack = MethodStack.get();
         if (null==stack) {
             MethodNode parent = new MethodNode();
-            parent.setId("com.langpy.kotime.Cotroller.dispatch");
-            parent.setClassName("Cotroller");
+            parent.setId("com.langpy.kotime.Controller.dispatch");
+            parent.setClassName("Controller");
             parent.setMethodName("dispatch");
-            parent.setName("Cotroller.dispatch");
-            parent.setMethodType(MethodType.Others);
+            parent.setName("Controller.dispatch");
+            parent.setMethodType(MethodType.Dispatcher);
             return parent;
         }
         String classMethod = stack.peek();
         String[] classMethodSplit = classMethod.split("#");
         String parentClassName = classMethodSplit[0];
         String parentMothodName = classMethodSplit[1];
+        String parentMothodType = classMethodSplit[2];
         MethodNode parent = new MethodNode();
         parent.setId(parentClassName + "." + parentMothodName);
         parent.setClassName(parentClassName);
         parent.setMethodName(parentMothodName);
         parent.setName(parentClassName.substring(parentClassName.lastIndexOf(".") + 1) + "." + parentMothodName);
-        parent.setMethodType(Common.getMethodType(parentClassName));
+        parent.setMethodType(Common.getMethodType(parentMothodType));
         return parent;
     }
 
@@ -52,6 +53,9 @@ public class InvokeService {
         runTime = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         current.setValue(runTime);
         current.setMethodType(Common.getMethodType(pjp));
+        if (current.getMethodType()==MethodType.Controller) {
+            current.setRouteName(Common.getRoute(pjp));
+        }
         return current;
     }
 }

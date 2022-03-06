@@ -54,6 +54,7 @@ public class RunTimeHandler implements MethodInterceptor {
         graphService.addMethodNode(parent);
         graphService.addMethodNode(current);
         graphService.addMethodRelation(parent, current);
+        graphService.addMethodAnalyse(current.getId(),invocation.getMethod().getParameters(), invocation.getArguments(),((end - begin) / 1000000.0));
         MethodStack.clear();
         return obj;
     }

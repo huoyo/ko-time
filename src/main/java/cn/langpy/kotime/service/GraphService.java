@@ -5,7 +5,9 @@ import cn.langpy.kotime.data.MysqlBase;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.util.Context;
 
+import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * zhangchang
@@ -25,9 +27,13 @@ public interface GraphService {
 
     void addMethodNode(MethodNode methodNode);
 
+    void addMethodAnalyse(String methodId,Parameter[] names, Object[] values,double v);
+
     void addExceptionNode(ExceptionNode exceptionNode);
 
     MethodInfo getTree(String methodId);
+
+    Map<String, ParamMetric> getMethodParamGraph(String methodId);
 
     SystemStatistic getRunStatistic();
 

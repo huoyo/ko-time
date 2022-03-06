@@ -134,6 +134,15 @@ public class KoTimeController {
         return list;
     }
 
+    @GetMapping("/getParamGraph")
+    @ResponseBody
+    @Auth
+    public Map<String, ParamMetric> getParamGraph(String methodId) {
+        GraphService graphService = GraphService.getInstance();
+        Map<String, ParamMetric> list = graphService.getMethodParamGraph(methodId);
+        return list;
+    }
+
     @GetMapping("/getApiTips")
     @ResponseBody
     @Auth

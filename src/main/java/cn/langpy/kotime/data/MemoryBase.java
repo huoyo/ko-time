@@ -6,7 +6,11 @@ import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,22 +30,25 @@ public class MemoryBase implements GraphService {
 
     private volatile static Map<String, ExceptionRelation> exceptionRelations;
 
+    private volatile static Map<String, Map<String, ParamMetric>> paramValueMetricMap;
+
     static {
         methodNodes = new HashMap<>();
         exceptions = new HashMap<>();
         methodRelations = new HashMap<>();
         exceptionRelations = new HashMap<>();
+        paramValueMetricMap = new HashMap<String, Map<String, ParamMetric>>();
     }
 
     @Override
     public void addMethodNode(MethodNode methodNode) {
-        if (null==methodNode) {
+        if (null == methodNode) {
             return;
         }
         if (!methodNodes.containsKey(methodNode.getId())) {
             methodNodes.put(methodNode.getId(), methodNode);
-        }else {
-            if (methodNode.getMethodType()==MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
+        } else {
+            if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
                 MethodNode controller = methodNodes.get(methodNode.getId());
                 controller.setRouteName(methodNode.getRouteName());
                 methodNodes.put(methodNode.getId(), controller);
@@ -49,10 +56,74 @@ public class MemoryBase implements GraphService {
         }
     }
 
+    List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
+
+    public void addMethodAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
+        List<String> params = new ArrayList<>();
+        for (int i = 0; i < names.length; i++) {
+            Class<?> type = names[i].getType();
+            if (baseTypes.contains(type)) {
+                if (values[i] != null) {
+                    params.add(names[i].getName());
+                }
+            } else {
+                if (type == HttpServletRequest.class) {
+                    continue;
+                }
+                Field[] declaredFields = values[i].getClass().getDeclaredFields();
+                for (Field field : declaredFields) {
+                    field.setAccessible(true);
+                    try {
+                        Object value = field.get(values[i]);
+                        if (value != null) {
+                            params.add(field.getName());
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        String paramsKey = "-";
+        if (params.size()>0) {
+            paramsKey = String.join("-", params);
+        }
+        if (paramValueMetricMap.containsKey(methodId)) {
+            Map<String, ParamMetric> paramMetricMap = paramValueMetricMap.get(methodId);
+            if (paramMetricMap.containsKey(paramsKey)) {
+                ParamMetric paramMetric = paramMetricMap.get(paramsKey);
+                BigDecimal bg = BigDecimal.valueOf((paramMetric.getAvgRunTime() + v) / 2.0);
+                double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                paramMetric.setAvgRunTime(avg);
+                if (v > paramMetric.getMaxRunTime()) {
+                    paramMetric.setMaxRunTime(v);
+                }
+                if (v < paramMetric.getMinRunTime()) {
+                    paramMetric.setMinRunTime(v);
+                }
+            } else {
+                ParamMetric paramMetric = new ParamMetric();
+                paramMetric.setMaxRunTime(v);
+                paramMetric.setAvgRunTime(v);
+                paramMetric.setMaxRunTime(v);
+                paramMetricMap.put(paramsKey, paramMetric);
+            }
+        } else {
+            ParamMetric paramMetric = new ParamMetric();
+            paramMetric.setMaxRunTime(v);
+            paramMetric.setAvgRunTime(v);
+            paramMetric.setMaxRunTime(v);
+
+            Map<String, ParamMetric> paramMetricMap = new HashMap<>();
+            paramMetricMap.put(paramsKey, paramMetric);
+            paramValueMetricMap.put(methodId, paramMetricMap);
+        }
+    }
+
 
     @Override
     public MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode) {
-        if (null!=sourceMethodNode && null!=targetMethodNode && sourceMethodNode.getId().equals(targetMethodNode.getId())) {
+        if (null != sourceMethodNode && null != targetMethodNode && sourceMethodNode.getId().equals(targetMethodNode.getId())) {
             return null;
         }
         MethodRelation methodRelation = new MethodRelation();
@@ -135,7 +206,7 @@ public class MemoryBase implements GraphService {
                 MethodRelation relation = null;
                 if (relations.isPresent()) {
                     relation = relations.get();
-                }else{
+                } else {
                     continue;
                 }
                 MethodInfo methodInfo = new MethodInfo();
@@ -158,6 +229,12 @@ public class MemoryBase implements GraphService {
     }
 
     @Override
+    public Map<String, ParamMetric> getMethodParamGraph(String methodId) {
+        Map<String, ParamMetric> paramMetricMap = paramValueMetricMap.get(methodId);
+        return paramMetricMap;
+    }
+
+    @Override
     public List<MethodInfo> searchMethods(String question) {
         List<MethodInfo> methodInfos = new ArrayList<>();
         for (MethodNode methodNode : methodNodes.values()) {
@@ -167,7 +244,7 @@ public class MemoryBase implements GraphService {
                 MethodRelation relation = null;
                 if (relations.isPresent()) {
                     relation = relations.get();
-                }else{
+                } else {
                     continue;
                 }
                 MethodInfo methodInfo = new MethodInfo();
@@ -198,7 +275,7 @@ public class MemoryBase implements GraphService {
                     methodInfos.add(methodNode.getName());
                 }
             }
-            if (methodInfos.size()>=10) {
+            if (methodInfos.size() >= 10) {
                 break;
             }
         }
@@ -302,19 +379,19 @@ public class MemoryBase implements GraphService {
         rootInfo.setExceptionNum(exceptionInfos.size());
         rootInfo.setExceptions(exceptionInfos);
         List<String> methodInfos = new ArrayList<>();
-        recursionMethod(rootInfo,methodInfos);
+        recursionMethod(rootInfo, methodInfos);
         methodInfos.clear();
         return rootInfo;
     }
 
-    public void recursionMethod(MethodInfo rootInfo,List<String> methodInfos) {
+    public void recursionMethod(MethodInfo rootInfo, List<String> methodInfos) {
         List<MethodInfo> children = getChildren(rootInfo.getId());
         if (children != null && children.size() > 0) {
             if (!methodInfos.contains(rootInfo.getId())) {
                 methodInfos.add(rootInfo.getId());
                 rootInfo.setChildren(children);
                 for (MethodInfo child : children) {
-                    recursionMethod(child,methodInfos);
+                    recursionMethod(child, methodInfos);
                 }
             }
 

@@ -3,7 +3,9 @@ package cn.langpy.kotime.data;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.GraphService;
 
+import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * zhangchang
@@ -16,12 +18,22 @@ public class MysqlBase implements GraphService {
     }
 
     @Override
+    public void addMethodAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
+
+    }
+
+    @Override
     public void addExceptionNode(ExceptionNode exceptionNode) {
 
     }
 
     @Override
     public MethodInfo getTree(String methodId) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ParamMetric> getMethodParamGraph(String methodId) {
         return null;
     }
 

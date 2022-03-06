@@ -10,7 +10,7 @@
     <artifactId>ko-time</artifactId>
     <version>2.0.6</version>
   </dependency>
-  
+  <!-- v2.0.6 为稳定版本 可尝试v2.0.8版本 加入了接口层路由和入参组合分析 双击调用链路图上的方法节点显示不同入参组合下的调用时长-->
 ```
 
 ## 配置

@@ -58,7 +58,7 @@ public class MemoryBase implements GraphService {
 
     List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
 
-    public void addMethodAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
+    public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
         List<String> params = new ArrayList<>();
         for (int i = 0; i < names.length; i++) {
             Class<?> type = names[i].getType();

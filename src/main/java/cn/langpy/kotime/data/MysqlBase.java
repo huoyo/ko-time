@@ -18,7 +18,7 @@ public class MysqlBase implements GraphService {
     }
 
     @Override
-    public void addMethodAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
+    public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
 
     }
 

@@ -97,6 +97,13 @@
       "defaultValue": "",
       "description": "password for authentication",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
+      "name": "ko-time.param-analyse",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "the charger of analysing params",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     }
   ],
   "hints": []

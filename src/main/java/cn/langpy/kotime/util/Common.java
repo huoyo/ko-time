@@ -19,11 +19,14 @@ public class Common {
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
         String[] classRoute = getRouteValue(targetClass);
-        if (classRoute == null || classRoute.length==0) {
+        if (classRoute == null || classRoute.length == 0) {
             return null;
         }
         StringBuilder routes = new StringBuilder(classRoute[0]);
         String[] methodRoute = getRouteValue(pjp.getMethod());
+        if (methodRoute == null || methodRoute.length == 0) {
+            return null;
+        }
         if (methodRoute[0].startsWith("/")) {
             routes.append(methodRoute[0]);
         } else {
@@ -33,65 +36,51 @@ public class Common {
     }
 
     private static String[] getRouteValue(Class<?> targetClass) {
-        String[] methodRoute = null;
         RequestMapping methodAnnotationRequest = targetClass.getAnnotation(RequestMapping.class);
-        if (methodAnnotationRequest == null) {
-            PostMapping methodAnnotationPost = targetClass.getAnnotation(PostMapping.class);
-            if (methodAnnotationPost == null) {
-                GetMapping methodAnnotationGet = targetClass.getAnnotation(GetMapping.class);
-                if (methodAnnotationGet == null) {
-                    PutMapping methodAnnotationPut = targetClass.getAnnotation(PutMapping.class);
-                    if (methodAnnotationPut == null) {
-                        DeleteMapping methodAnnotationDelete = targetClass.getAnnotation(DeleteMapping.class);
-                        if (methodAnnotationDelete == null) {
-                            return null;
-                        } else {
-                            methodRoute = methodAnnotationDelete.value();
-                        }
-                    } else {
-                        methodRoute = methodAnnotationPut.value();
-                    }
-                } else {
-                    methodRoute = methodAnnotationGet.value();
-                }
-            } else {
-                methodRoute = methodAnnotationPost.value();
-            }
-        } else {
-            methodRoute = methodAnnotationRequest.value();
+        if (methodAnnotationRequest != null) {
+            return methodAnnotationRequest.value();
         }
-        return methodRoute;
+        PostMapping methodAnnotationPost = targetClass.getAnnotation(PostMapping.class);
+        if (methodAnnotationPost != null) {
+            return methodAnnotationPost.value();
+        }
+        GetMapping methodAnnotationGet = targetClass.getAnnotation(GetMapping.class);
+        if (methodAnnotationGet != null) {
+            return methodAnnotationGet.value();
+        }
+        PutMapping methodAnnotationPut = targetClass.getAnnotation(PutMapping.class);
+        if (methodAnnotationPut != null) {
+            return methodAnnotationPut.value();
+        }
+        DeleteMapping methodAnnotationDelete = targetClass.getAnnotation(DeleteMapping.class);
+        if (methodAnnotationDelete != null) {
+            return methodAnnotationDelete.value();
+        }
+        return null;
     }
 
     private static String[] getRouteValue(Method method) {
-        String[] methodRoute = null;
         RequestMapping methodAnnotationRequest = method.getAnnotation(RequestMapping.class);
-        if (methodAnnotationRequest == null) {
-            PostMapping methodAnnotationPost = method.getAnnotation(PostMapping.class);
-            if (methodAnnotationPost == null) {
-                GetMapping methodAnnotationGet = method.getAnnotation(GetMapping.class);
-                if (methodAnnotationGet == null) {
-                    PutMapping methodAnnotationPut = method.getAnnotation(PutMapping.class);
-                    if (methodAnnotationPut == null) {
-                        DeleteMapping methodAnnotationDelete = method.getAnnotation(DeleteMapping.class);
-                        if (methodAnnotationDelete == null) {
-                            return null;
-                        } else {
-                            methodRoute = methodAnnotationDelete.value();
-                        }
-                    } else {
-                        methodRoute = methodAnnotationPut.value();
-                    }
-                } else {
-                    methodRoute = methodAnnotationGet.value();
-                }
-            } else {
-                methodRoute = methodAnnotationPost.value();
-            }
-        } else {
-            methodRoute = methodAnnotationRequest.value();
+        if (methodAnnotationRequest != null) {
+            return methodAnnotationRequest.value();
         }
-        return methodRoute;
+        PostMapping methodAnnotationPost = method.getAnnotation(PostMapping.class);
+        if (methodAnnotationPost != null) {
+            return methodAnnotationPost.value();
+        }
+        GetMapping methodAnnotationGet = method.getAnnotation(GetMapping.class);
+        if (methodAnnotationGet != null) {
+            return methodAnnotationGet.value();
+        }
+        PutMapping methodAnnotationPut = method.getAnnotation(PutMapping.class);
+        if (methodAnnotationPut != null) {
+            return methodAnnotationPut.value();
+        }
+        DeleteMapping methodAnnotationDelete = method.getAnnotation(DeleteMapping.class);
+        if (methodAnnotationDelete != null) {
+            return methodAnnotationDelete.value();
+        }
+        return null;
     }
 
     public static MethodType getMethodType(MethodInvocation pjp) {

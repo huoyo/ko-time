@@ -27,7 +27,7 @@ public interface GraphService {
 
     void addMethodNode(MethodNode methodNode);
 
-    void addMethodAnalyse(String methodId,Parameter[] names, Object[] values,double v);
+    void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v);
 
     void addExceptionNode(ExceptionNode exceptionNode);
 

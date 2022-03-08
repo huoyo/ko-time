@@ -16,6 +16,7 @@ public class DefaultConfig {
     private Double threshold;
     private String pointcut;
     private Boolean exceptionEnable;
+    private Boolean paramAnalyse;
     private String saveSaver;
     private Boolean saveAsync;
     private Integer threadNum;
@@ -126,5 +127,13 @@ public class DefaultConfig {
 
     public void setAuthEnable(Boolean authEnable) {
         this.authEnable = authEnable;
+    }
+
+    public Boolean getParamAnalyse() {
+        return paramAnalyse;
+    }
+
+    public void setParamAnalyse(Boolean paramAnalyse) {
+        this.paramAnalyse = paramAnalyse;
     }
 }

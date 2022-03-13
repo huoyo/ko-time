@@ -60,26 +60,29 @@ public class MemoryBase implements GraphService {
 
     public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
         List<String> params = new ArrayList<>();
-        for (int i = 0; i < names.length; i++) {
-            Class<?> type = names[i].getType();
-            if (baseTypes.contains(type)) {
-                if (values[i] != null) {
-                    params.add(names[i].getName());
-                }
-            } else {
-                if (type == HttpServletRequest.class) {
-                    continue;
-                }
-                Field[] declaredFields = values[i].getClass().getDeclaredFields();
-                for (Field field : declaredFields) {
-                    field.setAccessible(true);
-                    try {
-                        Object value = field.get(values[i]);
-                        if (value != null) {
-                            params.add(field.getName());
+        if (names!=null) {
+            int namesLen = names.length;
+            for (int i = 0; i < namesLen; i++) {
+                Class<?> type = names[i].getType();
+                if (baseTypes.contains(type)) {
+                    if (values[i] != null) {
+                        params.add(names[i].getName());
+                    }
+                } else {
+                    if (type == HttpServletRequest.class) {
+                        continue;
+                    }
+                    Field[] declaredFields = values[i].getClass().getDeclaredFields();
+                    for (Field field : declaredFields) {
+                        field.setAccessible(true);
+                        try {
+                            Object value = field.get(values[i]);
+                            if (value != null) {
+                                params.add(field.getName());
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
                     }
                 }
             }

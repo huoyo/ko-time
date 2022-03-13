@@ -66,7 +66,13 @@ public class MemoryBase implements GraphService {
                 Class<?> type = names[i].getType();
                 if (baseTypes.contains(type)) {
                     if (values[i] != null) {
-                        params.add(names[i].getName());
+                        if (values[i] instanceof String) {
+                            if (!StringUtils.isEmpty(values[i])) {
+                                params.add(names[i].getName());
+                            }
+                        }else {
+                            params.add(names[i].getName());
+                        }
                     }
                 } else {
                     if (type == HttpServletRequest.class) {
@@ -78,7 +84,13 @@ public class MemoryBase implements GraphService {
                         try {
                             Object value = field.get(values[i]);
                             if (value != null) {
-                                params.add(field.getName());
+                                if (value instanceof String) {
+                                    if (!StringUtils.isEmpty(value)) {
+                                        params.add(field.getName());
+                                    }
+                                }else {
+                                    params.add(field.getName());
+                                }
                             }
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();

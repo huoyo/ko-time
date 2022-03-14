@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.*;
@@ -78,11 +79,18 @@ public class MemoryBase implements GraphService {
                     if (type == HttpServletRequest.class) {
                         continue;
                     }
-                    Field[] declaredFields = values[i].getClass().getDeclaredFields();
+                    Object valuesI = values[i];
+                    if (valuesI==null) {
+                        continue;
+                    }
+                    Field[] declaredFields = valuesI.getClass().getDeclaredFields();
                     for (Field field : declaredFields) {
-                        field.setAccessible(true);
+                        if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+                            continue;
+                        }
                         try {
-                            Object value = field.get(values[i]);
+                            field.setAccessible(true);
+                            Object value = field.get(valuesI);
                             if (value != null) {
                                 if (value instanceof String) {
                                     if (!StringUtils.isEmpty(value)) {
@@ -94,6 +102,8 @@ public class MemoryBase implements GraphService {
                             }
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
+                        }finally {
+                            field.setAccessible(false);
                         }
                     }
                 }

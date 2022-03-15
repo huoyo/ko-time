@@ -3,7 +3,7 @@
 [中文简介/CHINESE](README.md)
 
 <div >
-    <img src='https://shields.io/badge/version-2.0.6-green.svg'>
+    <img src='https://shields.io/badge/version-2.0.9-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of the methods,which can help you to find methods's performances easily.</h4>

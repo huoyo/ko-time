@@ -8,9 +8,8 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.0.6</version>
+    <version>2.0.9</version>
   </dependency>
-  <!-- v2.0.6 为稳定版本 可尝试v2.0.8版本 加入了接口层路由和入参组合分析 双击调用链路图上的方法节点显示不同入参组合下的调用时长-->
 ```
 
 ## 配置
@@ -36,7 +35,7 @@
 > ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要登录才能访问调用链路 v2.0.2开始支持  
 > ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
 > ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
->
+> ko-time.param-analyse=true #是否开启入参组合分析 默认开启 v2.0.8开始支持  双击方法节点即可看到效果
 
 ## 访问
 

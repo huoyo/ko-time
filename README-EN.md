@@ -41,11 +41,9 @@ After clicking a inteface method,you can find paths of the method
 
 ![输入图片说明](docs/v203/ff.png)
 
-## Versions
+## Important Versions
 
 > V1.0：Basic functions
-
-> V1.1：The statistics of methods
 
 > V1.2：Error version
 
@@ -53,11 +51,6 @@ After clicking a inteface method,you can find paths of the method
 
 > V1.4：Add koTime.pointcut
 
-> V1.5：Remove lombok
-
-> V1.6：Add thymeleaf
-
-> V1.7：Fix 'No value present'
 
 > V1.8：Add the support for Mybatis and some metrics
 
@@ -73,9 +66,10 @@ After clicking a inteface method,you can find paths of the method
 
 > V2.0.2：Add auth;
 
-> V2.0.3：Optimize pages；
 
-> V2.0.4：Searching methods；
+> V2.0.7：Display routes for Controllers
+
+> V2.0.8：times for various params combinations
 
 
 ## Copyright

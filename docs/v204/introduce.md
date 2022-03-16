@@ -15,7 +15,7 @@ http://huoyo.gitee.io/ko-time/example
 
 
 
-## 版本说明
+## 重要版本说明
 
 > V1.0：基本功能
 
@@ -27,15 +27,7 @@ http://huoyo.gitee.io/ko-time/example
 
 > V1.4：添加koTime.pointcut配置
 
-> V1.5：剔除lombok
-
-> V1.6：兼容thymeleaf
-
-> V1.7：修复未调用接口时No value present异
-
 > V1.8：支持Mybatis的Mapper监测、新增最大/最小运行时间、修复小数位数过长页面边界溢出的bug
-
-> V1.9：过度版本
 
 > V2.0.0：添加异常监测，开放数据接口，修复与swagger冲突bug，添加配置动态更新功能以及重构数据存储机制
 
@@ -50,7 +42,9 @@ http://huoyo.gitee.io/ko-time/example
           优化页面加载；
           修复方法循环调用栈溢出的bug
 
-> V2.0.3：优化页面方法节点拖拽；
+> V2.0.7：Controller层显示路由
+
+> V2.0.8：入参组合分析
 
 ## 作者
 

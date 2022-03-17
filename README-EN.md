@@ -12,7 +12,7 @@
 
 ## Documents
 
-http://huoyo.gitee.io/ko-time
+[documents](http://kotimedoc.langpy.cn/)
 
 
 Features：

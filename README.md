@@ -12,7 +12,7 @@
 
 ## 文档
 
-http://huoyo.gitee.io/ko-time
+[使用教程](http://kotimedoc.langpy.cn/)
 
 
 特点：

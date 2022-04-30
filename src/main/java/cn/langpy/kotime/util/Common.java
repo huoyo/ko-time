@@ -19,10 +19,10 @@ public class Common {
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
         String[] classRoute = getRouteValue(targetClass);
-        if (classRoute == null || classRoute.length == 0) {
-            return null;
+        StringBuilder routes=new StringBuilder();
+        if (classRoute != null && classRoute.length > 0) {
+            routes = new StringBuilder(classRoute[0]);
         }
-        StringBuilder routes = new StringBuilder(classRoute[0]);
         String[] methodRoute = getRouteValue(pjp.getMethod());
         if (methodRoute == null || methodRoute.length == 0) {
             return null;

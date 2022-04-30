@@ -148,7 +148,13 @@ public class MemoryBase implements GraphService {
 
     @Override
     public MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode) {
-        if (null != sourceMethodNode && null != targetMethodNode && sourceMethodNode.getId().equals(targetMethodNode.getId())) {
+        if (null == sourceMethodNode || null == targetMethodNode ) {
+            return null;
+        }
+        if (sourceMethodNode.getId().equals(targetMethodNode.getId())) {
+            return null;
+        }
+        if (methodRelations.containsKey(targetMethodNode.getId()+sourceMethodNode.getId())) {
             return null;
         }
         MethodRelation methodRelation = new MethodRelation();

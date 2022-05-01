@@ -175,7 +175,11 @@
                         "id":clickNodeId+"ana",
                         "from":clickNodeId,
                         "title":{'name':"入参组合分析"},
-                        "data":datas
+                        "data":datas,
+                        'style':{
+                            'data-font-size':'10px',
+                            'title-font-size':'12px'
+                        }
                     }
                     graph.createNode(paramGraphData,e.x+150,e.y-30);
                     methodParamMap.set(clickNodeId+"ana","")

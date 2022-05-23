@@ -4,10 +4,14 @@ import cn.langpy.kotime.model.ExceptionNode;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.service.InvokeService;
+import cn.langpy.kotime.service.InvokedHandler;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodStack;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+
+import java.lang.reflect.Parameter;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * zhangchang
@@ -21,6 +25,8 @@ public class RunTimeHandler implements MethodInterceptor {
             return invocation.proceed();
         }
         boolean exceptionEnable = Context.getConfig().getExceptionEnable();
+        Parameter[] parameters = invocation.getMethod().getParameters();
+        ThreadPoolExecutor pool = Context.getThreadPoolExecutor();
         long begin = System.nanoTime();
         Object obj = null;
         MethodNode parent = InvokeService.getParentMethodNode();
@@ -37,10 +43,9 @@ public class RunTimeHandler implements MethodInterceptor {
                 exception.setId(exception.getClassName() + exception.getName() + exception.getMessage());
                 MethodNode current = InvokeService.getCurrentMethodNode(invocation, 0.0);
                 if (current.getClassName().equals(e.getStackTrace()[0].getClassName())) {
-                    GraphService graphService = GraphService.getInstance();
-                    graphService.addMethodNode(current);
-                    graphService.addExceptionNode(exception);
-                    graphService.addExceptionRelation(current, exception);
+                    for (InvokedHandler invokedHandler : Context.getInvokedHandlers()) {
+                        pool.execute(()->invokedHandler.onInvoked(current,parent,parameters, invocation.getArguments()));
+                    }
                 }
                 MethodStack.clear();
                 throw e;
@@ -50,12 +55,9 @@ public class RunTimeHandler implements MethodInterceptor {
         }
         long end = System.nanoTime();
         MethodNode current = InvokeService.getCurrentMethodNode(invocation, ((end - begin) / 1000000.0));
-        GraphService graphService = GraphService.getInstance();
-        graphService.addMethodNode(parent);
-        graphService.addMethodNode(current);
-        graphService.addMethodRelation(parent, current);
-        if (Context.getConfig().getParamAnalyse()) {
-            graphService.addParamAnalyse(current.getId(),invocation.getMethod().getParameters(), invocation.getArguments(),((end - begin) / 1000000.0));
+
+        for (InvokedHandler invokedHandler : Context.getInvokedHandlers()) {
+            pool.execute(()->invokedHandler.onInvoked(current,parent,parameters, invocation.getArguments()));
         }
         MethodStack.clear();
         return obj;

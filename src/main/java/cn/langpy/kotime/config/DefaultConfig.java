@@ -18,7 +18,6 @@ public class DefaultConfig {
     private Boolean exceptionEnable;
     private Boolean paramAnalyse;
     private String saveSaver;
-    private Boolean saveAsync;
     private Integer threadNum;
     private String contextPath;
     private Boolean authEnable;
@@ -81,13 +80,7 @@ public class DefaultConfig {
         this.saveSaver = saveSaver;
     }
 
-    public Boolean getSaveAsync() {
-        return saveAsync;
-    }
 
-    public void setSaveAsync(Boolean saveAsync) {
-        this.saveAsync = saveAsync;
-    }
 
     public Integer getThreadNum() {
         return threadNum;

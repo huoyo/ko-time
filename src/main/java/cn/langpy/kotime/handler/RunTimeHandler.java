@@ -43,9 +43,10 @@ public class RunTimeHandler implements MethodInterceptor {
                 exception.setId(exception.getClassName() + exception.getName() + exception.getMessage());
                 MethodNode current = InvokeService.getCurrentMethodNode(invocation, 0.0);
                 if (current.getClassName().equals(e.getStackTrace()[0].getClassName())) {
-                    for (InvokedHandler invokedHandler : Context.getInvokedHandlers()) {
-                        pool.execute(()->invokedHandler.onInvoked(current,parent,parameters, invocation.getArguments()));
-                    }
+                    GraphService graphService = GraphService.getInstance();
+                    graphService.addMethodNode(current);
+                    graphService.addExceptionNode(exception);
+                    graphService.addExceptionRelation(current, exception);
                 }
                 MethodStack.clear();
                 throw e;

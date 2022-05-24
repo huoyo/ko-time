@@ -4,6 +4,9 @@ package cn.langpy.kotime.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
+
 /**
  * zhangchang
  */
@@ -23,6 +26,7 @@ public class DefaultConfig {
     private Boolean authEnable;
     private String userName;
     private String password;
+    private DataSource dataSource;
 
     public Boolean getEnable() {
         return enable;
@@ -128,5 +132,13 @@ public class DefaultConfig {
 
     public void setParamAnalyse(Boolean paramAnalyse) {
         this.paramAnalyse = paramAnalyse;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

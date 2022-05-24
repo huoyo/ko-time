@@ -2,7 +2,7 @@ package cn.langpy.kotime.config;
 
 import cn.langpy.kotime.annotation.KoListener;
 import cn.langpy.kotime.handler.RunTimeHandler;
-import cn.langpy.kotime.service.InvokedHandler;
+import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.util.Context;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +14,9 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -62,13 +65,14 @@ public class LoadConfig {
         config.setSaveSaver(defaultConfig.getSaveSaver() == null ? saveSaver : defaultConfig.getSaveSaver());
         config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
         config.setContextPath(defaultConfig.getContextPath());
-        config.setThreadNum(defaultConfig.getThreadNum() == null ? 10 : defaultConfig.getThreadNum());
+        config.setThreadNum(defaultConfig.getThreadNum() == null ? 30 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
         if (null!=config) {
             config.setPointcut("("+config.getPointcut()+" ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
         }
         Context.setConfig(config);
+        Context.setKoThreadPool(new ThreadPoolExecutor(config.getThreadNum(), 10000,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>()));
         log.info("kotime=>loading config");
 
         if (StringUtils.hasText(config.getContextPath())) {

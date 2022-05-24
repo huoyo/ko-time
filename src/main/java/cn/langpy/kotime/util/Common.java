@@ -1,5 +1,6 @@
 package cn.langpy.kotime.util;
 
+import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.model.MethodRelation;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ public class Common {
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
         String[] classRoute = getRouteValue(targetClass);
-        StringBuilder routes=new StringBuilder();
+        StringBuilder routes = new StringBuilder();
         if (classRoute != null && classRoute.length > 0) {
             routes = new StringBuilder(classRoute[0]);
         }
@@ -117,11 +118,15 @@ public class Common {
         }
     }
 
-    public static void showLog(String method, MethodRelation current) {
-        if (Context.getConfig().getLogEnable() && "chinese".equals(Context.getConfig().getLogLanguage())) {
-            log.info("调用方法=" + method + "，耗时=" + current.getAvgRunTime() + "毫秒");
-        } else if (Context.getConfig().getLogEnable() && "english".equals(Context.getConfig().getLogLanguage())) {
-            log.info("method=" + method + "，runTime=" + current.getAvgRunTime() + "ms");
+    public static void showLog(MethodNode current) {
+        showLog(current.getId(), current.getValue());
+    }
+
+    public static void showLog(String method, double value) {
+        if ("chinese".equals(Context.getConfig().getLogLanguage())) {
+            log.info("调用方法=" + method + "()，耗时=" + value + "毫秒");
+        } else if ( "english".equals(Context.getConfig().getLogLanguage())) {
+            log.info("method=" + method + "()，runTime=" + value + "ms");
         }
     }
 

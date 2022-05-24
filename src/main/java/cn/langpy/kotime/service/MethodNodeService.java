@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 /**
  * zhangchang
  */
-public class InvokeService {
-    public static Logger log = Logger.getLogger(InvokeService.class.toString());
+public class MethodNodeService {
+    public static Logger log = Logger.getLogger(MethodNodeService.class.toString());
 
     public static MethodNode getParentMethodNode() {
         Stack<String> stack = MethodStack.get();

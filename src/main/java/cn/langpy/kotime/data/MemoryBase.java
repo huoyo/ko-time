@@ -164,7 +164,6 @@ public class MemoryBase implements GraphService {
         methodRelation.setAvgRunTime(targetMethodNode.getValue());
         methodRelation.setMaxRunTime(targetMethodNode.getValue());
         methodRelation.setMinRunTime(targetMethodNode.getValue());
-        Common.showLog(targetMethodNode.getId(), methodRelation);
         MethodRelation old = methodRelations.get(methodRelation.getId());
         if (null == old) {
             methodRelations.put(methodRelation.getId(), methodRelation);

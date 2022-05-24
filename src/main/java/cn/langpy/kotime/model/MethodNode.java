@@ -89,6 +89,7 @@ public class MethodNode{
                 "className='" + className + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", methodType=" + methodType +
+                ", value=" + value +
                 '}';
     }
 }

@@ -1,14 +1,17 @@
 package cn.langpy.kotime.service;
 
 import cn.langpy.kotime.annotation.KoListener;
+import cn.langpy.kotime.handler.InvokedHandler;
+import cn.langpy.kotime.model.ExceptionNode;
 import cn.langpy.kotime.model.MethodNode;
+import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Parameter;
 
 @KoListener
-public final class KoInvokedHandler implements InvokedHandler{
+public final class KoInvokedHandler implements InvokedHandler {
+
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
         GraphService graphService = GraphService.getInstance();
@@ -18,5 +21,16 @@ public final class KoInvokedHandler implements InvokedHandler{
         if (Context.getConfig().getParamAnalyse()) {
             graphService.addParamAnalyse(current.getId(),names, values,current.getValue());
         }
+        if (Context.getConfig().getLogEnable()){
+            Common.showLog(current);
+        }
+    }
+
+    @Override
+    public void onInvoked(MethodNode current, MethodNode parent, ExceptionNode exception, Parameter[] names, Object[] values) {
+        GraphService graphService = GraphService.getInstance();
+        graphService.addMethodNode(current);
+        graphService.addExceptionNode(exception);
+        graphService.addExceptionRelation(current, exception);
     }
 }

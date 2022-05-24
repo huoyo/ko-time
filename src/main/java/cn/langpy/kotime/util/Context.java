@@ -1,13 +1,11 @@
 package cn.langpy.kotime.util;
 
 import cn.langpy.kotime.config.DefaultConfig;
-import cn.langpy.kotime.service.InvokedHandler;
+import cn.langpy.kotime.handler.InvokedHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * zhangchang
@@ -16,7 +14,7 @@ public class Context {
 
     private static DefaultConfig config;
     private static List<InvokedHandler> invokedHandlers;
-    private static ThreadPoolExecutor threadPoolExecutor;
+    private static ThreadPoolExecutor koThreadPool;
 
     static {
         config = new DefaultConfig();
@@ -24,7 +22,6 @@ public class Context {
         config.setEnable(true);
         config.setLogLanguage("chinese");
         invokedHandlers = new ArrayList<>();
-        threadPoolExecutor = new ThreadPoolExecutor(10, 1000,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>());
     }
 
     public static void setConfig(DefaultConfig koTimeConfig) {
@@ -43,11 +40,11 @@ public class Context {
         return invokedHandlers;
     }
 
-    public static ThreadPoolExecutor getThreadPoolExecutor() {
-        return threadPoolExecutor;
+    public static ThreadPoolExecutor getKoThreadPool() {
+        return koThreadPool;
     }
 
-    public static void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
-        Context.threadPoolExecutor = threadPoolExecutor;
+    public static void setKoThreadPool(ThreadPoolExecutor koThreadPool) {
+        Context.koThreadPool = koThreadPool;
     }
 }

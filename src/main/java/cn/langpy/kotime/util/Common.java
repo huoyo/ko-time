@@ -6,9 +6,18 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -16,6 +25,8 @@ import java.util.logging.Logger;
  */
 public class Common {
     public static Logger log = Logger.getLogger(Common.class.toString());
+
+    final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
 
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
@@ -128,6 +139,63 @@ public class Common {
         } else if ( "english".equals(Context.getConfig().getLogLanguage())) {
             log.info("method=" + method + "()，runTime=" + value + "ms");
         }
+    }
+
+    public static String getPramsStr(Parameter[] names, Object[] values) {
+        List<String> params = new ArrayList<>();
+        if (names!=null) {
+            int namesLen = names.length;
+            for (int i = 0; i < namesLen; i++) {
+                Class<?> type = names[i].getType();
+                if (baseTypes.contains(type)) {
+                    if (values[i] != null) {
+                        if (values[i] instanceof String) {
+                            if (!StringUtils.isEmpty(values[i])) {
+                                params.add(names[i].getName());
+                            }
+                        }else {
+                            params.add(names[i].getName());
+                        }
+                    }
+                } else {
+                    if (type == HttpServletRequest.class) {
+                        continue;
+                    }
+                    Object valuesI = values[i];
+                    if (valuesI==null) {
+                        continue;
+                    }
+                    Field[] declaredFields = valuesI.getClass().getDeclaredFields();
+                    for (Field field : declaredFields) {
+                        if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+                            continue;
+                        }
+                        try {
+                            field.setAccessible(true);
+                            Object value = field.get(valuesI);
+                            if (value != null) {
+                                if (value instanceof String) {
+                                    if (!StringUtils.isEmpty(value)) {
+                                        params.add(field.getName());
+                                    }
+                                }else {
+                                    params.add(field.getName());
+                                }
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }finally {
+                            field.setAccessible(false);
+                        }
+                    }
+                }
+            }
+        }
+        String paramsKey = "-";
+        if (params.size()>0) {
+            paramsKey = String.join("-", params);
+        }
+        return paramsKey;
     }
 
 }

@@ -57,62 +57,9 @@ public class MemoryBase implements GraphService {
         }
     }
 
-    List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
 
     public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
-        List<String> params = new ArrayList<>();
-        if (names!=null) {
-            int namesLen = names.length;
-            for (int i = 0; i < namesLen; i++) {
-                Class<?> type = names[i].getType();
-                if (baseTypes.contains(type)) {
-                    if (values[i] != null) {
-                        if (values[i] instanceof String) {
-                            if (!StringUtils.isEmpty(values[i])) {
-                                params.add(names[i].getName());
-                            }
-                        }else {
-                            params.add(names[i].getName());
-                        }
-                    }
-                } else {
-                    if (type == HttpServletRequest.class) {
-                        continue;
-                    }
-                    Object valuesI = values[i];
-                    if (valuesI==null) {
-                        continue;
-                    }
-                    Field[] declaredFields = valuesI.getClass().getDeclaredFields();
-                    for (Field field : declaredFields) {
-                        if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
-                            continue;
-                        }
-                        try {
-                            field.setAccessible(true);
-                            Object value = field.get(valuesI);
-                            if (value != null) {
-                                if (value instanceof String) {
-                                    if (!StringUtils.isEmpty(value)) {
-                                        params.add(field.getName());
-                                    }
-                                }else {
-                                    params.add(field.getName());
-                                }
-                            }
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }finally {
-                            field.setAccessible(false);
-                        }
-                    }
-                }
-            }
-        }
-        String paramsKey = "-";
-        if (params.size()>0) {
-            paramsKey = String.join("-", params);
-        }
+        String paramsKey = Common.getPramsStr(names,values);
         if (paramValueMetricMap.containsKey(methodId)) {
             Map<String, ParamMetric> paramMetricMap = paramValueMetricMap.get(methodId);
             if (paramMetricMap.containsKey(paramsKey)) {

@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -71,6 +72,8 @@ public class LoadConfig {
         if (null!=config) {
             config.setPointcut("("+config.getPointcut()+" ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
         }
+        DataSource dataSource = applicationContext.getBean(DataSource.class);
+        config.setDataSource(dataSource);
         Context.setConfig(config);
         Context.setKoThreadPool(new ThreadPoolExecutor(config.getThreadNum(), 10000,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>()));
         log.info("kotime=>loading config");

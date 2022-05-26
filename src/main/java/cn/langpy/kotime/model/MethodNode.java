@@ -86,7 +86,8 @@ public class MethodNode{
     @Override
     public String toString() {
         return "RunTimeNode{" +
-                "className='" + className + '\'' +
+                "id='" + id + '\'' +
+                ",className='" + className + '\'' +
                 ", methodName='" + methodName + '\'' +
                 ", methodType=" + methodType +
                 ", value=" + value +

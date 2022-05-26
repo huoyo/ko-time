@@ -107,7 +107,11 @@ public class KoTimeController {
     @ResponseBody
     @Auth
     public DefaultConfig getConfig() {
-        return Context.getConfig();
+        DefaultConfig config = Context.getConfig();
+        config.setDataSource(null);
+        config.setUserName(null);
+        config.setPassword(null);
+        return config;
     }
 
     @GetMapping("/getStatistic")

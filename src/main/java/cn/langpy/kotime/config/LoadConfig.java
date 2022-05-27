@@ -42,7 +42,7 @@ public class LoadConfig {
     private Boolean exceptionEnable;
     @Value("${koTime.save.saver:memory}")
     private String saveSaver;
-    @Value("${koTime.save.thread-num:10}")
+    @Value("${koTime.save.thread-num:30}")
     private Integer threadNum;
     @Value("${server.port:8080}")
     private Integer serverPort;
@@ -73,7 +73,7 @@ public class LoadConfig {
             config.setPointcut("("+config.getPointcut()+" ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
         }
         DataSource dataSource = applicationContext.getBean(DataSource.class);
-        config.setDataSource(dataSource);
+        Context.setDataSource(dataSource);
         Context.setConfig(config);
         Context.setKoThreadPool(new ThreadPoolExecutor(config.getThreadNum(), 10000,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>()));
         log.info("kotime=>loading config");

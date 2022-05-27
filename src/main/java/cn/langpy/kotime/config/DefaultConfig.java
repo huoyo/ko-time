@@ -26,7 +26,6 @@ public class DefaultConfig {
     private Boolean authEnable;
     private String userName;
     private String password;
-    private DataSource dataSource;
 
     public Boolean getEnable() {
         return enable;
@@ -134,11 +133,4 @@ public class DefaultConfig {
         this.paramAnalyse = paramAnalyse;
     }
 
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 }

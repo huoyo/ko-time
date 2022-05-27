@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * zhangchang
  */
-public class MemoryBase implements GraphService {
+public class RedisBase implements GraphService {
 
     private volatile static Map<String, MethodNode> methodNodes;
 

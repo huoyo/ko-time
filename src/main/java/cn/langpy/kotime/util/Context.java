@@ -3,6 +3,7 @@ package cn.langpy.kotime.util;
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.handler.InvokedHandler;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -15,6 +16,7 @@ public class Context {
     private static DefaultConfig config;
     private static List<InvokedHandler> invokedHandlers;
     private static ThreadPoolExecutor koThreadPool;
+    private static DataSource dataSource;
 
     static {
         config = new DefaultConfig();
@@ -46,5 +48,13 @@ public class Context {
 
     public static void setKoThreadPool(ThreadPoolExecutor koThreadPool) {
         Context.koThreadPool = koThreadPool;
+    }
+
+    public static DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public static void setDataSource(DataSource dataSource) {
+        Context.dataSource = dataSource;
     }
 }

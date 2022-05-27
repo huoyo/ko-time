@@ -1,8 +1,17 @@
 package cn.langpy.kotime.model;
 
-public class TableInfo {
+public class ColumnInfo {
+    private String table;
     private String name;
     private String dataType;
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
 
     public String getName() {
         return name;

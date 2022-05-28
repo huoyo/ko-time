@@ -3,7 +3,7 @@ package cn.langpy.kotime.constant;
 public class KoSqlConstant {
     public final static String addMethod = "INSERT INTO ko_method_node(id, name, class_name, method_name, route_name, method_type) VALUES (?, ?, ?, ?, ?, ?)";
     public final static String queryMethod = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE id=?";
-    public final static String queryMethodLikeName = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE method_name like ?";
+    public final static String queryMethodLikeName = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE name like ?";
     public final static String queryController = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE method_type=?";
     public final static String updateMethod = "UPDATE ko_method_node SET name=?, class_name=?, method_name=?, route_name=?, method_type=? WHERE id=?";
     public final static String addException = "INSERT INTO ko_exception_node(id, name, class_name, message) VALUES (?, ?, ?, ?)";

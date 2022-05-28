@@ -333,9 +333,7 @@ public class DataBase implements GraphService {
         List<MethodInfo> methodInfos = new ArrayList<>();
         List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodLikeName, new Object[]{"%" + question + "%"}, MethodNode.class);
         for (MethodNode methodNode : methodNodes) {
-            if (methodNode.getName().toLowerCase().contains(question.toLowerCase())) {
                 String id = methodNode.getId();
-
                 List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
                 if (relations.size() == 0) {
                     continue;
@@ -355,7 +353,6 @@ public class DataBase implements GraphService {
                 if (!methodInfos.contains(methodInfo)) {
                     methodInfos.add(methodInfo);
                 }
-            }
         }
         return methodInfos;
     }

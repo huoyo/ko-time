@@ -7,11 +7,7 @@ import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.*;
@@ -22,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * zhangchang
  */
-@Component("redis")
+//@Component("redis")
 public class RedisBase implements GraphService {
 
     private volatile static Map<String, MethodNode> methodNodes;

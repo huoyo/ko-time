@@ -19,23 +19,23 @@ create table ko_method_relation (
 
 ;
 create table ko_exception_node (
-    id varchar(64) not null primary key comment '主键' ,
-    name varchar(64) null comment '异常名' ,
-    class_name varchar(64) null comment '类名' ,
-    message varchar(64) null comment '异常消息'
+    id varchar(200) not null primary key comment '主键' ,
+    name varchar(200) null comment '异常名' ,
+    class_name varchar(200) null comment '类名' ,
+    message varchar(200) null comment '异常消息'
 ) comment '异常表';
 
 
 create table ko_exception_relation (
-    id varchar(64) not null primary key comment '' ,
-    source_id varchar(64) null comment '调用方法id' ,
-    target_id varchar(64) null comment '异常id' ,
+    id varchar(200) not null primary key comment '' ,
+    source_id varchar(200 null comment '调用方法id' ,
+    target_id varchar(200) null comment '异常id' ,
     location int null comment '异常位置'
 ) comment '异常关系表';
 
 create table ko_param_ana (
-       source_id varchar(64) null comment '调用方法id' ,
-       params varchar(64) null comment '参数组合，-分隔' ,
+       source_id varchar(200) null comment '调用方法id' ,
+       params varchar(200) null comment '参数组合，-分隔' ,
        avg_run_time numeric(10,2) null comment '平均耗时' ,
        max_run_time numeric(10,2) null comment '最大耗时' ,
        min_run_time numeric(10,2) null comment '最小耗时'

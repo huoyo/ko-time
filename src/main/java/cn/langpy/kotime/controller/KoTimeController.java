@@ -117,7 +117,6 @@ public class KoTimeController {
     public SystemStatistic getStatistic() {
         GraphService graphService = GraphService.getInstance();
         SystemStatistic system = graphService.getRunStatistic();
-        graphService.close();
         return system;
     }
 
@@ -133,7 +132,6 @@ public class KoTimeController {
             list = graphService.getControllers();
         }
         Collections.sort(list);
-        graphService.close();
         return list;
     }
 
@@ -143,7 +141,6 @@ public class KoTimeController {
     public Map<String, ParamMetric> getParamGraph(String methodId) {
         GraphService graphService = GraphService.getInstance();
         Map<String, ParamMetric> list = graphService.getMethodParamGraph(methodId);
-        graphService.close();
         return list;
     }
 
@@ -153,7 +150,6 @@ public class KoTimeController {
     public List<String> getApiTips(String question) {
         GraphService graphService = GraphService.getInstance();
         List<String> list = graphService.getCondidates(question);
-        graphService.close();
         return list;
     }
 
@@ -164,7 +160,6 @@ public class KoTimeController {
     public List<ExceptionNode> getExceptions() {
         GraphService graphService = GraphService.getInstance();
         List<ExceptionNode> exceptionList = graphService.getExceptions();
-        graphService.close();
         return exceptionList;
     }
 
@@ -174,7 +169,6 @@ public class KoTimeController {
     public MethodInfo getTree(String methodName) {
         GraphService graphService = GraphService.getInstance();
         MethodInfo tree = graphService.getTree(methodName);
-        graphService.close();
         return tree;
     }
 
@@ -184,7 +178,6 @@ public class KoTimeController {
     public List<ExceptionInfo> getMethodsByExceptionId(String exceptionId) {
         GraphService graphService = GraphService.getInstance();
         List<ExceptionInfo> exceptionInfos = graphService.getExceptionInfos(exceptionId);
-        graphService.close();
         return exceptionInfos;
     }
 

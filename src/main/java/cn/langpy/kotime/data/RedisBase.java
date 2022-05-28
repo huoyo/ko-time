@@ -5,6 +5,7 @@ import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * zhangchang
  */
+@Component("redis")
 public class RedisBase implements GraphService {
 
     private volatile static Map<String, MethodNode> methodNodes;
@@ -376,8 +378,4 @@ public class RedisBase implements GraphService {
 
     }
 
-    @Override
-    public void close() {
-
-    }
 }

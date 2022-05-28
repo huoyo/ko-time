@@ -2,6 +2,7 @@ package cn.langpy.kotime.util;
 
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.handler.InvokedHandler;
+import cn.langpy.kotime.service.GraphService;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class Context {
 
     private static DefaultConfig config;
     private static List<InvokedHandler> invokedHandlers;
-    private static ThreadPoolExecutor koThreadPool;
     private static DataSource dataSource;
+    private static GraphService saver;
 
     static {
         config = new DefaultConfig();
@@ -42,19 +43,19 @@ public class Context {
         return invokedHandlers;
     }
 
-    public static ThreadPoolExecutor getKoThreadPool() {
-        return koThreadPool;
-    }
-
-    public static void setKoThreadPool(ThreadPoolExecutor koThreadPool) {
-        Context.koThreadPool = koThreadPool;
-    }
-
     public static DataSource getDataSource() {
         return dataSource;
     }
 
     public static void setDataSource(DataSource dataSource) {
         Context.dataSource = dataSource;
+    }
+
+    public static GraphService getSaver() {
+        return saver;
+    }
+
+    public static void setSaver(GraphService saver) {
+        Context.saver = saver;
     }
 }

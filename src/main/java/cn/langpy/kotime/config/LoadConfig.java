@@ -3,6 +3,8 @@ package cn.langpy.kotime.config;
 import cn.langpy.kotime.annotation.KoListener;
 import cn.langpy.kotime.handler.RunTimeHandler;
 import cn.langpy.kotime.handler.InvokedHandler;
+import cn.langpy.kotime.service.GraphService;
+import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.util.Context;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,14 +12,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 /**
@@ -40,9 +41,9 @@ public class LoadConfig {
     private String pointcut;
     @Value("${koTime.exception.enable:false}")
     private Boolean exceptionEnable;
-    @Value("${koTime.save.saver:memory}")
+    @Value("${koTime.saver:memory}")
     private String saveSaver;
-    @Value("${koTime.save.thread-num:30}")
+    @Value("${koTime.thread-num:5}")
     private Integer threadNum;
     @Value("${server.port:8080}")
     private Integer serverPort;
@@ -63,19 +64,29 @@ public class LoadConfig {
         config.setLogLanguage(defaultConfig.getLogLanguage() == null ? logLanguage : defaultConfig.getLogLanguage());
         config.setThreshold(defaultConfig.getThreshold() == null ? timeThreshold : defaultConfig.getThreshold());
         config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
-        config.setSaveSaver(defaultConfig.getSaveSaver() == null ? saveSaver : defaultConfig.getSaveSaver());
+        config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
         config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
         config.setContextPath(defaultConfig.getContextPath());
-        config.setThreadNum(defaultConfig.getThreadNum() == null ? 30 : defaultConfig.getThreadNum());
+        config.setThreadNum(defaultConfig.getThreadNum() == null ? 5 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
-        if (null!=config) {
-            config.setPointcut("("+config.getPointcut()+" ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
+        if (null != config) {
+            config.setPointcut("(" + config.getPointcut() + " ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
         }
         DataSource dataSource = applicationContext.getBean(DataSource.class);
         Context.setDataSource(dataSource);
         Context.setConfig(config);
-        Context.setKoThreadPool(new ThreadPoolExecutor(config.getThreadNum(), 10000,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>()));
+        String[] names = applicationContext.getBeanNamesForType(GraphService.class);
+        for (String name : names) {
+            GraphService bean = (GraphService) applicationContext.getBean(name);
+            if (null != bean) {
+                Component annotation = bean.getClass().getAnnotation(Component.class);
+                if (config.getSaver().equals(annotation.value())) {
+                    Context.setSaver(bean);
+                    break;
+                }
+            }
+        }
         log.info("kotime=>loading config");
 
         if (StringUtils.hasText(config.getContextPath())) {
@@ -83,23 +94,27 @@ public class LoadConfig {
         } else {
             log.info("kotime=>view:http://localhost:" + serverPort + serverContext + "/koTime");
         }
+        initMethodHandlers();
     }
 
-    @PostConstruct
     public void initMethodHandlers() {
         String[] names = applicationContext.getBeanNamesForType(InvokedHandler.class);
         for (String name : names) {
             InvokedHandler bean = (InvokedHandler) applicationContext.getBean(name);
             if (null != bean) {
                 KoListener annotation = bean.getClass().getAnnotation(KoListener.class);
-                if (null==annotation) {
+                if (null == annotation) {
                     continue;
                 }
                 log.info("kotime=>loading InvokedHandler:" + bean.getClass().getSimpleName());
                 Context.addInvokedHandler(bean);
             }
         }
+        for (int i = 0; i < Context.getConfig().getThreadNum(); i++) {
+            new Thread(()->InvokedQueue.onInveked()).start();
+        }
     }
+
 
     @Bean
     public AspectJExpressionPointcutAdvisor configurabledvisor() {

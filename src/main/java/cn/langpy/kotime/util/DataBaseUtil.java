@@ -41,7 +41,7 @@ public class DataBaseUtil {
             int n = statement.executeUpdate();
             return n;
         } catch (SQLIntegrityConstraintViolationException e) {
-            log.warning("Duplicate id："+values[0]);
+            log.warning("Duplicate id：" + values[0]);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class DataBaseUtil {
     }
 
     public static int update(String sql, Object[] values) {
-        try (Connection connection = getDataSource().getConnection()){
+        try (Connection connection = getDataSource().getConnection()) {
             return update(connection, sql, values);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -62,7 +62,7 @@ public class DataBaseUtil {
     }
 
     public static List<Map<String, Object>> query(String sql, Object[] values) {
-        try (Connection connection = getDataSource().getConnection()){
+        try (Connection connection = getDataSource().getConnection()) {
             return query(connection, sql, values);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -144,7 +144,7 @@ public class DataBaseUtil {
     }
 
     public static <T> List<T> query(String sql, Object[] values, Class<T> c) {
-        try (Connection connection = getDataSource().getConnection()){
+        try (Connection connection = getDataSource().getConnection()) {
             return query(connection, sql, values, c);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -164,15 +164,16 @@ public class DataBaseUtil {
 
     private static PreparedStatement setParams(PreparedStatement statement, Object[] values) {
         try {
-            for (int i = 0; i < values.length; i++) {
+            int length = values.length;
+            for (int i = 0; i < length; i++) {
                 if (values[i] == null) {
                     statement.setObject(i + 1, null);
                 } else if (values[i] instanceof String) {
                     statement.setString(i + 1, (String) values[i]);
-                } else if (values[i] instanceof Integer) {
-                    statement.setInt(i + 1, (Integer) values[i]);
                 } else if (values[i] instanceof Double) {
                     statement.setDouble(i + 1, (Double) values[i]);
+                } else if (values[i] instanceof Integer) {
+                    statement.setInt(i + 1, (Integer) values[i]);
                 } else if (values[i] instanceof Boolean) {
                     statement.setBoolean(i + 1, (Boolean) values[i]);
                 } else {
@@ -188,14 +189,14 @@ public class DataBaseUtil {
     private static Object getColumnValue(ResultSet resultSet, ColumnInfo column) throws SQLException {
         if ("VARCHAR".equals(column.getDataType()) || "TEXT".equals(column.getDataType())) {
             return resultSet.getString(column.getName());
-        } else if ("DATETIME".equalsIgnoreCase(column.getDataType())) {
-            return resultSet.getTimestamp(column.getName());
-        } else if ("INT".equalsIgnoreCase(column.getDataType())) {
-            return resultSet.getInt(column.getName());
-        } else if ("DECIMAL".equalsIgnoreCase(column.getDataType())) {
-            return resultSet.getBigDecimal(column.getName()).doubleValue();
         } else if ("DOUBLE".equalsIgnoreCase(column.getDataType())) {
             return resultSet.getDouble(column.getName());
+        } else if ("DECIMAL".equalsIgnoreCase(column.getDataType())) {
+            return resultSet.getBigDecimal(column.getName()).doubleValue();
+        } else if ("INT".equalsIgnoreCase(column.getDataType())) {
+            return resultSet.getInt(column.getName());
+        } else if ("DATETIME".equalsIgnoreCase(column.getDataType())) {
+            return resultSet.getTimestamp(column.getName());
         } else {
             return resultSet.getObject(column.getName());
         }
@@ -203,7 +204,8 @@ public class DataBaseUtil {
 
     private static List<ColumnInfo> getColumns(ResultSetMetaData metaData) throws SQLException {
         List<ColumnInfo> colnames = new ArrayList<ColumnInfo>();
-        for (int i = 0; i < metaData.getColumnCount(); i++) {
+        int columnCount = metaData.getColumnCount();
+        for (int i = 0; i < columnCount; i++) {
             String table = metaData.getTableName(i + 1);
             String colname = metaData.getColumnName(i + 1);
             String colType = metaData.getColumnTypeName(i + 1);

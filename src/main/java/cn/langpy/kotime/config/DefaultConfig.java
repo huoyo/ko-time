@@ -5,8 +5,6 @@ package cn.langpy.kotime.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-
 /**
  * zhangchang
  */
@@ -20,7 +18,7 @@ public class DefaultConfig {
     private String pointcut;
     private Boolean exceptionEnable;
     private Boolean paramAnalyse;
-    private String saveSaver;
+    private String saver;
     private Integer threadNum;
     private String contextPath;
     private Boolean authEnable;
@@ -75,12 +73,12 @@ public class DefaultConfig {
         this.exceptionEnable = exceptionEnable;
     }
 
-    public String getSaveSaver() {
-        return saveSaver;
+    public String getSaver() {
+        return saver;
     }
 
-    public void setSaveSaver(String saveSaver) {
-        this.saveSaver = saveSaver;
+    public void setSaver(String saver) {
+        this.saver = saver;
     }
 
 

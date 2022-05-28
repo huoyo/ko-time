@@ -50,7 +50,7 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
-      "name": "ko-time.save-saver",
+      "name": "ko-time.saver",
       "type": "java.lang.String",
       "defaultValue": "memory",
       "description": "waiting to implement",
@@ -59,7 +59,7 @@
     {
       "name": "ko-time.thread-num",
       "type": "java.lang.Integer",
-      "defaultValue": 30,
+      "defaultValue": 10,
       "description": "waiting to implement",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },

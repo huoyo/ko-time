@@ -1,8 +1,5 @@
 package cn.langpy.kotime.service;
 
-import cn.langpy.kotime.data.MemoryBase;
-import cn.langpy.kotime.data.DataBase;
-import cn.langpy.kotime.data.RedisBase;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.util.Context;
 
@@ -16,15 +13,7 @@ import java.util.Map;
 public interface GraphService {
 
     static GraphService getInstance() {
-        GraphService graphService = null;
-        if (Context.getConfig().getSaveSaver().equals("memory")) {
-            graphService = new MemoryBase();
-        } else if (Context.getConfig().getSaveSaver().equals("database")) {
-            graphService = new DataBase();
-        } else if (Context.getConfig().getSaveSaver().equals("redis")) {
-            graphService = new RedisBase();
-        }
-        return graphService;
+        return Context.getSaver();
     }
 
     void addMethodNode(MethodNode methodNode);
@@ -57,6 +46,5 @@ public interface GraphService {
 
     ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode);
 
-    void close();
 
 }

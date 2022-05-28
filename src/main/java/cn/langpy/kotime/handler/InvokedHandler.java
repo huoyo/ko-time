@@ -16,7 +16,7 @@ public interface InvokedHandler {
     /**
      * return the results with the possible exception after invoking a method.
      */
-    default void onInvoked(MethodNode current, MethodNode parent, ExceptionNode exception,Parameter[] names, Object[] values){
+    default void onException(MethodNode current, MethodNode parent, ExceptionNode exception, Parameter[] names, Object[] values){
 
     }
 }

@@ -32,6 +32,24 @@ public class DataBase implements GraphService {
     private Connection readConnection;
     private Connection writeConnection;
 
+    public  DataBase() {
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(() -> {
+                    try {
+                        log.info("kotime=>close database connections...");
+                        if (null!=readConnection) {
+                            readConnection.close();
+                        }
+                        if (null!=writeConnection) {
+                            writeConnection.close();
+                        }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                })
+        );
+    }
+
     public Connection getReadConnection() {
         try {
             if (null == readConnection || readConnection.isClosed()) {
@@ -40,6 +58,7 @@ public class DataBase implements GraphService {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return readConnection;
     }
 

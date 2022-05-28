@@ -32,7 +32,7 @@ public class DataBaseUtil {
     }
 
     public static int insert(Connection connection, String sql, Object[] values) {
-        PreparedStatement statement;
+        PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
             if (null != values) {
@@ -44,6 +44,14 @@ public class DataBaseUtil {
             log.warning("Duplicate id：" + values[0]);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         }
         return 0;
     }
@@ -72,7 +80,7 @@ public class DataBaseUtil {
 
     public static List<Map<String, Object>> query(Connection connection, String sql, Object[] values) {
         List<Map<String, Object>> list = new ArrayList<>();
-        PreparedStatement statement;
+        PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
             if (null != values) {
@@ -90,13 +98,21 @@ public class DataBaseUtil {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         }
         return list;
     }
 
     public static <T> List<T> query(Connection connection, String sql, Object[] values, Class<T> c) {
         List<T> list = new ArrayList<>();
-        PreparedStatement statement;
+        PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
             if (null != values) {
@@ -139,6 +155,14 @@ public class DataBaseUtil {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         }
         return list;
     }

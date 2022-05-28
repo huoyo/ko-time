@@ -7,6 +7,8 @@ import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.util.Context;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +20,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.util.concurrent.*;
 import java.util.logging.Logger;
 
 /**
@@ -73,8 +74,20 @@ public class LoadConfig {
         if (null != config) {
             config.setPointcut("(" + config.getPointcut() + " ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
         }
-        DataSource dataSource = applicationContext.getBean(DataSource.class);
-        Context.setDataSource(dataSource);
+        try {
+            DataSource dataSource = applicationContext.getBean(DataSource.class);
+            Context.setDataSource(dataSource);
+        }catch (NoUniqueBeanDefinitionException e){
+            if (StringUtils.isEmpty(config.getDataSource())) {
+                log.warning("No unique bean of type 'javax.sql.DataSource' available,you can define it by `ko-time.data-source=xxx`");
+            }else {
+                DataSource dataSource = applicationContext.getBean(config.getDataSource(),DataSource.class);
+                Context.setDataSource(dataSource);
+            }
+        }catch (NoSuchBeanDefinitionException e){
+            log.warning("No qualifying bean of type 'javax.sql.DataSource' available,you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+        }
+
         Context.setConfig(config);
         String[] names = applicationContext.getBeanNamesForType(GraphService.class);
         for (String name : names) {

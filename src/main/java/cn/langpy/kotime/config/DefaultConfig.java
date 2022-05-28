@@ -19,11 +19,20 @@ public class DefaultConfig {
     private Boolean exceptionEnable;
     private Boolean paramAnalyse;
     private String saver;
+    private String dataSource;
     private Integer threadNum;
     private String contextPath;
     private Boolean authEnable;
     private String userName;
     private String password;
+
+    public String getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Boolean getEnable() {
         return enable;

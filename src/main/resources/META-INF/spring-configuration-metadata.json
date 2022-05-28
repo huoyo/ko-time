@@ -57,6 +57,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.data-source",
+      "type": "java.lang.String",
+      "defaultValue": "",
+      "description": "waiting to implement",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.thread-num",
       "type": "java.lang.Integer",
       "defaultValue": 10,

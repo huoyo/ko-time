@@ -11,13 +11,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -71,10 +69,7 @@ public class DataBase implements GraphService {
                     methodNode.getRouteName(),
                     methodNode.getMethodType().name()
             };
-            long start1 = System.currentTimeMillis();
             DataBaseUtil.insert(getWriteConnection(),KoSqlConstant.addMethod, params);
-            long end1 = System.currentTimeMillis();
-            log.info("插入耗时" + (end1 - start1) / 1000.0);
         } else {
             if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
                 Object[] params = new Object[]{

@@ -15,12 +15,12 @@ import java.util.logging.Logger;
 
 public class DataBaseUtil {
     public static Logger log = Logger.getLogger(DataBaseUtil.class.toString());
+
     static Map<String, ColumnInfo> tableInfoMap = new ConcurrentHashMap<>();
 
     public static DataSource getDataSource() {
         return Context.getDataSource();
     }
-
     public static int insert(String sql, Object[] values) {
         try {
             Connection connection = getDataSource().getConnection();
@@ -41,7 +41,7 @@ public class DataBaseUtil {
             int n = statement.executeUpdate();
             return n;
         } catch (SQLIntegrityConstraintViolationException e) {
-            log.warning("Duplicate id：" + values[0]);
+            log.info("Duplicate Method id：" + values[0]);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {

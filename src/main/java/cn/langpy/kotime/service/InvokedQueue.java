@@ -39,10 +39,4 @@ public class InvokedQueue {
         }
     }
 
-    public static void main(String[] args) {
-        InvokedQueue.add(new InvokedInfo());
-        System.out.println(InvokedQueue.linkedList.size());
-        InvokedQueue.linkedList.poll();
-        System.out.println(InvokedQueue.linkedList.size());
-    }
 }

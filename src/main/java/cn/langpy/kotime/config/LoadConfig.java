@@ -79,13 +79,13 @@ public class LoadConfig {
             Context.setDataSource(dataSource);
         }catch (NoUniqueBeanDefinitionException e){
             if (StringUtils.isEmpty(config.getDataSource())) {
-                log.warning("kotime=>No unique bean of type 'javax.sql.DataSource' available,you can define it by `ko-time.data-source=xxx`");
+                log.warning("kotime=>No unique bean of type 'DataSource' available,you can define it by `ko-time.data-source=xxx`");
             }else {
                 DataSource dataSource = applicationContext.getBean(config.getDataSource(),DataSource.class);
                 Context.setDataSource(dataSource);
             }
         }catch (NoSuchBeanDefinitionException e){
-            log.warning("kotime=>No qualifying bean of type 'javax.sql.DataSource' available,you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+            log.warning("kotime=>No qualifying bean of type 'DataSource' available,you can ignore it if your KoTime saver is `ko-time.saver=memory`");
         }
 
         Context.setConfig(config);

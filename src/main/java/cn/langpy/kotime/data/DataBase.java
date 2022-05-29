@@ -3,14 +3,12 @@ package cn.langpy.kotime.data;
 import cn.langpy.kotime.constant.KoSqlConstant;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.GraphService;
-import cn.langpy.kotime.util.Common;
-import cn.langpy.kotime.util.Context;
-import cn.langpy.kotime.util.DataBaseUtil;
-import cn.langpy.kotime.util.MethodType;
+import cn.langpy.kotime.util.*;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -54,7 +52,12 @@ public class DataBase implements GraphService {
     public Connection getReadConnection() {
         try {
             if (null == readConnection || readConnection.isClosed()) {
-                readConnection = Context.getDataSource().getConnection();
+                DataSource dataSource = Context.getDataSource();
+                if (null==dataSource) {
+                    throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle");
+                }else {
+                    readConnection = dataSource.getConnection();
+                }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -66,7 +69,12 @@ public class DataBase implements GraphService {
     public Connection getWriteConnection() {
         try {
             if (null == writeConnection || writeConnection.isClosed()) {
-                writeConnection = Context.getDataSource().getConnection();
+                DataSource dataSource = Context.getDataSource();
+                if (null==dataSource) {
+                    throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle");
+                }else {
+                    writeConnection = dataSource.getConnection();
+                }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

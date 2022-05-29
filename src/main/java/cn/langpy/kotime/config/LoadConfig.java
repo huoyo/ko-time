@@ -44,7 +44,7 @@ public class LoadConfig {
     private Boolean exceptionEnable;
     @Value("${koTime.saver:memory}")
     private String saveSaver;
-    @Value("${koTime.thread-num:5}")
+    @Value("${koTime.thread-num:2}")
     private Integer threadNum;
     @Value("${server.port:8080}")
     private Integer serverPort;
@@ -68,7 +68,7 @@ public class LoadConfig {
         config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
         config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
         config.setContextPath(defaultConfig.getContextPath());
-        config.setThreadNum(defaultConfig.getThreadNum() == null ? 5 : defaultConfig.getThreadNum());
+        config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
         if (null != config) {
@@ -79,13 +79,13 @@ public class LoadConfig {
             Context.setDataSource(dataSource);
         }catch (NoUniqueBeanDefinitionException e){
             if (StringUtils.isEmpty(config.getDataSource())) {
-                log.warning("No unique bean of type 'javax.sql.DataSource' available,you can define it by `ko-time.data-source=xxx`");
+                log.warning("kotime=>No unique bean of type 'javax.sql.DataSource' available,you can define it by `ko-time.data-source=xxx`");
             }else {
                 DataSource dataSource = applicationContext.getBean(config.getDataSource(),DataSource.class);
                 Context.setDataSource(dataSource);
             }
         }catch (NoSuchBeanDefinitionException e){
-            log.warning("No qualifying bean of type 'javax.sql.DataSource' available,you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+            log.warning("kotime=>No qualifying bean of type 'javax.sql.DataSource' available,you can ignore it if your KoTime saver is `ko-time.saver=memory`");
         }
 
         Context.setConfig(config);

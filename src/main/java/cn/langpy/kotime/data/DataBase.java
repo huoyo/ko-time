@@ -36,7 +36,6 @@ public class DataBase implements GraphService {
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {
                     try {
-                        log.info("kotime=>close database connections...");
                         if (null!=readConnection) {
                             readConnection.close();
                         }
@@ -45,6 +44,8 @@ public class DataBase implements GraphService {
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
+                    }finally {
+                        log.info("kotime=>closed database connections...");
                     }
                 })
         );
@@ -78,8 +79,9 @@ public class DataBase implements GraphService {
         if (null == methodNode) {
             return;
         }
-        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryMethod, new Object[]{methodNode.getId()});
-        if (query.size() == 0) {
+//        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryMethod, new Object[]{methodNode.getId()});
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(),KoSqlConstant.queryMethod, methodNode.getId());
+        if (!existsById) {
             Object[] params = new Object[]{
                     methodNode.getId(),
                     methodNode.getName(),
@@ -107,8 +109,9 @@ public class DataBase implements GraphService {
 
     @Override
     public synchronized void addExceptionNode(ExceptionNode exceptionNode) {
-        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryException, new Object[]{exceptionNode.getId()});
-        if (query.size() == 0) {
+//        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryException, new Object[]{exceptionNode.getId()});
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(),KoSqlConstant.queryException, exceptionNode.getId());
+        if (!existsById) {
             Object[] params = new Object[]{
                     exceptionNode.getId(),
                     exceptionNode.getName(),
@@ -168,8 +171,9 @@ public class DataBase implements GraphService {
 
     @Override
     public synchronized ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
-        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryExceptionRe, new Object[]{sourceMethodNode.getId() + exceptionNode.getId()});
-        if (query.size() == 0) {
+//        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryExceptionRe, new Object[]{sourceMethodNode.getId() + exceptionNode.getId()});
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(),KoSqlConstant.queryExceptionRe, sourceMethodNode.getId() + exceptionNode.getId());
+        if (!existsById) {
             Object[] params = new Object[]{
                     sourceMethodNode.getId() + exceptionNode.getId(),
                     sourceMethodNode.getId(),

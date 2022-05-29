@@ -21,6 +21,7 @@ public class DataBaseUtil {
     public static DataSource getDataSource() {
         return Context.getDataSource();
     }
+
     public static int insert(String sql, Object[] values) {
         try {
             Connection connection = getDataSource().getConnection();
@@ -108,6 +109,29 @@ public class DataBaseUtil {
             }
         }
         return list;
+    }
+
+    public static boolean existsById(Connection connection, String sql, Object id) {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement = setParams(statement, new Object[]{id});
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     public static <T> List<T> query(Connection connection, String sql, Object[] values, Class<T> c) {

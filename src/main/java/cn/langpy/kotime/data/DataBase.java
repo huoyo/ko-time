@@ -30,19 +30,19 @@ public class DataBase implements GraphService {
     private Connection readConnection;
     private Connection writeConnection;
 
-    public  DataBase() {
+    public DataBase() {
         Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {
                     try {
-                        if (null!=readConnection) {
+                        if (null != readConnection) {
                             readConnection.close();
                         }
-                        if (null!=writeConnection) {
+                        if (null != writeConnection) {
                             writeConnection.close();
                         }
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
-                    }finally {
+                    } finally {
                         log.info("kotime=>closed database connections...");
                     }
                 })
@@ -53,9 +53,9 @@ public class DataBase implements GraphService {
         try {
             if (null == readConnection || readConnection.isClosed()) {
                 DataSource dataSource = Context.getDataSource();
-                if (null==dataSource) {
+                if (null == dataSource) {
                     throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle, or you can use `ko-time.saver=memory` to store data!");
-                }else {
+                } else {
                     readConnection = dataSource.getConnection();
                 }
             }
@@ -70,9 +70,9 @@ public class DataBase implements GraphService {
         try {
             if (null == writeConnection || writeConnection.isClosed()) {
                 DataSource dataSource = Context.getDataSource();
-                if (null==dataSource) {
+                if (null == dataSource) {
                     throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle, or you can use `ko-time.saver=memory` to store data!");
-                }else {
+                } else {
                     writeConnection = dataSource.getConnection();
                 }
             }
@@ -87,8 +87,7 @@ public class DataBase implements GraphService {
         if (null == methodNode) {
             return;
         }
-//        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryMethod, new Object[]{methodNode.getId()});
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(),KoSqlConstant.queryMethod, methodNode.getId());
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryMethod, methodNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
                     methodNode.getId(),
@@ -98,7 +97,7 @@ public class DataBase implements GraphService {
                     methodNode.getRouteName(),
                     methodNode.getMethodType().name()
             };
-            DataBaseUtil.insert(getWriteConnection(),KoSqlConstant.addMethod, params);
+            DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addMethod, params);
         } else {
             if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
                 Object[] params = new Object[]{
@@ -109,7 +108,7 @@ public class DataBase implements GraphService {
                         methodNode.getMethodType().name(),
                         methodNode.getId(),
                 };
-                DataBaseUtil.update(getWriteConnection(),KoSqlConstant.updateMethod, params);
+                DataBaseUtil.update(getWriteConnection(), KoSqlConstant.updateMethod, params);
             }
         }
     }
@@ -117,8 +116,7 @@ public class DataBase implements GraphService {
 
     @Override
     public synchronized void addExceptionNode(ExceptionNode exceptionNode) {
-//        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryException, new Object[]{exceptionNode.getId()});
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(),KoSqlConstant.queryException, exceptionNode.getId());
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryException, exceptionNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
                     exceptionNode.getId(),
@@ -126,7 +124,7 @@ public class DataBase implements GraphService {
                     exceptionNode.getClassName(),
                     exceptionNode.getMessage()
             };
-            DataBaseUtil.insert(getWriteConnection(),KoSqlConstant.addException, params);
+            DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addException, params);
         }
     }
 
@@ -140,7 +138,7 @@ public class DataBase implements GraphService {
             return null;
         }
         try {
-            List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryMethodRe, new Object[]{sourceMethodNode.getId() + targetMethodNode.getId()});
+            List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryMethodRe, new Object[]{sourceMethodNode.getId() + targetMethodNode.getId()});
             if (query.size() > 0) {
                 Map<String, Object> old = query.get(0);
                 double oldAvg = Double.valueOf(old.get("avg_run_time") + "");
@@ -158,7 +156,7 @@ public class DataBase implements GraphService {
                         min,
                         sourceMethodNode.getId() + targetMethodNode.getId()
                 };
-                DataBaseUtil.update(getWriteConnection(),KoSqlConstant.updateMethodRe, params);
+                DataBaseUtil.update(getWriteConnection(), KoSqlConstant.updateMethodRe, params);
                 return null;
             } else {
                 Object[] params = new Object[]{
@@ -169,7 +167,7 @@ public class DataBase implements GraphService {
                         targetMethodNode.getValue(),
                         targetMethodNode.getValue()
                 };
-                DataBaseUtil.insert(getWriteConnection(),KoSqlConstant.addMethodRe, params);
+                DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addMethodRe, params);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -180,7 +178,7 @@ public class DataBase implements GraphService {
     @Override
     public synchronized ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
 //        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryExceptionRe, new Object[]{sourceMethodNode.getId() + exceptionNode.getId()});
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(),KoSqlConstant.queryExceptionRe, sourceMethodNode.getId() + exceptionNode.getId());
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionRe, sourceMethodNode.getId() + exceptionNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
                     sourceMethodNode.getId() + exceptionNode.getId(),
@@ -188,7 +186,7 @@ public class DataBase implements GraphService {
                     exceptionNode.getId(),
                     exceptionNode.getValue()
             };
-            DataBaseUtil.insert(getWriteConnection(),KoSqlConstant.addExceptionRe, params);
+            DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addExceptionRe, params);
         }
         return null;
     }
@@ -196,7 +194,7 @@ public class DataBase implements GraphService {
     @Override
     public synchronized void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
         String paramsKey = Common.getPramsStr(names, values);
-        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryParamsAna, new Object[]{methodId, paramsKey});
+        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryParamsAna, new Object[]{methodId, paramsKey});
         if (query.size() == 0) {
             Object[] params = new Object[]{
                     methodId,
@@ -205,7 +203,7 @@ public class DataBase implements GraphService {
                     v,
                     v
             };
-            DataBaseUtil.insert(getWriteConnection(),KoSqlConstant.addParamsAna, params);
+            DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addParamsAna, params);
         } else {
             Map<String, Object> old = query.get(0);
             double oldAvg = Double.valueOf(old.get("avg_run_time") + "");
@@ -222,14 +220,14 @@ public class DataBase implements GraphService {
                     methodId,
                     paramsKey
             };
-            DataBaseUtil.update(getWriteConnection(),KoSqlConstant.updateParamsAna, params);
+            DataBaseUtil.update(getWriteConnection(), KoSqlConstant.updateParamsAna, params);
         }
     }
 
     @Override
     public MethodInfo getTree(String methodId) {
         MethodInfo rootInfo = new MethodInfo();
-        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethod, new Object[]{methodId}, MethodNode.class);
+        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{methodId}, MethodNode.class);
         if (methodNodes.size() == 0) {
             return rootInfo;
         }
@@ -242,7 +240,7 @@ public class DataBase implements GraphService {
         rootInfo.setMethodType(methodNode.getMethodType());
         rootInfo.setRouteName(methodNode.getRouteName());
 
-        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodReByTarget, new Object[]{methodId}, MethodRelation.class);
+        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReByTarget, new Object[]{methodId}, MethodRelation.class);
         if (relations.size() == 0) {
             return rootInfo;
         }
@@ -279,7 +277,7 @@ public class DataBase implements GraphService {
     @Override
     public Map<String, ParamMetric> getMethodParamGraph(String methodId) {
         Map<String, ParamMetric> paramMetricMap = new HashMap<>();
-        List<ParamAna> paramAnas = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryParamsAnaBySource, new Object[]{methodId}, ParamAna.class);
+        List<ParamAna> paramAnas = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryParamsAnaBySource, new Object[]{methodId}, ParamAna.class);
 
         if (paramAnas.size() == 0) {
             return paramMetricMap;
@@ -303,15 +301,29 @@ public class DataBase implements GraphService {
         if (null == controllerApis || controllerApis.size() == 0) {
             return systemStatistic;
         }
-        int delayNum = (int) controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() >= Context.getConfig().getThreshold()).count();
+
+        int delayNum = 0;
+        int totalNum = controllerApis.size();
+        double max = Double.MIN_VALUE;
+        double min = Double.MAX_VALUE;
+        double avg = controllerApis.get(0).getAvgRunTime();
+        for (MethodInfo controllerApi : controllerApis) {
+            double avgRunTime = controllerApi.getAvgRunTime();
+            if (avgRunTime >= Context.getConfig().getThreshold()) {
+                delayNum++;
+            }
+            if (avgRunTime>max) {
+                max = avgRunTime;
+            }
+            if (avgRunTime<min) {
+                min = avgRunTime;
+            }
+            avg = (avgRunTime+avg)/2;
+        }
         systemStatistic.setDelayNum(delayNum);
-        int normalNum = (int) controllerApis.stream().filter(controllerApi -> controllerApi.getAvgRunTime() < Context.getConfig().getThreshold()).count();
-        systemStatistic.setNormalNum(normalNum);
-        int totalNum = (int) controllerApis.stream().count();
+        systemStatistic.setNormalNum(totalNum-delayNum);
         systemStatistic.setTotalNum(totalNum);
-        Double max = controllerApis.stream().map(api -> api.getAvgRunTime()).max(Double::compareTo).get();
-        Double min = controllerApis.stream().map(api -> api.getAvgRunTime()).min(Double::compareTo).get();
-        Double avg = controllerApis.stream().map(api -> api.getAvgRunTime()).collect(Collectors.averagingDouble(Double::doubleValue));
+
         BigDecimal bg = BigDecimal.valueOf(avg);
         avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         systemStatistic.setMaxRunTime(max);
@@ -323,10 +335,10 @@ public class DataBase implements GraphService {
     @Override
     public List<MethodInfo> getControllers() {
         List<MethodInfo> methodInfos = new ArrayList<>();
-        List<MethodInfo> controllers = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryController, new Object[]{MethodType.Controller.name()}, MethodInfo.class);
+        List<MethodInfo> controllers = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryController, new Object[]{MethodType.Controller.name()}, MethodInfo.class);
         for (MethodInfo methodNode : controllers) {
             String id = methodNode.getId();
-            List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
+            List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
             if (relations.size() == 0) {
                 continue;
             }
@@ -351,7 +363,7 @@ public class DataBase implements GraphService {
 
     @Override
     public List<String> getCondidates(String question) {
-        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodLikeName, new Object[]{"%" + question + "%"}, MethodNode.class);
+        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodLikeName, new Object[]{"%" + question + "%"}, MethodNode.class);
         List<String> methodInfos = new ArrayList<>();
         if (methodNodes.size() > 0) {
             methodInfos = methodNodes.stream().map(MethodNode::getName).collect(toList());
@@ -362,28 +374,28 @@ public class DataBase implements GraphService {
     @Override
     public List<MethodInfo> searchMethods(String question) {
         List<MethodInfo> methodInfos = new ArrayList<>();
-        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodLikeName, new Object[]{"%" + question + "%"}, MethodNode.class);
+        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodLikeName, new Object[]{"%" + question + "%"}, MethodNode.class);
         for (MethodNode methodNode : methodNodes) {
-                String id = methodNode.getId();
-                List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
-                if (relations.size() == 0) {
-                    continue;
-                }
-                MethodRelation relation = relations.get(0);
-                MethodInfo methodInfo = new MethodInfo();
-                methodInfo.setId(methodNode.getId());
-                methodInfo.setName(methodNode.getName());
-                methodInfo.setClassName(methodNode.getClassName());
-                methodInfo.setMethodName(methodNode.getMethodName());
-                methodInfo.setMethodType(methodNode.getMethodType());
-                methodInfo.setRouteName(methodNode.getRouteName());
-                methodInfo.setValue(relation.getAvgRunTime());
-                methodInfo.setAvgRunTime(relation.getAvgRunTime());
-                methodInfo.setMaxRunTime(relation.getMaxRunTime());
-                methodInfo.setMinRunTime(relation.getMinRunTime());
-                if (!methodInfos.contains(methodInfo)) {
-                    methodInfos.add(methodInfo);
-                }
+            String id = methodNode.getId();
+            List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
+            if (relations.size() == 0) {
+                continue;
+            }
+            MethodRelation relation = relations.get(0);
+            MethodInfo methodInfo = new MethodInfo();
+            methodInfo.setId(methodNode.getId());
+            methodInfo.setName(methodNode.getName());
+            methodInfo.setClassName(methodNode.getClassName());
+            methodInfo.setMethodName(methodNode.getMethodName());
+            methodInfo.setMethodType(methodNode.getMethodType());
+            methodInfo.setRouteName(methodNode.getRouteName());
+            methodInfo.setValue(relation.getAvgRunTime());
+            methodInfo.setAvgRunTime(relation.getAvgRunTime());
+            methodInfo.setMaxRunTime(relation.getMaxRunTime());
+            methodInfo.setMinRunTime(relation.getMinRunTime());
+            if (!methodInfos.contains(methodInfo)) {
+                methodInfos.add(methodInfo);
+            }
         }
         return methodInfos;
     }
@@ -391,11 +403,11 @@ public class DataBase implements GraphService {
     @Override
     public List<MethodInfo> getChildren(String methodId) {
 
-        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethodReBySource, new Object[]{methodId}, MethodRelation.class);
+        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReBySource, new Object[]{methodId}, MethodRelation.class);
 
         List<MethodInfo> methodInfos = new ArrayList<>();
         for (MethodRelation methodRelation : relations) {
-            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethod, new Object[]{methodRelation.getTargetId()}, MethodNode.class);
+            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{methodRelation.getTargetId()}, MethodNode.class);
             if (methodNodes.size() == 0) {
                 continue;
             }
@@ -424,17 +436,17 @@ public class DataBase implements GraphService {
 
     @Override
     public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
-        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryExceptionReByTarget, new Object[]{exceptionId}, ExceptionRelation.class);
+        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptionReByTarget, new Object[]{exceptionId}, ExceptionRelation.class);
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
         for (ExceptionRelation relation : relations) {
             String sourceMethodId = relation.getSourceId();
-            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethod, new Object[]{sourceMethodId}, MethodNode.class);
+            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{sourceMethodId}, MethodNode.class);
             if (methodNodes.size() == 0) {
                 continue;
             }
             MethodNode methodNode = methodNodes.get(0);
 
-            List<ExceptionNode> exceptions = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryMethod, new Object[]{exceptionId}, ExceptionNode.class);
+            List<ExceptionNode> exceptions = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{exceptionId}, ExceptionNode.class);
             if (methodNodes.size() == 0) {
                 continue;
             }
@@ -457,10 +469,10 @@ public class DataBase implements GraphService {
     @Override
     public List<ExceptionInfo> getExceptions(String methodId) {
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
-        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryExceptionReByTarget, new Object[]{methodId}, ExceptionRelation.class);
+        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptionReByTarget, new Object[]{methodId}, ExceptionRelation.class);
         for (ExceptionRelation relation : relations) {
             String exceptionId = relation.getTargetId();
-            List<ExceptionNode> exceptionNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryException, new Object[]{exceptionId}, ExceptionNode.class);
+            List<ExceptionNode> exceptionNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryException, new Object[]{exceptionId}, ExceptionNode.class);
             if (exceptionNodes.size() == 0) {
                 continue;
             }
@@ -480,7 +492,7 @@ public class DataBase implements GraphService {
 
     @Override
     public List<ExceptionNode> getExceptions() {
-        List<ExceptionNode> exceptionNodes = DataBaseUtil.query(getReadConnection(),KoSqlConstant.queryExceptions, null, ExceptionNode.class);
+        List<ExceptionNode> exceptionNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptions, null, ExceptionNode.class);
         return exceptionNodes;
     }
 

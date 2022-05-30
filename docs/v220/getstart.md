@@ -7,7 +7,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.0.BETA</version>
+    <version>2.2.0-PREPARE</version>
   </dependency>
 ```
 
@@ -35,8 +35,8 @@
 > ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
 > ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
 > ko-time.param-analyse=true #是否开启入参组合分析 默认开启 v2.0.8开始支持  双击方法节点即可看到效果
-> ko-time.saver=memory #接口信息存储位置，可选{memory,database} 默认memory v2.2.0.BETA开始支持
-> ko-time.thread-num=5 #调用信息存储线程数（为了不影响项目本身的性能，链路存储异步进行），默认5  v2.2.0.BETA开始支持
+> ko-time.saver=memory #接口信息存储位置，可选{memory,database} 默认memory v2.2.0-PREPARE
+> ko-time.thread-num=2 #调用信息存储线程数（为了不影响项目本身的性能，链路存储异步进行），默认2  v2.2.0-PREPARE开始支持
 
 ## 访问
 

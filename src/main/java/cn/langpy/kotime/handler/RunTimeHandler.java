@@ -47,6 +47,7 @@ public class RunTimeHandler implements MethodInterceptor {
                     invokedInfo.setNames(parameters);
                     invokedInfo.setValues(invocation.getArguments());
                     InvokedQueue.add(invokedInfo);
+                    InvokedQueue.wake();
                 }
                 MethodStack.clear();
                 throw e;
@@ -63,6 +64,7 @@ public class RunTimeHandler implements MethodInterceptor {
         invokedInfo.setNames(parameters);
         invokedInfo.setValues(invocation.getArguments());
         InvokedQueue.add(invokedInfo);
+        InvokedQueue.wake();
         MethodStack.clear();
         return obj;
     }

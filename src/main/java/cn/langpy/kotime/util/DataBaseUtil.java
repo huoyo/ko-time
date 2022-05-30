@@ -115,7 +115,7 @@ public class DataBaseUtil {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(sql);
-            statement = setParams(statement, new Object[]{id});
+            statement = setParams(statement, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return true;
@@ -145,9 +145,12 @@ public class DataBaseUtil {
             final ResultSetMetaData metaData = statement.getMetaData();
             ResultSet resultSet = statement.executeQuery();
             List<ColumnInfo> columns = getColumns(metaData);
+            Field[] fields = null;
             while (resultSet.next()) {
                 T object = c.newInstance();
-                Field[] fields = object.getClass().getDeclaredFields();
+                if (null == fields) {
+                    fields = object.getClass().getDeclaredFields();
+                }
                 for (Field field : fields) {
                     int mod = field.getModifiers();
                     if (Modifier.isStatic(mod) || Modifier.isFinal(mod)) {
@@ -227,6 +230,27 @@ public class DataBaseUtil {
                 } else {
                     throw new DataBaseException("Invalid type=" + values[i].getClass().getName());
                 }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return statement;
+    }
+
+    private static PreparedStatement setParams(PreparedStatement statement, Object value) {
+        try {
+            if (value == null) {
+                statement.setObject(1, null);
+            } else if (value instanceof String) {
+                statement.setString(1, (String) value);
+            } else if (value instanceof Double) {
+                statement.setDouble(1, (Double) value);
+            } else if (value instanceof Integer) {
+                statement.setInt(1, (Integer) value);
+            } else if (value instanceof Boolean) {
+                statement.setBoolean(1, (Boolean) value);
+            } else {
+                throw new DataBaseException("Invalid type=" + value.getClass().getName());
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -21,13 +21,16 @@ public final class KoInvokedHandler implements InvokedHandler {
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
         GraphService graphService = GraphService.getInstance();
+        long start = System.currentTimeMillis();
         graphService.addMethodNode(parent);
         graphService.addMethodNode(current);
         graphService.addMethodRelation(parent, current);
+        long end = System.currentTimeMillis();
+        log.info("存储耗时：" + (end - start) / 1000.0);
         if (Context.getConfig().getParamAnalyse()) {
-            graphService.addParamAnalyse(current.getId(),names, values,current.getValue());
+            graphService.addParamAnalyse(current.getId(), names, values, current.getValue());
         }
-        if (Context.getConfig().getLogEnable()){
+        if (Context.getConfig().getLogEnable()) {
             Common.showLog(current);
         }
     }

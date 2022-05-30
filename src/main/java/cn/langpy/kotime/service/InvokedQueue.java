@@ -16,14 +16,41 @@ public class InvokedQueue {
         queue.add(invokedInfo);
     }
 
+    public static void pause() {
+        try {
+            synchronized (queue) {
+                queue.wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void wake() {
+        try {
+            synchronized (queue) {
+                queue.notifyAll();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void onInveked() {
+        int n = 0;
         while (true) {
             try {
                 if (queue.isEmpty()) {
+                    n++;
+                    if (n > 20) {
+                        n = 0;
+                        pause();
+                    }
                     continue;
                 }
                 InvokedInfo poll = queue.poll();
-                if (poll==null) {
+                if (poll == null) {
                     continue;
                 }
                 for (InvokedHandler invokedHandler : Context.getInvokedHandlers()) {

@@ -85,7 +85,7 @@ public class LoadConfig {
                 Context.setDataSource(dataSource);
             }
         }catch (NoSuchBeanDefinitionException e){
-            log.warning("kotime=>No qualifying bean of type 'DataSource' available,you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+            log.warning("kotime=>No qualifying bean of type 'DataSource' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
         }
 
         Context.setConfig(config);

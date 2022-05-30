@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 @Aspect
 @Component
 public class AuthHandler {
-    public static Logger log = Logger.getLogger(AuthHandler.class.toString());
+    private static Logger log = Logger.getLogger(AuthHandler.class.toString());
 
     @Pointcut(KoConstant.authRange)
     public void preProcess() {

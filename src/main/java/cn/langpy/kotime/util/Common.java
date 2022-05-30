@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * zhangchang
  */
 public class Common {
-    public static Logger log = Logger.getLogger(Common.class.toString());
+    private static Logger log = Logger.getLogger(Common.class.toString());
 
     final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
 

@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 @ComponentScan("cn.langpy.kotime")
 @Configuration
 public class LoadConfig {
-    public static Logger log = Logger.getLogger(LoadConfig.class.toString());
+    private static Logger log = Logger.getLogger(LoadConfig.class.toString());
 
     @Value("${koTime.enable:true}")
     private Boolean kotimeEnable;

@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class DataBaseUtil {
-    public static Logger log = Logger.getLogger(DataBaseUtil.class.toString());
+    private static Logger log = Logger.getLogger(DataBaseUtil.class.toString());
 
     static Map<String, ColumnInfo> tableInfoMap = new ConcurrentHashMap<>();
 
@@ -82,13 +82,14 @@ public class DataBaseUtil {
     public static List<Map<String, Object>> query(Connection connection, String sql, Object[] values) {
         List<Map<String, Object>> list = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(sql);
             if (null != values) {
                 statement = setParams(statement, values);
             }
             final ResultSetMetaData metaData = statement.getMetaData();
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             List<ColumnInfo> columns = getColumns(metaData);
             while (resultSet.next()) {
                 Map<String, Object> map = new HashMap<>();
@@ -107,16 +108,24 @@ public class DataBaseUtil {
                     throwables.printStackTrace();
                 }
             }
+            if (null != resultSet) {
+                try {
+                    resultSet.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         }
         return list;
     }
 
     public static boolean existsById(Connection connection, String sql, Object id) {
         PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(sql);
             statement = setParams(statement, id);
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return true;
             }
@@ -130,6 +139,13 @@ public class DataBaseUtil {
                     throwables.printStackTrace();
                 }
             }
+            if (null != resultSet) {
+                try {
+                    resultSet.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
         }
         return false;
     }
@@ -137,13 +153,14 @@ public class DataBaseUtil {
     public static <T> List<T> query(Connection connection, String sql, Object[] values, Class<T> c) {
         List<T> list = new ArrayList<>();
         PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
             statement = connection.prepareStatement(sql);
             if (null != values) {
                 statement = setParams(statement, values);
             }
             final ResultSetMetaData metaData = statement.getMetaData();
-            ResultSet resultSet = statement.executeQuery();
+            resultSet = statement.executeQuery();
             List<ColumnInfo> columns = getColumns(metaData);
             Field[] fields = null;
             while (resultSet.next()) {
@@ -173,6 +190,7 @@ public class DataBaseUtil {
                     } else {
                         field.set(object, columnValue);
                     }
+                    field.setAccessible(false);
                 }
                 list.add(object);
             }
@@ -190,6 +208,14 @@ public class DataBaseUtil {
                     throwables.printStackTrace();
                 }
             }
+            if (null != resultSet) {
+                try {
+                    resultSet.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+
         }
         return list;
     }

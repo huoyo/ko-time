@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 @Aspect
 @Component
 public class ComputeTimeHandler {
-    public static Logger log = Logger.getLogger(ComputeTimeHandler.class.toString());
+    private static Logger log = Logger.getLogger(ComputeTimeHandler.class.toString());
 
     @Pointcut(KoConstant.comMethodRange)
     public void preProcess() {

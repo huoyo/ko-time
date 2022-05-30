@@ -34,7 +34,7 @@ public class KoTimeController {
     @Value("${ko-time.password:}")
     private String password;
 
-    public static Logger log = Logger.getLogger(KoTimeController.class.toString());
+    private static Logger log = Logger.getLogger(KoTimeController.class.toString());
 
     @PostMapping("/login")
     @ResponseBody
@@ -65,41 +65,48 @@ public class KoTimeController {
 
 
     @GetMapping
-    public void index(String test, HttpServletResponse response, HttpServletRequest request) throws Exception {
+    public void index(String test, HttpServletResponse response, HttpServletRequest request) {
         if (null != test) {
             return;
         }
         response.setContentType("text/html;charset=utf-8");
         ClassPathResource classPathResource = new ClassPathResource(KoConstant.kotimeViewer);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(), "utf-8"));
-        PrintWriter out = response.getWriter();
-        String context = request.getContextPath();
-        if (StringUtils.hasText(Context.getConfig().getContextPath())) {
-            context = Context.getConfig().getContextPath();
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        String line = "";
-        int n = 0;
-        while ((line = reader.readLine()) != null) {
-            if (n > 14) {
-                if (line.indexOf(KoConstant.globalThreshold) > -1) {
-                    line = line.replace(KoConstant.globalThreshold, Context.getConfig().getThreshold() + "");
-                } else if (line.indexOf(KoConstant.globalNeedLogin) > -1) {
-                    line = line.replace(KoConstant.globalNeedLogin, Context.getConfig().getAuthEnable() + "");
-                } else if (line.indexOf(KoConstant.contextPath) > -1) {
-                    line = line.replace(KoConstant.contextPath, context);
-                } else if (line.indexOf(KoConstant.exceptionTitleStyle) > -1) {
-                    line = line.replace(KoConstant.exceptionTitleStyle, Context.getConfig().getExceptionEnable() == true ? "" : "display:none;");
-                }
-                stringBuilder.append(line + "\n");
-            } else {
-                stringBuilder.append(line + "\n");
+        try (
+                InputStream inputStream = classPathResource.getInputStream();
+                InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
+                BufferedReader reader = new BufferedReader(streamReader);
+                PrintWriter out = response.getWriter()) {
+
+            String context = request.getContextPath();
+            if (StringUtils.hasText(Context.getConfig().getContextPath())) {
+                context = Context.getConfig().getContextPath();
             }
-            n++;
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = "";
+            int n = 0;
+            while ((line = reader.readLine()) != null) {
+                if (n > 14) {
+                    if (line.indexOf(KoConstant.globalThreshold) > -1) {
+                        line = line.replace(KoConstant.globalThreshold, Context.getConfig().getThreshold() + "");
+                    } else if (line.indexOf(KoConstant.globalNeedLogin) > -1) {
+                        line = line.replace(KoConstant.globalNeedLogin, Context.getConfig().getAuthEnable() + "");
+                    } else if (line.indexOf(KoConstant.contextPath) > -1) {
+                        line = line.replace(KoConstant.contextPath, context);
+                    } else if (line.indexOf(KoConstant.exceptionTitleStyle) > -1) {
+                        line = line.replace(KoConstant.exceptionTitleStyle, Context.getConfig().getExceptionEnable() == true ? "" : "display:none;");
+                    }
+                    stringBuilder.append(line + "\n");
+                } else {
+                    stringBuilder.append(line + "\n");
+                }
+                n++;
+            }
+            line = stringBuilder.toString();
+            out.write(line);
+            out.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        line = stringBuilder.toString();
-        out.write(line);
-        out.close();
     }
 
 

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 @KoListener
 public final class KoInvokedHandler implements InvokedHandler {
-    public static Logger log = Logger.getLogger(KoInvokedHandler.class.toString());
+    private static Logger log = Logger.getLogger(KoInvokedHandler.class.toString());
 
 
     @Override

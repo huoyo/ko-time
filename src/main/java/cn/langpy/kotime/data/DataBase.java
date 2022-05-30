@@ -15,7 +15,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 @Component("database")
 @Lazy
 public class DataBase implements GraphService {
-    public static Logger log = Logger.getLogger(DataBase.class.toString());
+    private static Logger log = Logger.getLogger(DataBase.class.toString());
 
     private Connection readConnection;
     private Connection writeConnection;

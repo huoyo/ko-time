@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 
 public class InvokedQueue {
-    public static Logger log = Logger.getLogger(InvokedQueue.class.toString());
+    private static Logger log = Logger.getLogger(InvokedQueue.class.toString());
 
     private volatile static ConcurrentLinkedQueue<InvokedInfo> queue = new ConcurrentLinkedQueue();
 

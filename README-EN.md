@@ -1,6 +1,7 @@
-# KoTime
+<div align="center">
+    <h1 >KoTime</h1> 
+</div>
 
-[中文简介/CHINESE](README.md)
 
 <div >
     <img src='https://shields.io/badge/version-2.0.9-green.svg'>
@@ -11,6 +12,8 @@
 
 
 ## Documents
+
+[中文简介/CHINESE](README.md)
 
 [documents](http://kotimedoc.langpy.cn/)
 

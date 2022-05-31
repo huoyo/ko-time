@@ -1,8 +1,9 @@
-# KoTime
 
-[英文简介/ENGLISH](README-EN.md)
+<div align="center">
+    <h1 >KoTime</h1> 
+</div>
 
-<div >
+<div align="center">
     <img src='https://shields.io/badge/version-2.1.1-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat|UIKit-r.svg'>
@@ -11,6 +12,8 @@
 
 
 ## 文档
+
+[英文简介/ENGLISH](README-EN.md)
 
 [使用教程](http://kotimedoc.langpy.cn/)
 

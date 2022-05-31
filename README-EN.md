@@ -3,7 +3,7 @@
 </div>
 
 
-<div >
+<div align="center">
     <img src='https://shields.io/badge/version-2.0.9-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat|UIKit-r.svg'>

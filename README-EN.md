@@ -8,6 +8,10 @@
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of the methods,which can help you to find methods's performances easily.</h4>
+        <ul>
+            <li>Tracking the Java methods and calculating their execution times</li>
+            <li>Show the paths of the methods</li>
+        </ul>
 </div>
 
 
@@ -17,11 +21,6 @@
 
 [documents](http://kotimedoc.langpy.cn/)
 
-
-Features：
-
-> * Tracking the Java methods and calculating their execution times
-> * Show the paths of the methods
 
 
 ## Display

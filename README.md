@@ -8,6 +8,10 @@
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
+    <ul>
+        <li>实时监听方法，统计运行时长</li>
+        <li>web展示方法调用链路，瓶颈可视化追踪</li>
+    </ul>
 </div>
 
 
@@ -18,9 +22,6 @@
 [使用教程](http://kotimedoc.langpy.cn/)
 
 
-特点：
-> * 实时监听方法，统计运行时长
-> * web展示方法调用链路，瓶颈可视化追踪
 
 
 ## 可视化展示

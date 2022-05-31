@@ -22,46 +22,56 @@
         <connection>scm:git:https://gitee.com/huoyo/ko-time.git</connection>
         <developerConnection>scm:git:https://gitee.com/huoyo/ko-time.git</developerConnection>
     </scm>
+    <properties>
+        <jwt.version>4.0.0-beta.0</jwt.version>
+        <aspecttj.version>1.9.5</aspecttj.version>
+        <tomcat.version>9.0.36</tomcat.version>
+        <spring-context.version>5.2.7.RELEASE</spring-context.version>
+        <spring-web.version>5.2.11.RELEASE</spring-web.version>
+        <spring-webmvc.version>5.3.6</spring-webmvc.version>
+        <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
+        <spring-redis.version>2.6.4</spring-redis.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>4.0.0-beta.0</version>
+            <version>${jwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.2.7.RELEASE</version>
+            <version>${spring-context.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.9.5</version>
+            <version>${aspecttj.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.2.11.RELEASE</version>
+            <version>${spring-web.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${spring-boot.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.36</version>
+            <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>5.3.6</version>
+            <version>${spring-webmvc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -69,6 +79,12 @@
             <artifactId>javassist</artifactId>
             <version>3.26.0-GA</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+<!--            <version>${spring-redis.version}</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
     </dependencies>
     <developers>
         <developer>

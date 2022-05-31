@@ -71,9 +71,6 @@ public class LoadConfig {
         config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
-        if (null != config) {
-            config.setPointcut("(" + config.getPointcut() + " ) && !@annotation(javax.websocket.server.ServerEndpoint) && !@annotation(cn.langpy.kotime.annotation.KoListener)");
-        }
         try {
             DataSource dataSource = applicationContext.getBean(DataSource.class);
             Context.setDataSource(dataSource);
@@ -133,7 +130,9 @@ public class LoadConfig {
     public AspectJExpressionPointcutAdvisor configurabledvisor() {
         log.info("kotime=>loading method listener");
         AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
-        advisor.setExpression(defaultConfig.getPointcut() == null ? pointcut : defaultConfig.getPointcut());
+        String cutRange = defaultConfig.getPointcut() == null ? pointcut : defaultConfig.getPointcut();
+        cutRange = cutRange + " && !@annotation(cn.langpy.kotime.annotation.KoListener)";
+        advisor.setExpression(cutRange);
         advisor.setAdvice(new RunTimeHandler());
         return advisor;
     }

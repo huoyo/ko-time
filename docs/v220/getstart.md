@@ -24,19 +24,20 @@
 
 * 可选配置（以下配置一般不用设置）
 
-> 
-> ko-time.enable=true  # 是否开启koTime，默认开启，当为false时，关闭koTime   
-> ko-time.log-enable=false  # 是否开启控制输出，默认false  
-> ko-time.log-language=chinese # 控制台输出语言（english/chinese）默认chinese  
-> ko-time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
-> ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置，一般情况切记不要配置   v2.0.1开始支持  
-> ko-time.exception-enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  
-> ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要登录才能访问调用链路 v2.0.2开始支持  
-> ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
-> ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
-> ko-time.param-analyse=true #是否开启入参组合分析 默认开启 v2.0.8开始支持  双击方法节点即可看到效果
-> ko-time.saver=memory #接口信息存储位置，可选{memory,database} 默认memory v2.2.0-BETA
-> ko-time.thread-num=2 #调用信息存储线程数（为了不影响项目本身的性能，链路存储异步进行），默认2  v2.2.0-BETA开始支持
+```
+ko-time.enable=true  # 是否开启koTime，默认开启，当为false时，关闭koTime   
+ko-time.log-enable=false  # 是否开启控制输出，默认false  
+ko-time.log-language=chinese # 控制台输出语言（english/chinese）默认chinese  
+ko-time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
+ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置，一般情况切记不要配置   v2.0.1开始支持  
+ko-time.exception-enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  
+ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要登录才能访问调用链路 v2.0.2开始支持  
+ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
+ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
+ko-time.param-analyse=true # 是否开启入参组合分析 默认开启 v2.0.8开始支持 双击方法节点即可看到效果 
+ko-time.saver=memory # 接口信息存储位置，可选{memory,database} 默认memory v2.2.0-BETA 
+ko-time.thread-num=2 # 调用信息存储线程数（为了不影响项目本身性能，链路存储异步进行），默认2，该值并非越大越好，瓶颈取决于数据库性能和服务器配置，尽可能少占用项目资源为上  v2.2.0-BETA开始支持
+```
 
 ## 访问
 

@@ -7,9 +7,10 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class KoUtil {
-    private static final String koTimeSecret = "KotimeLang";
+    private final static String koTimeSecret = UUID.randomUUID().toString().replace("-","");
 
     public static String login(String userName) {
         Algorithm algorithm = Algorithm.HMAC256(koTimeSecret);
@@ -44,6 +45,5 @@ public class KoUtil {
             return false;
         }
     }
-
 
 }

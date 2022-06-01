@@ -46,6 +46,12 @@ public class DataBase implements GraphService {
                     }
                 })
         );
+        initConnection();
+    }
+
+    public void initConnection() {
+        getReadConnection();
+        getWriteConnection();
     }
 
     public Connection getReadConnection() {

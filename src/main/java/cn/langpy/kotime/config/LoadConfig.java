@@ -6,6 +6,7 @@ import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.util.Context;
+import cn.langpy.kotime.util.DataBaseException;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
@@ -96,6 +97,9 @@ public class LoadConfig {
                     break;
                 }
             }
+        }
+        if (null==Context.getSaver()) {
+            throw new DataBaseException("error `ko-time.saver="+config.getSaver()+"`, and you can only choose an option in {memory,database} for `ko-time.saver=`!");
         }
         log.info("kotime=>loading config");
 

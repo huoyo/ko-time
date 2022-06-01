@@ -52,7 +52,7 @@ create table ko_exception_node (
 
 create table ko_exception_relation (
     id varchar(200) not null primary key comment '' ,
-    source_id varchar(200 null comment '调用方法id' ,
+    source_id varchar(200) null comment '调用方法id' ,
     target_id varchar(200) null comment '异常id' ,
     location int null comment '异常位置'
 ) comment '异常关系表';

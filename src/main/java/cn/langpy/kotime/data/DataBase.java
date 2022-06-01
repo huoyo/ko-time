@@ -59,7 +59,9 @@ public class DataBase implements GraphService {
             if (null == readConnection || readConnection.isClosed()) {
                 DataSource dataSource = Context.getDataSource();
                 if (null == dataSource) {
-                    throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle, or you can use `ko-time.saver=memory` to store data!");
+                    if ("database".equals(Context.getConfig().getSaver())) {
+                        throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle, or you can use `ko-time.saver=memory` to store data!");
+                    }
                 } else {
                     readConnection = dataSource.getConnection();
                 }
@@ -76,7 +78,9 @@ public class DataBase implements GraphService {
             if (null == writeConnection || writeConnection.isClosed()) {
                 DataSource dataSource = Context.getDataSource();
                 if (null == dataSource) {
-                    throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle, or you can use `ko-time.saver=memory` to store data!");
+                    if ("database".equals(Context.getConfig().getSaver())) {
+                        throw new DataBaseException("`ko-time.saver=database` needs a DataSource for MySQl or Oracle, or you can use `ko-time.saver=memory` to store data!");
+                    }
                 } else {
                     writeConnection = dataSource.getConnection();
                 }
@@ -317,16 +321,16 @@ public class DataBase implements GraphService {
             if (avgRunTime >= Context.getConfig().getThreshold()) {
                 delayNum++;
             }
-            if (avgRunTime>max) {
+            if (avgRunTime > max) {
                 max = avgRunTime;
             }
-            if (avgRunTime<min) {
+            if (avgRunTime < min) {
                 min = avgRunTime;
             }
-            avg = (avgRunTime+avg)/2;
+            avg = (avgRunTime + avg) / 2;
         }
         systemStatistic.setDelayNum(delayNum);
-        systemStatistic.setNormalNum(totalNum-delayNum);
+        systemStatistic.setNormalNum(totalNum - delayNum);
         systemStatistic.setTotalNum(totalNum);
 
         BigDecimal bg = BigDecimal.valueOf(avg);

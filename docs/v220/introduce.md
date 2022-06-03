@@ -2,10 +2,6 @@
 ## 简介
 koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈
 
-## 预览
-
-http://huoyo.gitee.io/ko-time/example
-
 
 ## 优点
 

@@ -23,7 +23,8 @@ public class BoomFilter {
     }
 
     public static void add(String value) {
-        for (int i = 0; i < hashFuncs.size(); i++) {
+        int len = hashFuncs.size();
+        for (int i = 0; i <len ; i++) {
             BiFunction<String, Integer, Integer> hashFunc = hashFuncs.get(i);
             int hashSeed = hashSeeds[i];
             Integer bitHash = hashFunc.apply(value, hashSeed);
@@ -32,7 +33,8 @@ public class BoomFilter {
     }
 
     public static boolean exists(String value) {
-        for (int i = 0; i < hashFuncs.size(); i++) {
+        int len = hashFuncs.size();
+        for (int i = 0; i < len; i++) {
             BiFunction<String, Integer, Integer> hashFunc = hashFuncs.get(i);
             int hashSeed = hashSeeds[i];
             Integer bitHash = hashFunc.apply(value, hashSeed);

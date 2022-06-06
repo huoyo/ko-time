@@ -186,7 +186,6 @@ public class DataBase implements GraphService {
 
     @Override
     public synchronized ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
-//        List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(),KoSqlConstant.queryExceptionRe, new Object[]{sourceMethodNode.getId() + exceptionNode.getId()});
         boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionRe, sourceMethodNode.getId() + exceptionNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{

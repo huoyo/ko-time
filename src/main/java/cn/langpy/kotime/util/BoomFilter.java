@@ -11,7 +11,7 @@ public class BoomFilter {
     private static Logger log = Logger.getLogger(BoomFilter.class.toString());
 
     private final static int size = 1000000;
-    private final static BitSet bits = new BitSet(size);
+    private volatile  static BitSet bits = new BitSet(size);
     private final static int[] hashSeeds = new int[]{3, 113, 919, 2203, 4013, 6011};
 
     private final static List<BiFunction<String, Integer, Integer>> hashFuncs = new ArrayList<>();
@@ -47,7 +47,7 @@ public class BoomFilter {
     }
 
 
-    public static int hash(String value, int seed) {
+    private static int hash(String value, int seed) {
         return Math.abs(value.hashCode() * seed + 33) % size;
     }
 }

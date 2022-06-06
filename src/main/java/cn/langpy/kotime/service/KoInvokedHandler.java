@@ -4,11 +4,10 @@ import cn.langpy.kotime.annotation.KoListener;
 import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.model.ExceptionNode;
 import cn.langpy.kotime.model.MethodNode;
-import cn.langpy.kotime.util.BoomFilter;
+import cn.langpy.kotime.util.BloomFilter;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Parameter;
 import java.util.logging.Logger;
 
@@ -39,10 +38,10 @@ public final class KoInvokedHandler implements InvokedHandler {
     }
 
     public MethodNode filter(MethodNode currentNode) {
-        if (BoomFilter.exists(currentNode.getId())) {
+        if (BloomFilter.exists(currentNode.getId())) {
             return null;
         } else {
-            BoomFilter.add(currentNode.getId());
+            BloomFilter.add(currentNode.getId());
             return currentNode;
         }
     }

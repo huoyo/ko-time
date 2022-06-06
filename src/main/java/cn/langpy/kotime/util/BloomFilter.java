@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 
-public class BoomFilter {
-    private static Logger log = Logger.getLogger(BoomFilter.class.toString());
+public class BloomFilter {
+    private static Logger log = Logger.getLogger(BloomFilter.class.toString());
 
     private final static int size = 1000000;
     private volatile  static BitSet bits = new BitSet(size);

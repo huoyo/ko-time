@@ -36,6 +36,9 @@ public class AuthHandler {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         boolean needAuth = method.isAnnotationPresent(Auth.class);
         if (needAuth&& Context.getConfig().getAuthEnable()) {
+            if (!Context.getConfig().getEnable()) {
+                throw new RuntimeException("no data to return,because kotime switch was closed!");
+            }
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String token = request.getParameter("token");
             if (StringUtils.hasText(token)) {

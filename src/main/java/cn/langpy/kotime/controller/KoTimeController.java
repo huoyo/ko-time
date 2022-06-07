@@ -66,6 +66,9 @@ public class KoTimeController {
 
     @GetMapping
     public void index(String test, HttpServletResponse response, HttpServletRequest request) {
+        if (!Context.getConfig().getEnable()) {
+            return;
+        }
         if (null != test) {
             return;
         }

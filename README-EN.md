@@ -15,6 +15,12 @@
 </div>
 
 
+## Locations
+
+[Gitee](https://gitee.com/huoyo/ko-time.git)
+
+[Github](https://github.com/huoyo/ko-time.git)
+
 ## Documents
 
 [中文简介/CHINESE](README.md)

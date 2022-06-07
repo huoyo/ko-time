@@ -46,8 +46,12 @@
       "name": "ko-time.log-language",
       "defaultValue": "chinese",
       "type": "java.lang.String",
-      "description": "(Deprecated)to select language for log printed",
-      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+      "description": "to select language for log printed",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig",
+      "deprecation": {
+        "level": "warning",
+        "replacement": "ko-time.language"
+      }
     },
     {
       "name": "ko-time.pointcut",

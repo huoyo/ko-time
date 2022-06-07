@@ -177,11 +177,16 @@
                         "title":{'name':"入参组合分析"},
                         "data":datas,
                         'style':{
+                            'title-color':'#597772',
+                            'border-color':'#597772',
                             'data-font-size':'10px',
                             'title-font-size':'12px'
                         }
                     }
-                    graph.createNode(paramGraphData,e.x+150,e.y-30);
+                    let clickNodeX =  Number(clickNode.getAttribute("x"));
+                    let clickNodeY =  Number(clickNode.getAttribute("y"));
+                    graph.createNode(paramGraphData,clickNodeX,clickNodeY-100);
+                    // graph.createNode(paramGraphData,e.x+150,e.y-30);
                     methodParamMap.set(clickNodeId+"ana","")
                 });
             }

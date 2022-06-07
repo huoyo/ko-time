@@ -7,6 +7,8 @@ import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.util.BloomFilter;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
+import cn.langpy.kotime.util.MethodType;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Parameter;
 import java.util.logging.Logger;
@@ -39,6 +41,10 @@ public final class KoInvokedHandler implements InvokedHandler {
 
     public MethodNode filter(MethodNode currentNode) {
         if (BloomFilter.exists(currentNode.getId())) {
+            //allow controllers's routes to be updated
+            if (!StringUtils.isEmpty(currentNode.getRouteName())) {
+                return currentNode;
+            }
             return null;
         } else {
             BloomFilter.add(currentNode.getId());

@@ -64,21 +64,21 @@
       "name": "ko-time.saver",
       "type": "java.lang.String",
       "defaultValue": "memory",
-      "description": "waiting to implement",
+      "description": "a place to store data",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
       "name": "ko-time.data-source",
       "type": "java.lang.String",
       "defaultValue": "",
-      "description": "waiting to implement",
+      "description": "datasource",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
       "name": "ko-time.thread-num",
       "type": "java.lang.Integer",
       "defaultValue": 2,
-      "description": "waiting to implement",
+      "description": "number of thread to store data",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {

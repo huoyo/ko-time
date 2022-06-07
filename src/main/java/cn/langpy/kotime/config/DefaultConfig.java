@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "ko-time")
 public class DefaultConfig {
     private Boolean enable;
+    private String language;
+    @Deprecated
     private String logLanguage;
     private Boolean logEnable;
     private Double threshold;
@@ -25,6 +27,14 @@ public class DefaultConfig {
     private Boolean authEnable;
     private String userName;
     private String password;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public String getDataSource() {
         return dataSource;

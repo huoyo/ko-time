@@ -69,6 +69,7 @@ public class LoadConfig {
         config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
         config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
         config.setContextPath(defaultConfig.getContextPath());
+        config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());
         config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());

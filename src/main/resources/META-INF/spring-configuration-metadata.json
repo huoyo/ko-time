@@ -36,10 +36,17 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.language",
+      "defaultValue": "chinese",
+      "type": "java.lang.String",
+      "description": "to select language for viewer",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.log-language",
       "defaultValue": "chinese",
       "type": "java.lang.String",
-      "description": "to select language for log printed",
+      "description": "(Deprecated)to select language for log printed",
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {

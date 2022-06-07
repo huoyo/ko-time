@@ -73,7 +73,7 @@ public class KoTimeController {
             return;
         }
         response.setContentType("text/html;charset=utf-8");
-        ClassPathResource classPathResource = new ClassPathResource(KoConstant.kotimeViewer);
+        ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName());
         try (
                 InputStream inputStream = classPathResource.getInputStream();
                 InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
@@ -207,6 +207,9 @@ public class KoTimeController {
         }
         if (config.getThreshold() != null) {
             koTimeConfig.setThreshold(config.getThreshold());
+        }
+        if (config.getLanguage() != null) {
+            koTimeConfig.setLanguage(config.getLanguage());
         }
         return true;
     }

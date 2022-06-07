@@ -133,7 +133,7 @@ public class Common {
     }
 
     public static void showLog(String method, double value) {
-        if ("chinese".equals(Context.getConfig().getLogLanguage())) {
+        if ("chinese".equals(Context.getConfig().getLanguage())) {
             log.info("调用方法=" + method + "()，耗时=" + value + "毫秒");
         } else if ( "english".equals(Context.getConfig().getLogLanguage())) {
             log.info("method=" + method + "()，runTime=" + value + "ms");

@@ -62,7 +62,7 @@ public class LoadConfig {
     public void initConfig() {
         DefaultConfig config = new DefaultConfig();
         config.setLogEnable(defaultConfig.getLogEnable() == null ? logEnable : defaultConfig.getLogEnable());
-        config.setPointcut(defaultConfig.getPointcut() == null ? pointcut : defaultConfig.getPointcut());
+//        config.setPointcut(defaultConfig.getPointcut() == null ? pointcut : defaultConfig.getPointcut());
         config.setLogLanguage(defaultConfig.getLogLanguage() == null ? logLanguage : defaultConfig.getLogLanguage());
         config.setThreshold(defaultConfig.getThreshold() == null ? timeThreshold : defaultConfig.getThreshold());
         config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());

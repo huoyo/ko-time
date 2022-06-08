@@ -47,7 +47,7 @@
                 kotimeEnableDom.checked = kotimeEnable;
 
                 let apiTip = document.getElementById('apiTip');
-                apiTip.innerHTML = kotimeEnable==true?"We can see intefaces after invoking methods!":"KoTime switch was closed!";
+                apiTip.innerHTML = kotimeEnable==true?"We can see interfaces after invoking methods!":"KoTime switch was closed!";
 
 
                 let threshold = data['threshold'];
@@ -138,9 +138,9 @@
                     let apiId = className+"."+methodName;
                     let  color = avgRunTime>globalThreshold?'danger':'success';
                     if (methodType=='Controller' && routeName!=null && routeName!='') {
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg:  "+avgRunTime+" ms</span></li>";
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                     }else{
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg:  "+avgRunTime+" ms</span></li>";
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                     }
                 };
                 element.innerHTML = html;
@@ -332,9 +332,9 @@
                         let  color = avgRunTime>globalThreshold?'danger':'success';
 
                         if (methodType=='Controller' && routeName!=null && routeName!='') {
-                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg:  "+avgRunTime+" ms</span></li>";
+                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                         }else{
-                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg:  "+avgRunTime+" ms</span></li>";
+                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                         }
                     };
                     element.innerHTML = html;
@@ -357,7 +357,7 @@
 
 <ul class="uk-flex-center" uk-tab>
     <li id="zl" class="uk-active"><a href="#" >Summary</a></li>
-    <li id="jklb"><a href="#" >Intefaces</a></li>
+    <li id="jklb"><a href="#" >Interfaces</a></li>
     <li><a href="#" >Exceptions</a></li>
     <li><a href="#" >Configurations</a></li>
     <li><a href="#" >Contact me</a></li>
@@ -366,7 +366,7 @@
 <ul class="uk-switcher uk-margin">
     <li style="margin-left: 30%;margin-right: 30%;">
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#" >Number of Inteface</a></li>
+            <li class="uk-active"><a href="#" >Number of Interface</a></li>
         </ul>
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>

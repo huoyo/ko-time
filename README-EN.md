@@ -4,7 +4,7 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.0.9-green.svg'>
+    <img src='https://shields.io/badge/version-2.2.2-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|Java JWT|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of the methods,which can help you to find methods's performances easily.</h4>
@@ -77,8 +77,11 @@ After clicking a inteface method,you can find paths of the method
 
 > V2.0.7：Display routes for Controllers
 
-> V2.0.8：times for various params combinations
+> V2.0.8：Times for various params combinations
 
+> V2.2.0：Support using database to store data
+
+> V2.2.2：Support the viewer to use English
 
 ## Copyright
 

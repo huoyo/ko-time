@@ -27,7 +27,7 @@ Add some options in `application.properties`
 ```
 ko-time.enable=true  # KoTime switch,default true
 ko-time.log-enable=false  # KoTime's console log switch,default false
-ko-time.log-language=chinese # console's language（english/chinese）,default chinese  
+ko-time.language=chinese # language（english/chinese）,default chinese  
 ko-time.threshold=800.0 # time threshold for the method node whose color is red if its avgRunTime>threshold,default 800  
 ko-time.context-path=http://localhost:80 # context path for the viwer,and you need not set it under normal circumstances. added in v2.0.1
 ko-time.exception-enable=true # exception detect switch，default false. added in v2.0.0

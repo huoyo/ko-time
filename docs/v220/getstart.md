@@ -27,7 +27,7 @@
 ```
 ko-time.enable=true  # 是否开启koTime，默认开启，当为false时，关闭koTime   
 ko-time.log-enable=false  # 是否开启控制输出，默认false  
-ko-time.log-language=chinese # 控制台输出语言（english/chinese）默认chinese  
+ko-time.language=chinese # 语言（english/chinese）默认chinese  
 ko-time.threshold=800.0 # 时间阈值，用于前端展示，大于阈值显示红色，小于阈值显示绿色，默认800  
 ko-time.context-path=http://localhost:80 # 前端页面调用接口的上下文环境，无法自动获取时可手动配置，一般情况切记不要配置   v2.0.1开始支持  
 ko-time.exception-enable=true # 是否开启异常检测，默认为false,开启后会对方法内部抛出的异常进行统计 v2.0.0开始支持  

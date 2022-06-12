@@ -11,3 +11,5 @@
   * [中文(Chinese)](v220/introduce)
   * [英文(English)](v220/en/introduce)
 
+* [合作支持](v220/donate)
+

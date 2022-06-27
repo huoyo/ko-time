@@ -27,7 +27,7 @@ public class KoUtil {
     }
 
 
-    public static List<Integer> randomSecretIndexs() {
+    private static List<Integer> randomSecretIndexs() {
         List<Integer> choices = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < 20; i++) {

@@ -38,7 +38,7 @@ public final class KoInvokedHandler implements InvokedHandler {
         graphService.addExceptionRelation(current, exception);
     }
 
-    public MethodNode filter(MethodNode currentNode) {
+    private MethodNode filter(MethodNode currentNode) {
         if (BloomFilter.exists(currentNode.getId())) {
             //allow controllers's routes to be updated
             if (!StringUtils.isEmpty(currentNode.getRouteName())) {

@@ -1,5 +1,6 @@
 package cn.langpy.kotime.util;
 
+import javax.sql.DataSource;
 import java.util.*;
 
 public class KoUtil {
@@ -7,16 +8,24 @@ public class KoUtil {
 
     private final static List<Integer> choices = randomSecretIndexs();
 
+    /**
+     * nothing to introduce for this, that everyone knows!
+     */
     public static String login(String userName) {
         String token = encode(userName + "KOTO" + (System.currentTimeMillis() + (12 * 60 * 60 * 1000)));
         return token;
     }
 
-
+    /**
+     * nothing to introduce for this, that everyone knows!
+     */
     public static void checkLogin(String token) {
         decode(token);
     }
 
+    /**
+     * nothing to introduce for this, that everyone knows!
+     */
     public static boolean isLogin(String token) {
         try {
             decode(token);
@@ -24,6 +33,30 @@ public class KoUtil {
         } catch (Exception verificationException) {
             return false;
         }
+    }
+
+    /**
+     * set a Datasource for saving of kotime data
+     * note: this Datasource will not affect project's datasource
+     */
+    public void setDataSource(DataSource dataSource) {
+        //I will write it, and do not rush me!
+    }
+
+    /**
+     * set a RedisTemplate for saving of kotime data
+     * note: you can choose one between setRedisTemplate and setJedisPool to save data
+     */
+    public void setRedisTemplate() {
+        //I will write it, and do not rush me!
+    }
+
+    /**
+     * set a RedisTemplate for saving of kotime data
+     * note: you can choose one between setRedisTemplate and setJedisPool to save data
+     */
+    public void setJedisPool() {
+        //I will write it, and do not rush me!
     }
 
 

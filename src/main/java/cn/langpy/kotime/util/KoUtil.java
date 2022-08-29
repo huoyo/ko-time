@@ -1,5 +1,8 @@
 package cn.langpy.kotime.util;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
 import javax.sql.DataSource;
 import java.util.*;
 
@@ -7,6 +10,8 @@ public class KoUtil {
     private final static String koTimeSecret = UUID.randomUUID().toString().replace("-", "");
 
     private final static List<Integer> choices = randomSecretIndexs();
+
+    private static Map<String,Object> caches = new HashMap<>();
 
     /**
      * nothing to introduce for this, that everyone knows!
@@ -39,24 +44,29 @@ public class KoUtil {
      * set a Datasource for saving of kotime data
      * note: this Datasource will not affect project's datasource
      */
-    public void setDataSource(DataSource dataSource) {
-        //I will write it, and do not rush me!
+    public static void setDataSource(DataSource dataSource) {
+        caches.put("dataSource",dataSource);
+    }
+
+    public static DataSource getDataSource() {
+        return (DataSource)caches.get("dataSource");
     }
 
     /**
      * set a RedisTemplate for saving of kotime data
      * note: you can choose one between setRedisTemplate and setJedisPool to save data
      */
-    public void setRedisTemplate() {
-        //I will write it, and do not rush me!
+    public static void setStringRedisTemplate(RedisTemplate redisTemplate) {
+        caches.put("redisTemplate",redisTemplate);
     }
 
-    /**
-     * set a RedisTemplate for saving of kotime data
-     * note: you can choose one between setRedisTemplate and setJedisPool to save data
-     */
-    public void setJedisPool() {
-        //I will write it, and do not rush me!
+    public static StringRedisTemplate getStringRedisTemplate() {
+        return (StringRedisTemplate)caches.get("redisTemplate");
+    }
+
+
+    public static void clearCaches() {
+        caches.clear();
     }
 
 

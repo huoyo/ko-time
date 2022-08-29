@@ -22,11 +22,21 @@ public class DefaultConfig {
     private Boolean paramAnalyse;
     private String saver;
     private String dataSource;
+
+    private String redisTemplate;
     private Integer threadNum;
     private String contextPath;
     private Boolean authEnable;
     private String userName;
     private String password;
+
+    public String getRedisTemplate() {
+        return redisTemplate;
+    }
+
+    public void setRedisTemplate(String redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public String getLanguage() {
         return language;

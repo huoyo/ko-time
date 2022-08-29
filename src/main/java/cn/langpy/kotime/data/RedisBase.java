@@ -5,6 +5,13 @@ import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,25 +25,21 @@ import static java.util.stream.Collectors.toList;
 /**
  * zhangchang
  */
-//@Component("redis")
+@Lazy
+@Component("redis")
 public class RedisBase implements GraphService {
 
-    private volatile static Map<String, MethodNode> methodNodes;
+    private static final String methodPre = "KO_METHODS:";
+    private static final String exceptionPre = "KO_EXCEPTIONS:";
+    private static final String methodRelationPre = "KO_METHODRES:";
+    private static final String exceptionRelationPre = "KO_EXCEPTIONRES:";
+    private static final String paramValueMetricMapPre = "KO_PARAM:";
 
-    private volatile static Map<String, ExceptionNode> exceptions;
+    private static StringRedisTemplate redisTemplate;
 
-    private volatile static Map<String, MethodRelation> methodRelations;
+    public RedisBase() {
+        redisTemplate = Context.getStringRedisTemplate();
 
-    private volatile static Map<String, ExceptionRelation> exceptionRelations;
-
-    private volatile static Map<String, Map<String, ParamMetric>> paramValueMetricMap;
-
-    static {
-        methodNodes = new HashMap<>();
-        exceptions = new HashMap<>();
-        methodRelations = new HashMap<>();
-        exceptionRelations = new HashMap<>();
-        paramValueMetricMap = new HashMap<String, Map<String, ParamMetric>>();
     }
 
     @Override
@@ -44,24 +47,26 @@ public class RedisBase implements GraphService {
         if (null == methodNode) {
             return;
         }
-        if (!methodNodes.containsKey(methodNode.getId())) {
-            methodNodes.put(methodNode.getId(), methodNode);
+        String key = methodPre + methodNode.getId();
+        if (!redisTemplate.hasKey(key)) {
+            insert(key, methodNode);
         } else {
             if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
-                MethodNode controller = methodNodes.get(methodNode.getId());
+                MethodNode controller = query(key, MethodNode.class);
                 controller.setRouteName(methodNode.getRouteName());
-                methodNodes.put(methodNode.getId(), controller);
+                insert(key, controller);
             }
         }
     }
 
 
     public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
-        String paramsKey = Common.getPramsStr(names,values);
-        if (paramValueMetricMap.containsKey(methodId)) {
-            Map<String, ParamMetric> paramMetricMap = paramValueMetricMap.get(methodId);
+        String paramsKey = Common.getPramsStr(names, values);
+        String key = paramValueMetricMapPre + methodId;
+        if (redisTemplate.hasKey(key)) {
+            Map<String, JSONObject> paramMetricMap = query(key, Map.class);
             if (paramMetricMap.containsKey(paramsKey)) {
-                ParamMetric paramMetric = paramMetricMap.get(paramsKey);
+                ParamMetric paramMetric = paramMetricMap.get(paramsKey).toJavaObject(ParamMetric.class);
                 BigDecimal bg = BigDecimal.valueOf((paramMetric.getAvgRunTime() + v) / 2.0);
                 double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 paramMetric.setAvgRunTime(avg);
@@ -71,35 +76,29 @@ public class RedisBase implements GraphService {
                 if (v < paramMetric.getMinRunTime()) {
                     paramMetric.setMinRunTime(v);
                 }
-            } else {
-                ParamMetric paramMetric = new ParamMetric();
-                paramMetric.setMaxRunTime(v);
-                paramMetric.setAvgRunTime(v);
-                paramMetric.setMaxRunTime(v);
-                paramMetricMap.put(paramsKey, paramMetric);
+                insert(key, paramMetricMap);
             }
         } else {
             ParamMetric paramMetric = new ParamMetric();
             paramMetric.setMaxRunTime(v);
             paramMetric.setAvgRunTime(v);
             paramMetric.setMaxRunTime(v);
-
             Map<String, ParamMetric> paramMetricMap = new HashMap<>();
             paramMetricMap.put(paramsKey, paramMetric);
-            paramValueMetricMap.put(methodId, paramMetricMap);
+            insert(key, paramMetricMap);
         }
     }
 
 
     @Override
     public MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode) {
-        if (null == sourceMethodNode || null == targetMethodNode ) {
+        if (null == sourceMethodNode || null == targetMethodNode) {
             return null;
         }
         if (sourceMethodNode.getId().equals(targetMethodNode.getId())) {
             return null;
         }
-        if (methodRelations.containsKey(targetMethodNode.getId()+sourceMethodNode.getId())) {
+        if (redisTemplate.hasKey(methodRelationPre + targetMethodNode.getId() + sourceMethodNode.getId())) {
             return null;
         }
         MethodRelation methodRelation = new MethodRelation();
@@ -109,9 +108,10 @@ public class RedisBase implements GraphService {
         methodRelation.setAvgRunTime(targetMethodNode.getValue());
         methodRelation.setMaxRunTime(targetMethodNode.getValue());
         methodRelation.setMinRunTime(targetMethodNode.getValue());
-        MethodRelation old = methodRelations.get(methodRelation.getId());
+        String key = methodRelationPre + methodRelation.getId();
+        MethodRelation old = query(key, MethodRelation.class);
         if (null == old) {
-            methodRelations.put(methodRelation.getId(), methodRelation);
+            insert(key, methodRelation);
             return methodRelation;
         } else {
             BigDecimal bg = BigDecimal.valueOf((methodRelation.getAvgRunTime() + old.getAvgRunTime()) / 2.0);
@@ -119,6 +119,7 @@ public class RedisBase implements GraphService {
             old.setAvgRunTime(avg);
             old.setMaxRunTime(methodRelation.getMaxRunTime() > old.getMaxRunTime() ? methodRelation.getMaxRunTime() : old.getMaxRunTime());
             old.setMinRunTime(methodRelation.getMinRunTime() < old.getMinRunTime() ? methodRelation.getMinRunTime() : old.getMinRunTime());
+            insert(key, old);
             return old;
         }
     }
@@ -130,9 +131,10 @@ public class RedisBase implements GraphService {
         exceptionRelation.setSourceId(sourceMethodNode.getId());
         exceptionRelation.setTargetId(exceptionNode.getId());
         exceptionRelation.setLocation(exceptionNode.getValue());
-        ExceptionRelation old = exceptionRelations.get(exceptionRelation.getId());
+        String key = exceptionRelationPre + exceptionRelation.getId();
+        ExceptionRelation old = query(key, ExceptionRelation.class);
         if (null == old) {
-            exceptionRelations.put(exceptionRelation.getId(), exceptionRelation);
+            insert(key, exceptionRelation);
             return exceptionRelation;
         } else {
             return old;
@@ -141,18 +143,20 @@ public class RedisBase implements GraphService {
 
     @Override
     public void addExceptionNode(ExceptionNode exceptionNode) {
-        if (!exceptions.containsKey(exceptionNode.getId())) {
-            exceptions.put(exceptionNode.getId(), exceptionNode);
+        String key = exceptionPre + exceptionNode.getId();
+        if (!redisTemplate.hasKey(key)) {
+            insert(key, exceptionNode);
         }
     }
 
     @Override
     public List<ExceptionInfo> getExceptions(String methodId) {
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
-        List<ExceptionRelation> relations = exceptionRelations.values().stream().filter(exceptionRelation -> exceptionRelation.getSourceId().equals(methodId)).collect(toList());
+        List<ExceptionRelation> searchs = searchList(exceptionRelationPre, ExceptionRelation.class);
+        List<ExceptionRelation> relations = searchs.stream().filter(exceptionRelation -> exceptionRelation.getSourceId().equals(methodId)).collect(toList());
         for (ExceptionRelation relation : relations) {
             String exceptionId = relation.getTargetId();
-            ExceptionNode exceptionNode = exceptions.get(exceptionId);
+            ExceptionNode exceptionNode = query(exceptionPre + exceptionId, ExceptionNode.class);
             ExceptionInfo exceptionInfo = new ExceptionInfo();
             exceptionInfo.setId(exceptionNode.getId());
             exceptionInfo.setName(exceptionNode.getName());
@@ -168,16 +172,21 @@ public class RedisBase implements GraphService {
 
     @Override
     public List<ExceptionNode> getExceptions() {
-        return exceptions.values().stream().distinct().collect(toList());
+        List<ExceptionNode> searchs = searchList(exceptionPre, ExceptionNode.class);
+        return searchs.stream().distinct().collect(toList());
     }
 
     @Override
     public List<MethodInfo> getControllers() {
         List<MethodInfo> methodInfos = new ArrayList<>();
-        for (MethodNode methodNode : methodNodes.values()) {
+        List<MethodNode> smethodNodes = searchList(methodPre, MethodNode.class);
+
+        for (MethodNode methodNode : smethodNodes) {
             if (MethodType.Controller == methodNode.getMethodType()) {
                 String id = methodNode.getId();
-                Optional<MethodRelation> relations = methodRelations.values().stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
+                List<MethodRelation> smethodRelations = searchList(methodRelationPre, MethodRelation.class);
+
+                Optional<MethodRelation> relations = smethodRelations.stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
                 MethodRelation relation = null;
                 if (relations.isPresent()) {
                     relation = relations.get();
@@ -205,17 +214,24 @@ public class RedisBase implements GraphService {
 
     @Override
     public Map<String, ParamMetric> getMethodParamGraph(String methodId) {
-        Map<String, ParamMetric> paramMetricMap = paramValueMetricMap.get(methodId);
-        return paramMetricMap;
+        String key = paramValueMetricMapPre + methodId;
+        Map<String, ParamMetric> res = new HashMap<>();
+        Map<String, JSONObject> paramMetric = query(key, Map.class);
+        for (String name : paramMetric.keySet()) {
+            res.put(name, paramMetric.get(name).toJavaObject(ParamMetric.class));
+        }
+        return res;
     }
 
     @Override
     public List<MethodInfo> searchMethods(String question) {
         List<MethodInfo> methodInfos = new ArrayList<>();
-        for (MethodNode methodNode : methodNodes.values()) {
+        List<MethodNode> smethodNodes = searchList(methodPre, MethodNode.class);
+        List<MethodRelation> methodRelationList = searchList(methodRelationPre, MethodRelation.class);
+        for (MethodNode methodNode : smethodNodes) {
             if (methodNode.getName().toLowerCase().contains(question.toLowerCase())) {
                 String id = methodNode.getId();
-                Optional<MethodRelation> relations = methodRelations.values().stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
+                Optional<MethodRelation> relations = methodRelationList.stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
                 MethodRelation relation = null;
                 if (relations.isPresent()) {
                     relation = relations.get();
@@ -244,7 +260,8 @@ public class RedisBase implements GraphService {
     @Override
     public List<String> getCondidates(String question) {
         List<String> methodInfos = new ArrayList<>();
-        for (MethodNode methodNode : methodNodes.values()) {
+        List<MethodNode> smethodNodes = searchList(methodPre, MethodNode.class);
+        for (MethodNode methodNode : smethodNodes) {
             if (methodNode.getName().toLowerCase().contains(question.toLowerCase())) {
                 if (!methodInfos.contains(methodNode.getName())) {
                     methodInfos.add(methodNode.getName());
@@ -260,11 +277,12 @@ public class RedisBase implements GraphService {
     @Override
     public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
-        for (ExceptionRelation relation : exceptionRelations.values()) {
+        List<ExceptionRelation> sexceptionRelations = searchList(exceptionRelationPre, ExceptionRelation.class);
+        for (ExceptionRelation relation : sexceptionRelations) {
             if (relation.getTargetId().equals(exceptionId)) {
                 String sourceMethodId = relation.getSourceId();
-                MethodNode methodNode = methodNodes.get(sourceMethodId);
-                ExceptionNode exceptionNode = exceptions.get(exceptionId);
+                MethodNode methodNode = query(methodPre + sourceMethodId, MethodNode.class);
+                ExceptionNode exceptionNode = query(exceptionPre + exceptionId, ExceptionNode.class);
 
                 ExceptionInfo exceptionInfo = new ExceptionInfo();
                 exceptionInfo.setId(exceptionNode.getId());
@@ -285,10 +303,11 @@ public class RedisBase implements GraphService {
     @Override
     public List<MethodInfo> getChildren(String methodId) {
         List<MethodInfo> methodInfos = new ArrayList<>();
-        for (MethodRelation methodRelation : methodRelations.values()) {
+        List<MethodRelation> methodRelationList = searchList(methodRelationPre, MethodRelation.class);
+        for (MethodRelation methodRelation : methodRelationList) {
             if (methodRelation.getSourceId().equals(methodId)) {
                 String targetMethodId = methodRelation.getTargetId();
-                MethodNode methodNode = methodNodes.get(targetMethodId);
+                MethodNode methodNode = query(methodPre + targetMethodId, MethodNode.class);
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
                 methodInfo.setName(methodNode.getName());
@@ -338,14 +357,16 @@ public class RedisBase implements GraphService {
     @Override
     public MethodInfo getTree(String methodId) {
         MethodInfo rootInfo = new MethodInfo();
-        MethodNode methodNode = methodNodes.get(methodId);
+        MethodNode methodNode = query(methodPre + methodId, MethodNode.class);
         rootInfo.setId(methodNode.getId());
         rootInfo.setName(methodNode.getName());
         rootInfo.setClassName(methodNode.getClassName());
         rootInfo.setMethodName(methodNode.getMethodName());
         rootInfo.setMethodType(methodNode.getMethodType());
         rootInfo.setRouteName(methodNode.getRouteName());
-        MethodRelation methodRelation = methodRelations.values().stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst().get();
+        List<MethodRelation> methodRelationList = searchList(methodRelationPre, MethodRelation.class);
+
+        MethodRelation methodRelation = methodRelationList.stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst().get();
         rootInfo.setValue(methodRelation.getAvgRunTime());
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());
@@ -373,5 +394,43 @@ public class RedisBase implements GraphService {
         }
 
     }
+
+
+    private void insert(String key, Object o) {
+        redisTemplate.opsForValue().set(key, toJson(o));
+    }
+
+    private <T> T query(String key, Class<T> c) {
+        Object o = redisTemplate.opsForValue().get(key);
+        if (o == null) {
+            return null;
+        }
+        return toObject(o.toString(), c);
+    }
+
+    private <T> List<T> searchList(String pre, Class<T> c) {
+        List<T> res = new ArrayList<>();
+        Set<String> keys = redisTemplate.keys(pre + "*");
+        if (keys == null || keys.size() == 0) {
+            return res;
+        }
+        List<String> objects = redisTemplate.opsForValue().multiGet(keys);
+        if (objects == null || objects.size() == 0) {
+            return res;
+        }
+        for (Object object : objects) {
+            res.add(toObject(object.toString(), c));
+        }
+        return res;
+    }
+
+    private String toJson(Object o) {
+        return JSON.toJSONString(o);
+    }
+
+    private <T> T toObject(String str, Class<T> c) {
+        return JSONObject.parseObject(str, c);
+    }
+
 
 }

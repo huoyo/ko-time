@@ -15,13 +15,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * zhangchang
@@ -62,7 +66,6 @@ public class LoadConfig {
     public void initConfig() {
         DefaultConfig config = new DefaultConfig();
         config.setLogEnable(defaultConfig.getLogEnable() == null ? logEnable : defaultConfig.getLogEnable());
-//        config.setPointcut(defaultConfig.getPointcut() == null ? pointcut : defaultConfig.getPointcut());
         config.setLogLanguage(defaultConfig.getLogLanguage() == null ? logLanguage : defaultConfig.getLogLanguage());
         config.setThreshold(defaultConfig.getThreshold() == null ? timeThreshold : defaultConfig.getThreshold());
         config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
@@ -73,20 +76,8 @@ public class LoadConfig {
         config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
-        try {
-            DataSource dataSource = applicationContext.getBean(DataSource.class);
-            Context.setDataSource(dataSource);
-        }catch (NoUniqueBeanDefinitionException e){
-            if (StringUtils.isEmpty(config.getDataSource())) {
-                log.warning("kotime=>No unique bean of type 'DataSource' available,you can define it by `ko-time.data-source=xxx`");
-            }else {
-                DataSource dataSource = applicationContext.getBean(config.getDataSource(),DataSource.class);
-                Context.setDataSource(dataSource);
-            }
-        }catch (NoSuchBeanDefinitionException e){
-            log.warning("kotime=>No qualifying bean of type 'DataSource' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
-        }
-
+        configDataSource(config);
+        configRedisTemplate(config);
         Context.setConfig(config);
         String[] names = applicationContext.getBeanNamesForType(GraphService.class);
         for (String name : names) {
@@ -99,8 +90,8 @@ public class LoadConfig {
                 }
             }
         }
-        if (null==Context.getSaver()) {
-            throw new DataBaseException("error `ko-time.saver="+config.getSaver()+"`, and you can only choose an option in {memory,database} for `ko-time.saver=`!");
+        if (null == Context.getSaver()) {
+            throw new DataBaseException("error `ko-time.saver=" + config.getSaver() + "`, and you can only choose an option in {memory,database,redis} for `ko-time.saver=`!");
         }
         log.info("kotime=>loading config");
 
@@ -110,6 +101,48 @@ public class LoadConfig {
             log.info("kotime=>view:http://localhost:" + serverPort + serverContext + "/koTime");
         }
         initMethodHandlers();
+    }
+
+    public void configDataSource(DefaultConfig config) {
+        if (!"database".equals(config.getSaver())) {
+            return;
+        }
+        try {
+            DataSource dataSource = applicationContext.getBean(DataSource.class);
+            Context.setDataSource(dataSource);
+        } catch (NoUniqueBeanDefinitionException e) {
+            if (StringUtils.isEmpty(config.getDataSource())) {
+                log.warning("kotime=>No unique bean of type 'DataSource' available,you can define it by `ko-time.data-source=xxx`");
+            } else {
+                DataSource dataSource = applicationContext.getBean(config.getDataSource(), DataSource.class);
+                Context.setDataSource(dataSource);
+            }
+        } catch (NoSuchBeanDefinitionException e) {
+            log.warning("kotime=>No qualifying bean of type 'DataSource' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+        }
+    }
+
+    public void configRedisTemplate(DefaultConfig config) {
+        if (!"redis".equals(config.getSaver())) {
+            return;
+        }
+        try {
+            StringRedisTemplate redisTemplate = applicationContext.getBean(StringRedisTemplate.class);
+            Context.setStringRedisTemplate(redisTemplate);
+        } catch (NoUniqueBeanDefinitionException e) {
+            if (!StringUtils.isEmpty(config.getRedisTemplate())) {
+                StringRedisTemplate redisTemplate = applicationContext.getBean(config.getRedisTemplate(), StringRedisTemplate.class);
+                Context.setStringRedisTemplate(redisTemplate);
+            } else {
+                Map<String, StringRedisTemplate> beansOfType = applicationContext.getBeansOfType(StringRedisTemplate.class);
+                log.warning("kotime=>No unique bean of type 'StringRedisTemplate' available,you can define it by `ko-time.redis-template=xxx`,and you can choose a name in "+beansOfType.keySet().stream().collect(Collectors.toList()));
+                log.warning("kotime=>Now the firsr was be set.");
+                Context.setStringRedisTemplate(beansOfType.values().stream().collect(Collectors.toList()).get(0));
+            }
+
+        } catch (NoSuchBeanDefinitionException e) {
+            log.warning("kotime=>No qualifying bean of type 'StringRedisTemplate' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+        }
     }
 
     public void initMethodHandlers() {
@@ -126,7 +159,7 @@ public class LoadConfig {
             }
         }
         for (int i = 0; i < Context.getConfig().getThreadNum(); i++) {
-            new Thread(()->InvokedQueue.onInveked()).start();
+            new Thread(() -> InvokedQueue.onInveked()).start();
         }
     }
 

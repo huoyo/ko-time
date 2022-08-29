@@ -3,6 +3,7 @@ package cn.langpy.kotime.util;
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.service.GraphService;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Context {
     private static DefaultConfig config;
     private static List<InvokedHandler> invokedHandlers;
     private static DataSource dataSource;
+    private static StringRedisTemplate stringRedisTemplate;
     private static GraphService saver;
 
     static {
@@ -24,6 +26,14 @@ public class Context {
         config.setEnable(true);
         config.setLogLanguage("chinese");
         invokedHandlers = new ArrayList<>();
+    }
+
+    public static StringRedisTemplate getStringRedisTemplate() {
+        return stringRedisTemplate;
+    }
+
+    public static void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
+        Context.stringRedisTemplate = stringRedisTemplate;
     }
 
     public static void setConfig(DefaultConfig koTimeConfig) {
@@ -49,6 +59,7 @@ public class Context {
     public static void setDataSource(DataSource dataSource) {
         Context.dataSource = dataSource;
     }
+
 
     public static GraphService getSaver() {
         return saver;

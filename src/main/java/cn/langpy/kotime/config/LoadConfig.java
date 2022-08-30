@@ -134,7 +134,7 @@ public class LoadConfig {
                 Context.setStringRedisTemplate(redisTemplate);
             } else {
                 Map<String, StringRedisTemplate> beansOfType = applicationContext.getBeansOfType(StringRedisTemplate.class);
-                log.warning("kotime=>No unique bean of type 'StringRedisTemplate' available,you can define it by `ko-time.redis-template=xxx`,and you can choose a name in "+beansOfType.keySet().stream().collect(Collectors.toList()));
+                log.warning("kotime=>No unique bean of type 'StringRedisTemplate' available,you can define it by `ko-time.redis-template=xxx`,and you can choose a name in " + beansOfType.keySet().stream().collect(Collectors.toList()));
                 log.warning("kotime=>Now the firsr was be set.");
                 Context.setStringRedisTemplate(beansOfType.values().stream().collect(Collectors.toList()).get(0));
             }

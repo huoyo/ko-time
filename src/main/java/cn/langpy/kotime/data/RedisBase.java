@@ -73,6 +73,7 @@ public class RedisBase implements GraphService {
                 if (v < paramMetric.getMinRunTime()) {
                     paramMetric.setMinRunTime(v);
                 }
+                paramMetricMap.put(paramsKey, (JSONObject) JSONObject.toJSON(paramMetric));
                 insert(key, paramMetricMap);
             }
         } else {
@@ -279,8 +280,13 @@ public class RedisBase implements GraphService {
             if (relation.getTargetId().equals(exceptionId)) {
                 String sourceMethodId = relation.getSourceId();
                 MethodNode methodNode = query(methodPre + sourceMethodId, MethodNode.class);
+                if (methodNode==null) {
+                    continue;
+                }
                 ExceptionNode exceptionNode = query(exceptionPre + exceptionId, ExceptionNode.class);
-
+                if (exceptionNode==null) {
+                    continue;
+                }
                 ExceptionInfo exceptionInfo = new ExceptionInfo();
                 exceptionInfo.setId(exceptionNode.getId());
                 exceptionInfo.setName(exceptionNode.getName());
@@ -305,6 +311,9 @@ public class RedisBase implements GraphService {
             if (methodRelation.getSourceId().equals(methodId)) {
                 String targetMethodId = methodRelation.getTargetId();
                 MethodNode methodNode = query(methodPre + targetMethodId, MethodNode.class);
+                if (methodNode == null) {
+                    continue;
+                }
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
                 methodInfo.setName(methodNode.getName());

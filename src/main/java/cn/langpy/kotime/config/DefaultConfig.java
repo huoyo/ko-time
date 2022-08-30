@@ -1,7 +1,6 @@
 package cn.langpy.kotime.config;
 
 
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +21,6 @@ public class DefaultConfig {
     private Boolean paramAnalyse;
     private String saver;
     private String dataSource;
-
     private String redisTemplate;
     private Integer threadNum;
     private String contextPath;
@@ -109,7 +107,6 @@ public class DefaultConfig {
     public void setSaver(String saver) {
         this.saver = saver;
     }
-
 
 
     public Integer getThreadNum() {

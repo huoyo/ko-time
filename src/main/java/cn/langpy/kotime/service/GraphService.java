@@ -16,12 +16,24 @@ public interface GraphService {
         return Context.getSaver();
     }
 
+    /**
+     * add a method data
+     */
     void addMethodNode(MethodNode methodNode);
 
+    /**
+     * add the parameters of a method
+     */
     void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v);
 
+    /**
+     * add a exception data
+     */
     void addExceptionNode(ExceptionNode exceptionNode);
 
+    /**
+     * get the method paths
+     */
     MethodInfo getTree(String methodId);
 
     Map<String, ParamMetric> getMethodParamGraph(String methodId);

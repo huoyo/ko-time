@@ -75,6 +75,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.redis-template",
+      "type": "java.lang.String",
+      "defaultValue": "",
+      "description": "StringRedisTemplate‘s bean",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.thread-num",
       "type": "java.lang.Integer",
       "defaultValue": 2,

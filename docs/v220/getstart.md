@@ -7,7 +7,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.2</version>
+    <version>2.2.3-PRE</version>
   </dependency>
 ```
 
@@ -35,7 +35,7 @@ ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要�
 ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
 ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
 ko-time.param-analyse=true # 是否开启入参组合分析 默认开启 v2.0.8开始支持 双击方法节点即可看到效果 
-ko-time.saver=memory # 接口信息存储位置，可选{memory,database} 默认memory v2.2.0-BETA 
+ko-time.saver=memory # 接口信息存储位置，可选{memory,database,redis} 默认memory v2.2.0-BETA 
 ko-time.thread-num=2 # 调用信息存储线程数（为了不影响项目本身性能，链路存储异步进行），默认2，该值并非越大越好，瓶颈取决于数据库性能和服务器配置，尽可能少占用项目资源为上  v2.2.0-BETA开始支持
 ```
 
@@ -59,7 +59,8 @@ ko-time.thread-num=2 # 调用信息存储线程数（为了不影响项目本身
 
 如：application.properties中定义了 `server.servlet.context-path=/myservice`，那么访问路径为`http://localhost:8080/myservice/koTime`
 
-如果页面能正常显示，但是无法获取方法链路，可配置`ko-time.context-path=http://localhost:8080/myservice`
+如果页面能正常显示，但是无法获取方法链路，可配置ko-time.context-path=http://正确路径/myservice进行koTime接口访问路径纠正
+
 
 
 ---

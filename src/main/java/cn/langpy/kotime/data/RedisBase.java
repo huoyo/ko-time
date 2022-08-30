@@ -8,10 +8,7 @@ import cn.langpy.kotime.util.MethodType;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -31,9 +28,9 @@ public class RedisBase implements GraphService {
 
     private static final String methodPre = "KO_METHODS:";
     private static final String exceptionPre = "KO_EXCEPTIONS:";
-    private static final String methodRelationPre = "KO_METHODRES:";
-    private static final String exceptionRelationPre = "KO_EXCEPTIONRES:";
-    private static final String paramValueMetricMapPre = "KO_PARAM:";
+    private static final String methodRelationPre = "KO_METHOD_RES:";
+    private static final String exceptionRelationPre = "KO_EXCEPTION_RES:";
+    private static final String paramValueMetricMapPre = "KO_PARAMETERS:";
 
     private static StringRedisTemplate redisTemplate;
 

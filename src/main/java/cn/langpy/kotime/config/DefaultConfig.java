@@ -24,9 +24,18 @@ public class DefaultConfig {
     private String redisTemplate;
     private Integer threadNum;
     private String contextPath;
+    private String dataPrefix;
     private Boolean authEnable;
     private String userName;
     private String password;
+
+    public String getDataPrefix() {
+        return dataPrefix;
+    }
+
+    public void setDataPrefix(String dataPrefix) {
+        this.dataPrefix = dataPrefix;
+    }
 
     public String getRedisTemplate() {
         return redisTemplate;

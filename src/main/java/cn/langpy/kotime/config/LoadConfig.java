@@ -70,6 +70,7 @@ public class LoadConfig {
         config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
         config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
         config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
+        config.setDataPrefix(defaultConfig.getDataPrefix() == null ? "KOTIME" : defaultConfig.getDataPrefix());
         config.setContextPath(defaultConfig.getContextPath());
         config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());
         config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());

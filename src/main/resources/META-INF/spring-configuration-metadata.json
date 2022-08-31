@@ -75,6 +75,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.data-prefix",
+      "type": "java.lang.String",
+      "defaultValue": "",
+      "description": "dataPrefix",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.redis-template",
       "type": "java.lang.String",
       "defaultValue": "",

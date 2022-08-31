@@ -26,11 +26,11 @@ import static java.util.stream.Collectors.toList;
 @Component("redis")
 public class RedisBase implements GraphService {
 
-    private static final String methodPre = "KO_METHODS:";
-    private static final String exceptionPre = "KO_EXCEPTIONS:";
-    private static final String methodRelationPre = "KO_METHOD_RES:";
-    private static final String exceptionRelationPre = "KO_EXCEPTION_RES:";
-    private static final String paramValueMetricMapPre = "KO_PARAMETERS:";
+    private static final String methodPre = Context.getConfig().getDataPrefix()+":KO_METHODS:";
+    private static final String exceptionPre = Context.getConfig().getDataPrefix()+":KO_EXCEPTIONS:";
+    private static final String methodRelationPre = Context.getConfig().getDataPrefix()+":KO_METHOD_RES:";
+    private static final String exceptionRelationPre = Context.getConfig().getDataPrefix()+":KO_EXCEPTION_RES:";
+    private static final String paramValueMetricMapPre = Context.getConfig().getDataPrefix()+":KO_PARAMETERS:";
 
     private static StringRedisTemplate redisTemplate;
 

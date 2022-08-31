@@ -38,7 +38,7 @@ v2.2.0开始支持数据库存储接口信息功能，可在内存和数据库�
 
 3.其他
 
-项目默认使用Springboot的StringRedisTemplate对象，无需其他操作
+到此配置结束，需要说明的是项目默认使用Springboot的StringRedisTemplate对象，无需其他操作
 如果对其不满意，可以自定Bean如：
 
 ```java

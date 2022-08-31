@@ -75,6 +75,13 @@ public class RedisBase implements GraphService {
                 }
                 paramMetricMap.put(paramsKey, (JSONObject) JSONObject.toJSON(paramMetric));
                 insert(key, paramMetricMap);
+            }else {
+                ParamMetric paramMetric = new ParamMetric();
+                paramMetric.setMaxRunTime(v);
+                paramMetric.setAvgRunTime(v);
+                paramMetric.setMaxRunTime(v);
+                paramMetricMap.put(paramsKey, (JSONObject)JSONObject.toJSON(paramMetric));
+                insert(key, paramMetricMap);
             }
         } else {
             ParamMetric paramMetric = new ParamMetric();

@@ -82,6 +82,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.data-reset",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "to delete all data",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.redis-template",
       "type": "java.lang.String",
       "defaultValue": "",

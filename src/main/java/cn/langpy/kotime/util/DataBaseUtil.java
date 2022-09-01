@@ -57,6 +57,26 @@ public class DataBaseUtil {
         return 0;
     }
 
+    public static int truncateByTable(Connection connection, String table) {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement("truncate table "+table);
+            int n = statement.executeUpdate();
+            return n;
+        }  catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
+
     public static int update(String sql, Object[] values) {
         try (Connection connection = getDataSource().getConnection()) {
             return update(connection, sql, values);

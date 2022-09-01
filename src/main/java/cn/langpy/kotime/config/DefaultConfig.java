@@ -25,9 +25,18 @@ public class DefaultConfig {
     private Integer threadNum;
     private String contextPath;
     private String dataPrefix;
+    private Boolean dataReset;
     private Boolean authEnable;
     private String userName;
     private String password;
+
+    public Boolean getDataReset() {
+        return dataReset;
+    }
+
+    public void setDataReset(Boolean dataReset) {
+        this.dataReset = dataReset;
+    }
 
     public String getDataPrefix() {
         return dataPrefix;

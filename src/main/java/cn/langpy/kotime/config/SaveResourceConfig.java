@@ -1,5 +1,6 @@
 package cn.langpy.kotime.config;
 
+import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.KoUtil;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +26,12 @@ public class SaveResourceConfig implements CommandLineRunner {
         if (null != redisTemplate) {
             log.info("kotime=>Setting the finnal StringRedisTemplate for kotime so that previous StringRedisTemplate will be invalid.");
             Context.setStringRedisTemplate(redisTemplate);
+        }
+
+        if (Context.getConfig().getDataReset()) {
+            log.info("kotime=>Deleting all data for kotime.");
+            GraphService instance = GraphService.getInstance();
+            instance.clearAll();
         }
 
         KoUtil.clearCaches();

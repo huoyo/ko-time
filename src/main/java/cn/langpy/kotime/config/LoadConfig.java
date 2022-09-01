@@ -70,12 +70,13 @@ public class LoadConfig {
         config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
         config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
         config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
-        config.setDataPrefix(defaultConfig.getDataPrefix() == null ? "KOTIME" : defaultConfig.getDataPrefix());
+        config.setDataPrefix(defaultConfig.getDataPrefix() == null ? (StringUtils.hasText(serverContext)?serverContext.substring(1):"KOTIME") : defaultConfig.getDataPrefix());
         config.setContextPath(defaultConfig.getContextPath());
         config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());
         config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
+        config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
         configDataSource(config);
         configRedisTemplate(config);
         Context.setConfig(config);

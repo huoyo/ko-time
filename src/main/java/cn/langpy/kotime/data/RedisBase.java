@@ -445,5 +445,16 @@ public class RedisBase implements GraphService {
         return JSONObject.parseObject(str, c);
     }
 
-
+    @Override
+    public boolean clearAll() {
+        List<String> keys = Arrays.asList(methodPre,methodRelationPre,exceptionPre,exceptionRelationPre,paramValueMetricMapPre);
+        for (String key : keys) {
+            Set<String> deleteKeys = redisTemplate.keys(key + "*");
+            if (deleteKeys==null || deleteKeys.size()==0) {
+                continue;
+            }
+            redisTemplate.delete(deleteKeys);
+        }
+        return true;
+    }
 }

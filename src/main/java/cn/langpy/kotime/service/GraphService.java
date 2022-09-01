@@ -58,5 +58,6 @@ public interface GraphService {
 
     ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode);
 
+    boolean clearAll();
 
 }

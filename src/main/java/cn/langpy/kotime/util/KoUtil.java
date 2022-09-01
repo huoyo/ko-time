@@ -41,7 +41,7 @@ public class KoUtil {
     }
 
     /**
-     * set a Datasource for saving of kotime data
+     * set a Datasource for saving of ko-time data
      * note: this Datasource will not affect project's datasource
      */
     public static void setDataSource(DataSource dataSource) {
@@ -53,7 +53,7 @@ public class KoUtil {
     }
 
     /**
-     * set a RedisTemplate for saving of kotime data
+     * set a RedisTemplate for saving of ko-time data
      * note: you can choose one between setRedisTemplate and setJedisPool to save data
      */
     public static void setStringRedisTemplate(RedisTemplate redisTemplate) {
@@ -62,6 +62,16 @@ public class KoUtil {
 
     public static StringRedisTemplate getStringRedisTemplate() {
         return (StringRedisTemplate)caches.get("redisTemplate");
+    }
+
+
+    /**
+     * record the exception to ko-time
+     * this method will throw an exception named RecordException,and RunTimeHandler will receive it so that it can be record by ko-time
+     */
+    public static void throwException(Exception e) {
+        RecordException recordException = new RecordException(e);
+        throw recordException;
     }
 
 

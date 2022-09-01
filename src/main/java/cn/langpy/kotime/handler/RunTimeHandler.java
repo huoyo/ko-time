@@ -7,6 +7,7 @@ import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.service.MethodNodeService;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodStack;
+import cn.langpy.kotime.util.RecordException;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -31,26 +32,37 @@ public class RunTimeHandler implements MethodInterceptor {
         if (exceptionEnable) {
             try {
                 obj = invocation.proceed();
-            } catch (Exception e) {
+            } catch (Exception te) {
+                Exception e = null;
+                if (te instanceof RecordException) {
+                    e = ((RecordException) te).getOriginalException();
+                }else {
+                    e = te;
+                }
                 ExceptionNode exception = new ExceptionNode();
                 exception.setName(e.getClass().getSimpleName());
                 exception.setClassName(e.getClass().getName());
                 exception.setMessage(e.getMessage());
-                exception.setValue(e.getStackTrace()[0].getLineNumber());
                 exception.setId(exception.getClassName() + exception.getName() + exception.getMessage());
                 MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, 0.0);
-                if (current.getClassName().equals(e.getStackTrace()[0].getClassName())) {
-                    InvokedInfo invokedInfo = new InvokedInfo();
-                    invokedInfo.setCurrent(current);
-                    invokedInfo.setParent(parent);
-                    invokedInfo.setException(exception);
-                    invokedInfo.setNames(parameters);
-                    invokedInfo.setValues(invocation.getArguments());
-                    InvokedQueue.add(invokedInfo);
-                    InvokedQueue.wake();
+                for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+                    if (stackTraceElement.getClassName().equals(current.getClassName())) {
+                        exception.setValue(stackTraceElement.getLineNumber());
+                        InvokedInfo invokedInfo = new InvokedInfo();
+                        invokedInfo.setCurrent(current);
+                        invokedInfo.setParent(parent);
+                        invokedInfo.setException(exception);
+                        invokedInfo.setNames(parameters);
+                        invokedInfo.setValues(invocation.getArguments());
+                        InvokedQueue.add(invokedInfo);
+                        InvokedQueue.wake();
+                        break;
+                    }
                 }
                 MethodStack.clear();
-                throw e;
+                if (!(te instanceof RecordException)) {
+                    throw te;
+                }
             }
         } else {
             obj = invocation.proceed();

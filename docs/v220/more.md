@@ -15,7 +15,7 @@ v2.2.0开始支持数据库存储接口信息功能，可在内存和数据库�
 
 > ko-time.saver=redis
 > 
-> ko-time.data-prefix=xxx #如果多个项目共用一个redis，最好配置此项，通过该名称区分数据
+> ko-time.data-prefix=xxx #如果多个项目共用一个redis，最好配置此项，通过该名称区分数据,如果项目配置过`server.servlet.context-path`，则自动取该配置
 > 
 > #redis配置
 > 
@@ -152,6 +152,28 @@ public class TestInvoke implements InvokedHandler {
     public void onException(MethodNode current, MethodNode parent, ExceptionNode exception, Parameter[] names, Object[] values) {
         System.out.println("异常："+exception);
     }
+}
+```
+
+## 异常监听说明
+
+### 配置
+
+开启了`ko-time.exception-enable=true`后：
+
+> 自动开始监听方法的异常
+> 在浏览器面板上可以显示
+> 与全局异常捕获@ControllerAdvice不冲突
+
+如果自己手动进行`try-catch`捕获，无法进行监听和显示，
+可以使用`KoUtil.throwException(e)`进行改造，即可监听并显示：
+
+```java
+ try {
+    //你的代码
+} catch (Exception e) {
+    //做一些你自己的处理
+    KoUtil.throwException(e);
 }
 ```
 

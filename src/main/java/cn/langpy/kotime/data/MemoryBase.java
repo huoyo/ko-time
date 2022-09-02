@@ -376,11 +376,13 @@ public class MemoryBase implements GraphService {
 
     @Override
     public boolean clearAll() {
-        methodNodes.clear();
-        exceptions.clear();
-        methodRelations.clear();
-        exceptionRelations.clear();
-        paramValueMetricMap.clear();
+      synchronized (this){
+          methodNodes.clear();
+          exceptions.clear();
+          methodRelations.clear();
+          exceptionRelations.clear();
+          paramValueMetricMap.clear();
+      }
         return true;
     }
 }

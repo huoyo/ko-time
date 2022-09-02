@@ -510,11 +510,14 @@ public class DataBase implements GraphService {
      */
     @Override
     public boolean clearAll() {
-        DataBaseUtil.truncateByTable(getReadConnection(),"ko_method_node");
-        DataBaseUtil.truncateByTable(getReadConnection(),"ko_method_relation");
-        DataBaseUtil.truncateByTable(getReadConnection(),"ko_exception_node");
-        DataBaseUtil.truncateByTable(getReadConnection(),"ko_exception_relation");
-        DataBaseUtil.truncateByTable(getReadConnection(),"ko_param_ana");
+        synchronized (this){
+            DataBaseUtil.truncateByTable(getReadConnection(),"ko_method_node");
+            DataBaseUtil.truncateByTable(getReadConnection(),"ko_method_relation");
+            DataBaseUtil.truncateByTable(getReadConnection(),"ko_exception_node");
+            DataBaseUtil.truncateByTable(getReadConnection(),"ko_exception_relation");
+            DataBaseUtil.truncateByTable(getReadConnection(),"ko_param_ana");
+        }
+
         return true;
     }
 }

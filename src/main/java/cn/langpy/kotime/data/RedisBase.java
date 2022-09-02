@@ -447,14 +447,16 @@ public class RedisBase implements GraphService {
 
     @Override
     public boolean clearAll() {
-        List<String> keys = Arrays.asList(methodPre,methodRelationPre,exceptionPre,exceptionRelationPre,paramValueMetricMapPre);
-        for (String key : keys) {
-            Set<String> deleteKeys = redisTemplate.keys(key + "*");
-            if (deleteKeys==null || deleteKeys.size()==0) {
-                continue;
-            }
-            redisTemplate.delete(deleteKeys);
-        }
+      synchronized (this){
+          List<String> keys = Arrays.asList(methodPre,methodRelationPre,exceptionPre,exceptionRelationPre,paramValueMetricMapPre);
+          for (String key : keys) {
+              Set<String> deleteKeys = redisTemplate.keys(key + "*");
+              if (deleteKeys==null || deleteKeys.size()==0) {
+                  continue;
+              }
+              redisTemplate.delete(deleteKeys);
+          }
+      }
         return true;
     }
 }

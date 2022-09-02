@@ -1,44 +1,94 @@
 
 > Translating..........
 
-## 存储多样性
+## Various saver
 
-v2.2.0开始支持数据库存储接口信息功能，可在内存和数据库中进行切换
+ You can choose different saver in {memory,database,redis} since v2.2.0
 
-### 内存存储
+### Memory saver
 
-更改配置：
+Configurate:
 
-> ko-time.saver=memory #默认存储方式，无需此配置也行
+> ko-time.saver=memory #default saver
 
-### 数据库存储
 
-> 注： 使用mysql
+### Redis saver
+
+1.Configurate：
+
+> ko-time.saver=redis
+>
+> ko-time.data-prefix=xxx #Configuratate this when many projects use one redis
+>
+> #redis Configuratations
+>
+> spring.redis.host: xxx
+>
+> spring.redis.port: xxx
+>
+> spring.redis.password: xxx
+>
+
+
+2.Add a redis denpendecy
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+```
+
+3.Others
+
+This is the end oof all the operations.
+
+We use Springboot's StringRedisTemplate to save data for redis,and you can create a StringRedisTemplate's Bean if you want more.
+
+```java
+@Bean("redisbean")
+public StringRedisTemplate getRedisTemplate(RedisConnectionFactory connectionFactory){
+    StringRedisTemplate template = new StringRedisTemplate();
+    template.setConnectionFactory(connectionFactory);
+    return template;
+}
+```
+
+then Configurate:
+
+> ko-time.redis-template: redisbean
+
+
+### Database saver
+
+> Note： use mysql
 
 1.更改配置：
 
 > ko-time.saver=database
 
-
+> 请引入MySQL相关依赖
 > 注：默认使用项目的数据源，多数据源情况下默认使用主数据源，如果没有主数据源，请在配置中指定数据源：`ko-time.data-source=数据源名称`
 
 2.数据表创建
 
+> 数据库字段长度不够的自行调整
+
 ```sql
 create table ko_method_node (
-     id varchar(200) not null primary key comment '主键' ,
-     name varchar(200) null comment '类名+方法名' ,
-     class_name varchar(200) null comment '类名' ,
-     method_name varchar(200) null comment '方法名' ,
-     route_name varchar(200) null comment '路由，controller才有' ,
+     id varchar(400) not null primary key comment '主键' ,
+     name varchar(400) null comment '类名+方法名' ,
+     class_name varchar(400) null comment '类名' ,
+     method_name varchar(400) null comment '方法名' ,
+     route_name varchar(400) null comment '路由，controller才有' ,
      method_type varchar(64) null comment '方法类型'
 ) comment '方法信息表';
 
 
 create table ko_method_relation (
-     id varchar(200) not null primary key comment '' ,
-     source_id varchar(200) null comment '调用方id' ,
-     target_id varchar(200) null comment '被调用方id' ,
+     id varchar(400) not null primary key comment '' ,
+     source_id varchar(400) null comment '调用方id' ,
+     target_id varchar(400) null comment '被调用方id' ,
      avg_run_time numeric(10,2) null comment '平均耗时' ,
      max_run_time numeric(10,2) null comment '最大耗时' ,
      min_run_time numeric(10,2) null comment '最小耗时'
@@ -46,23 +96,23 @@ create table ko_method_relation (
 
 ;
 create table ko_exception_node (
-    id varchar(200) not null primary key comment '主键' ,
-    name varchar(200) null comment '异常名' ,
-    class_name varchar(200) null comment '类名' ,
-    message varchar(200) null comment '异常消息'
+    id varchar(400) not null primary key comment '主键' ,
+    name varchar(400) null comment '异常名' ,
+    class_name varchar(400) null comment '类名' ,
+    message varchar(400) null comment '异常消息'
 ) comment '异常表';
 
 
 create table ko_exception_relation (
-    id varchar(200) not null primary key comment '' ,
-    source_id varchar(200) null comment '调用方法id' ,
-    target_id varchar(200) null comment '异常id' ,
+    id varchar(400) not null primary key comment '' ,
+    source_id varchar(400) null comment '调用方法id' ,
+    target_id varchar(400) null comment '异常id' ,
     location int null comment '异常位置'
 ) comment '异常关系表';
 
 create table ko_param_ana (
-       source_id varchar(200) null comment '调用方法id' ,
-       params varchar(200) null comment '参数组合，-分隔' ,
+       source_id varchar(400) null comment '调用方法id' ,
+       params varchar(400) null comment '参数组合，-分隔' ,
        avg_run_time numeric(10,2) null comment '平均耗时' ,
        max_run_time numeric(10,2) null comment '最大耗时' ,
        min_run_time numeric(10,2) null comment '最小耗时'
@@ -110,11 +160,27 @@ public class TestInvoke implements InvokedHandler {
 }
 ```
 
+## 异常监听说明
+
+开启了`ko-time.exception-enable=true`后：
+
+> 自动开始监听方法的异常
+> 在浏览器面板上可以显示
+> 与全局异常捕获@ControllerAdvice不冲突
+
+如果自己手动进行`try-catch`捕获，无法进行监听和显示，
+可以使用`KoUtil.throwException(e)`进行改造，即可监听并显示：
+
+```java
+ try {
+    //你的代码
+} catch (Exception e) {
+    //做一些你自己的处理
+    KoUtil.throwException(e);
+    //经过throwException代码和正常throw e一样，无法继续往下执行了
+}
+```
+
 ---
-
-
-**为了让作者不要偷懒，督促他好好维护和开发，我准备用金钱对他进行鞭笞**
-
-<img src="v202/pay.jpg"  width="15%" height="15%">
 
 

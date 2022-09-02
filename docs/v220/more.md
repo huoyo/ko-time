@@ -174,6 +174,7 @@ public class TestInvoke implements InvokedHandler {
 } catch (Exception e) {
     //做一些你自己的处理
     KoUtil.throwException(e);
+    //经过throw代码和正常throw e一样，无法继续往下执行了
 }
 ```
 

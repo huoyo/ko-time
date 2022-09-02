@@ -113,13 +113,13 @@ public class LoadConfig {
             Context.setDataSource(dataSource);
         } catch (NoUniqueBeanDefinitionException e) {
             if (StringUtils.isEmpty(config.getDataSource())) {
-                log.warning("kotime=>No unique bean of type 'DataSource' available,you can define it by `ko-time.data-source=xxx`");
+                log.severe("kotime=>No unique bean of type 'DataSource' available,you can define it by `ko-time.data-source=xxx`");
             } else {
                 DataSource dataSource = applicationContext.getBean(config.getDataSource(), DataSource.class);
                 Context.setDataSource(dataSource);
             }
         } catch (NoSuchBeanDefinitionException e) {
-            log.warning("kotime=>No qualifying bean of type 'DataSource' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+            log.severe("kotime=>No qualifying bean of type 'DataSource' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
         }
     }
 
@@ -142,7 +142,9 @@ public class LoadConfig {
             }
 
         } catch (NoSuchBeanDefinitionException e) {
-            log.warning("kotime=>No qualifying bean of type 'StringRedisTemplate' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+            log.severe("kotime=>No qualifying bean of type 'StringRedisTemplate' available,but you can ignore it if your KoTime saver is `ko-time.saver=memory`");
+        } catch (NoClassDefFoundError error) {
+            log.severe("kotime=>No dependency named `spring-boot-starter-data-redis` found,please add a denpendency in pom.xml for redis.");
         }
     }
 

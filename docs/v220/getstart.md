@@ -35,7 +35,7 @@ ko-time.auth-enable=true # 是否开启认证，默认为false,开启后需要�
 ko-time.user-name=xxxx # 登录用户 v2.0.2开始支持  
 ko-time.password=xxxx # 登录密码 v2.0.2开始支持  
 ko-time.param-analyse=true # 是否开启入参组合分析 默认开启 v2.0.8开始支持 双击方法节点即可看到效果 
-ko-time.saver=data-reset # 启动时是否删除过往数据 默认false v2.2.3开始支持
+ko-time.data-reset=false # 启动时是否删除过往数据 默认false v2.2.3开始支持
 ko-time.thread-num=2 # 调用信息存储线程数（为了不影响项目本身性能，链路存储异步进行），默认2，该值并非越大越好，瓶颈取决于数据库性能和服务器配置，尽可能少占用项目资源为上  v2.2.0-BETA开始支持
 ```
 

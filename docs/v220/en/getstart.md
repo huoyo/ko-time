@@ -34,8 +34,8 @@ ko-time.exception-enable=true # exception detect switch，default false. added i
 ko-time.auth-enable=true # authentication switch，default false. added in v2.0.2
 ko-time.user-name=xxxx # username added in v2.0.2 
 ko-time.password=xxxx # password added in v2.0.2 
+ko-time.data-reset=false # delete data switch ,default false. added in v2.2.3
 ko-time.param-analyse=true # param-analyse switch, default true. added in v2.0.8(you can see it when you dblclick on the method node) 
-ko-time.saver=memory # a place to store data，options in {memory,database} default memory. added in v2.2.0-BETA 
 ko-time.thread-num=2 # thread-num to to store data,default 2. this value is up to the performance of cpu and database.added in v2.2.0-BETA
 ```
 

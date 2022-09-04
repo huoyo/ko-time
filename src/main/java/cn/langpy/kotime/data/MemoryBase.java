@@ -49,6 +49,9 @@ public class MemoryBase implements GraphService {
         } else {
             if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
                 MethodNode controller = methodNodes.get(methodNode.getId());
+                if (controller==null) {
+                    return;
+                }
                 controller.setRouteName(methodNode.getRouteName());
                 methodNodes.put(methodNode.getId(), controller);
             }

@@ -18,7 +18,7 @@
 * 必填配置
 
 > 
-> ko-time.pointcut=`execution(public * com.huoyo..*.*(..))` # 需要监测的切面范围，参考aop的@pointcut 或者左侧常见问题
+> ko-time.pointcut=`execution(public * com.huoyo..*.*(..))` # 需要监测的切面范围，参考aop的@pointcut 或者左侧`常见问题`
 >
 
 

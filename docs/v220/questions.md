@@ -38,6 +38,10 @@ com.huoyo.demo
 
 > `execution(public * com.huoyo.demo.others..*.*(..))`
 
+如果想排除某些类如Test.class，可以
+
+> `execution(public * com.huoyo.demo.others..*.*(..)) && !execution(public * com.huoyo.demo.others.Test(..))`
+
 更多写法请详细参考aop
 
 ## 是否支持前后端分离项目

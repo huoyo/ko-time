@@ -50,6 +50,9 @@ public class RedisBase implements GraphService {
         } else {
             if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
                 MethodNode controller = query(key, MethodNode.class);
+                if (controller==null) {
+                    return;
+                }
                 controller.setRouteName(methodNode.getRouteName());
                 insert(key, controller);
             }

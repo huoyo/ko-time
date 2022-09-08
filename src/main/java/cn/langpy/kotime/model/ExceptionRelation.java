@@ -6,6 +6,7 @@ public class ExceptionRelation {
     private String id;
     private String sourceId;
     private String targetId;
+    private String message;
     private Integer location = 0;
 
     public Integer getLocation() {
@@ -38,6 +39,14 @@ public class ExceptionRelation {
 
     public void setTargetId(String targetId) {
         this.targetId = targetId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override

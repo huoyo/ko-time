@@ -43,7 +43,7 @@ public class RunTimeHandler implements MethodInterceptor {
                 exception.setName(e.getClass().getSimpleName());
                 exception.setClassName(e.getClass().getName());
                 exception.setMessage(e.getMessage());
-                exception.setId(exception.getClassName() + exception.getName() + exception.getMessage());
+                exception.setId(exception.getClassName() + exception.getName());
                 MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, 0.0);
                 for (StackTraceElement stackTraceElement : e.getStackTrace()) {
                     if (stackTraceElement.getClassName().equals(current.getClassName())) {

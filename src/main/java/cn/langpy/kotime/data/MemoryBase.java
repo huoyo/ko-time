@@ -133,6 +133,7 @@ public class MemoryBase implements GraphService {
         exceptionRelation.setSourceId(sourceMethodNode.getId());
         exceptionRelation.setTargetId(exceptionNode.getId());
         exceptionRelation.setLocation(exceptionNode.getValue());
+        exceptionRelation.setMessage(exceptionNode.getMessage());
         ExceptionRelation old = exceptionRelations.get(exceptionRelation.getId());
         if (null == old) {
             exceptionRelations.put(exceptionRelation.getId(), exceptionRelation);
@@ -160,7 +161,7 @@ public class MemoryBase implements GraphService {
             exceptionInfo.setId(exceptionNode.getId());
             exceptionInfo.setName(exceptionNode.getName());
             exceptionInfo.setClassName(exceptionNode.getClassName());
-            exceptionInfo.setMessage(exceptionNode.getMessage());
+            exceptionInfo.setMessage(relation.getMessage());
             exceptionInfo.setLocation(relation.getLocation());
             if (!exceptionInfos.contains(exceptionInfo)) {
                 exceptionInfos.add(exceptionInfo);
@@ -274,7 +275,7 @@ public class MemoryBase implements GraphService {
                 exceptionInfo.setName(exceptionNode.getName());
                 exceptionInfo.setClassName(exceptionNode.getClassName());
                 exceptionInfo.setLocation(relation.getLocation());
-                exceptionInfo.setMessage(exceptionNode.getMessage());
+                exceptionInfo.setMessage(relation.getMessage());
                 exceptionInfo.setMethodName(methodNode.getMethodName());
                 exceptionInfo.setOccurClassName(methodNode.getClassName());
                 if (!exceptionInfos.contains(exceptionInfo)) {

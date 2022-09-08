@@ -130,8 +130,7 @@ public class DataBase implements GraphService {
             Object[] params = new Object[]{
                     exceptionNode.getId(),
                     exceptionNode.getName(),
-                    exceptionNode.getClassName(),
-                    exceptionNode.getMessage()
+                    exceptionNode.getClassName()
             };
             DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addException, params);
         }
@@ -192,7 +191,8 @@ public class DataBase implements GraphService {
                     sourceMethodNode.getId() + exceptionNode.getId(),
                     sourceMethodNode.getId(),
                     exceptionNode.getId(),
-                    exceptionNode.getValue()
+                    exceptionNode.getValue(),
+                    exceptionNode.getMessage()
             };
             DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addExceptionRe, params);
         }
@@ -454,8 +454,8 @@ public class DataBase implements GraphService {
             }
             MethodNode methodNode = methodNodes.get(0);
 
-            List<ExceptionNode> exceptions = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{exceptionId}, ExceptionNode.class);
-            if (methodNodes.size() == 0) {
+            List<ExceptionNode> exceptions = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryException, new Object[]{exceptionId}, ExceptionNode.class);
+            if (exceptions.size() == 0) {
                 continue;
             }
             ExceptionNode exceptionNode = exceptions.get(0);
@@ -464,7 +464,7 @@ public class DataBase implements GraphService {
             exceptionInfo.setName(exceptionNode.getName());
             exceptionInfo.setClassName(exceptionNode.getClassName());
             exceptionInfo.setLocation(relation.getLocation());
-            exceptionInfo.setMessage(exceptionNode.getMessage());
+            exceptionInfo.setMessage(relation.getMessage());
             exceptionInfo.setMethodName(methodNode.getMethodName());
             exceptionInfo.setOccurClassName(methodNode.getClassName());
             if (!exceptionInfos.contains(exceptionInfo)) {
@@ -489,7 +489,7 @@ public class DataBase implements GraphService {
             exceptionInfo.setId(exceptionNode.getId());
             exceptionInfo.setName(exceptionNode.getName());
             exceptionInfo.setClassName(exceptionNode.getClassName());
-            exceptionInfo.setMessage(exceptionNode.getMessage());
+            exceptionInfo.setMessage(relation.getMessage());
             exceptionInfo.setLocation(relation.getLocation());
             if (!exceptionInfos.contains(exceptionInfo)) {
                 exceptionInfos.add(exceptionInfo);

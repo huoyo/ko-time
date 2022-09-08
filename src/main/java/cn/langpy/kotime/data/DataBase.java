@@ -375,35 +375,6 @@ public class DataBase implements GraphService {
             }
         }
         return methodInfosResult;
-
-//        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReBySource, new Object[]{methodId}, MethodRelation.class);
-//
-//        for (MethodRelation methodRelation : relations) {
-//            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{methodRelation.getTargetId()}, MethodNode.class);
-//            if (methodNodes.size() == 0) {
-//                continue;
-//            }
-//            MethodNode methodNode = methodNodes.get(0);
-//            MethodInfo methodInfo = new MethodInfo();
-//            methodInfo.setId(methodNode.getId());
-//            methodInfo.setName(methodNode.getName());
-//            methodInfo.setClassName(methodNode.getClassName());
-//            methodInfo.setMethodName(methodNode.getMethodName());
-//            methodInfo.setRouteName(methodNode.getRouteName());
-//            methodInfo.setMethodType(methodNode.getMethodType());
-//            methodInfo.setValue(methodRelation.getAvgRunTime());
-//            methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
-//            methodInfo.setMaxRunTime(methodRelation.getMaxRunTime());
-//            methodInfo.setMinRunTime(methodRelation.getMinRunTime());
-//
-//            List<ExceptionInfo> exceptionInfos = getExceptions(methodNode.getId());
-//            methodInfo.setExceptionNum(exceptionInfos.size());
-//            methodInfo.setExceptions(exceptionInfos);
-//            if (!methodInfos.contains(methodInfo)) {
-//                methodInfos.add(methodInfo);
-//            }
-//        }
-//        return methodInfos;
     }
 
     @Override

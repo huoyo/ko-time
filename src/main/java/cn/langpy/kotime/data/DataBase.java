@@ -96,7 +96,7 @@ public class DataBase implements GraphService {
         if (null == methodNode) {
             return;
         }
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryMethod, methodNode.getId());
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryMethodExist, methodNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
                     methodNode.getId(),
@@ -125,7 +125,7 @@ public class DataBase implements GraphService {
 
     @Override
     public synchronized void addExceptionNode(ExceptionNode exceptionNode) {
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryException, exceptionNode.getId());
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionExist, exceptionNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
                     exceptionNode.getId(),
@@ -185,7 +185,7 @@ public class DataBase implements GraphService {
 
     @Override
     public synchronized ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionRe, sourceMethodNode.getId() + exceptionNode.getId());
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionReExist, sourceMethodNode.getId() + exceptionNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
                     sourceMethodNode.getId() + exceptionNode.getId(),

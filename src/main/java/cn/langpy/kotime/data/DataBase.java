@@ -378,8 +378,8 @@ public class DataBase implements GraphService {
     }
 
     @Override
-    public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
-        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptionReByTarget, new Object[]{exceptionId}, ExceptionRelation.class);
+    public List<ExceptionInfo> getExceptionInfos(String exceptionId,String message) {
+        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptionReByTargetAndMessage, new Object[]{exceptionId,message}, ExceptionRelation.class);
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
         for (ExceptionRelation relation : relations) {
             String sourceMethodId = relation.getSourceId();

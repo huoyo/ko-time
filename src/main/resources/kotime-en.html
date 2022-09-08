@@ -152,7 +152,7 @@
                     let id = data[i]['id'];
                     let className = data[i]['className'];
                     let message = data[i]['message'];
-                    html += "<li onclick=\"showExceptions('"+id+"')\" style='' id=\""+id+"\"><span style='font-size: 16px;font-weight: 500;'>"+className+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-danger\">"+message+"</span></li>";
+                    html += "<li onclick=\"showExceptions('"+id+"','"+message+"')\" style='' id=\""+id+"\"><span style='font-size: 16px;font-weight: 500;'>"+className+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-danger\">"+message+"</span></li>";
                 };
                 element.innerHTML = html;
             });
@@ -253,8 +253,8 @@
 
         };
 
-        function showExceptions(id) {
-            $.get('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id+'&token='+globalToken, function (data) {
+        function showExceptions(id,message) {
+            $.get('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id+'&message='+message+'&token='+globalToken, function (data) {
                 let html = '';
                 for (let i = 0; i < data.length; i++) {
                     html +=

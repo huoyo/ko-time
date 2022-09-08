@@ -181,8 +181,25 @@ public class RedisBase implements GraphService {
 
     @Override
     public List<ExceptionNode> getExceptions() {
-        List<ExceptionNode> searchs = searchList(exceptionPre, ExceptionNode.class);
-        return searchs.stream().distinct().collect(toList());
+        List<ExceptionNode> exceptionInfos = new ArrayList<>();
+
+        List<ExceptionNode> exceptionNodes = searchList(exceptionPre, ExceptionNode.class);
+        List<ExceptionRelation> exceptionRelations = searchList(exceptionRelationPre, ExceptionRelation.class);
+        for (ExceptionNode exceptionNode : exceptionNodes) {
+            List<ExceptionRelation> relations = exceptionRelations.stream().filter(relation -> relation.getTargetId().equals(exceptionNode.getId())).collect(toList());
+            for (ExceptionRelation relation : relations) {
+                ExceptionNode re = new ExceptionNode();
+                re.setId(exceptionNode.getId());
+                re.setName(exceptionNode.getName());
+                re.setClassName(exceptionNode.getClassName());
+                re.setMessage(relation.getMessage());
+                re.setValue(relation.getLocation());
+                if (!exceptionInfos.contains(re)) {
+                    exceptionInfos.add(re);
+                }
+            }
+        }
+        return exceptionInfos;
     }
 
     @Override
@@ -284,11 +301,11 @@ public class RedisBase implements GraphService {
     }
 
     @Override
-    public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
+    public List<ExceptionInfo> getExceptionInfos(String exceptionId,String message) {
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
         List<ExceptionRelation> sexceptionRelations = searchList(exceptionRelationPre, ExceptionRelation.class);
         for (ExceptionRelation relation : sexceptionRelations) {
-            if (relation.getTargetId().equals(exceptionId)) {
+            if (relation.getTargetId().equals(exceptionId) && relation.getMessage().equals(message)) {
                 String sourceMethodId = relation.getSourceId();
                 MethodNode methodNode = query(methodPre + sourceMethodId, MethodNode.class);
                 if (methodNode==null) {

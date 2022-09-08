@@ -1,5 +1,6 @@
 package cn.langpy.kotime.model;
 
+
 import java.util.Objects;
 
 public class ExceptionNode {
@@ -54,12 +55,12 @@ public class ExceptionNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExceptionNode that = (ExceptionNode) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(className, that.className) && Objects.equals(message, that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, className, message);
     }
 
     @Override

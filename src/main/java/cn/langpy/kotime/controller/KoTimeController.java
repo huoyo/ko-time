@@ -185,9 +185,9 @@ public class KoTimeController {
     @GetMapping("/getMethodsByExceptionId")
     @ResponseBody
     @Auth
-    public List<ExceptionInfo> getMethodsByExceptionId(String exceptionId) {
+    public List<ExceptionInfo> getMethodsByExceptionId(String exceptionId,String message) {
         GraphService graphService = GraphService.getInstance();
-        List<ExceptionInfo> exceptionInfos = graphService.getExceptionInfos(exceptionId);
+        List<ExceptionInfo> exceptionInfos = graphService.getExceptionInfos(exceptionId,message);
         return exceptionInfos;
     }
 

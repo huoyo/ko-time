@@ -171,8 +171,48 @@ public class MemoryBase implements GraphService {
     }
 
     @Override
+    public List<ExceptionInfo> getExceptionInfos(String exceptionId,String message) {
+        List<ExceptionInfo> exceptionInfos = new ArrayList<>();
+        for (ExceptionRelation relation : exceptionRelations.values()) {
+            if (relation.getTargetId().equals(exceptionId) && relation.getMessage().equals(message)) {
+                String sourceMethodId = relation.getSourceId();
+                MethodNode methodNode = methodNodes.get(sourceMethodId);
+                ExceptionNode exceptionNode = exceptions.get(exceptionId);
+
+                ExceptionInfo exceptionInfo = new ExceptionInfo();
+                exceptionInfo.setId(exceptionNode.getId());
+                exceptionInfo.setName(exceptionNode.getName());
+                exceptionInfo.setClassName(exceptionNode.getClassName());
+                exceptionInfo.setLocation(relation.getLocation());
+                exceptionInfo.setMessage(relation.getMessage());
+                exceptionInfo.setMethodName(methodNode.getMethodName());
+                exceptionInfo.setOccurClassName(methodNode.getClassName());
+                if (!exceptionInfos.contains(exceptionInfo)) {
+                    exceptionInfos.add(exceptionInfo);
+                }
+            }
+        }
+        return exceptionInfos;
+    }
+
+    @Override
     public List<ExceptionNode> getExceptions() {
-        return exceptions.values().stream().distinct().collect(toList());
+        List<ExceptionNode> exceptionInfos = new ArrayList<>();
+        for (ExceptionNode exceptionNode : exceptions.values()) {
+            List<ExceptionRelation> relations = exceptionRelations.values().stream().filter(relation -> relation.getTargetId().equals(exceptionNode.getId())).collect(toList());
+            for (ExceptionRelation relation : relations) {
+                ExceptionNode re = new ExceptionNode();
+                re.setId(exceptionNode.getId());
+                re.setName(exceptionNode.getName());
+                re.setClassName(exceptionNode.getClassName());
+                re.setMessage(relation.getMessage());
+                re.setValue(relation.getLocation());
+                if (!exceptionInfos.contains(re)) {
+                    exceptionInfos.add(re);
+                }
+            }
+        }
+        return exceptionInfos;
     }
 
     @Override
@@ -261,30 +301,7 @@ public class MemoryBase implements GraphService {
         return methodInfos;
     }
 
-    @Override
-    public List<ExceptionInfo> getExceptionInfos(String exceptionId) {
-        List<ExceptionInfo> exceptionInfos = new ArrayList<>();
-        for (ExceptionRelation relation : exceptionRelations.values()) {
-            if (relation.getTargetId().equals(exceptionId)) {
-                String sourceMethodId = relation.getSourceId();
-                MethodNode methodNode = methodNodes.get(sourceMethodId);
-                ExceptionNode exceptionNode = exceptions.get(exceptionId);
 
-                ExceptionInfo exceptionInfo = new ExceptionInfo();
-                exceptionInfo.setId(exceptionNode.getId());
-                exceptionInfo.setName(exceptionNode.getName());
-                exceptionInfo.setClassName(exceptionNode.getClassName());
-                exceptionInfo.setLocation(relation.getLocation());
-                exceptionInfo.setMessage(relation.getMessage());
-                exceptionInfo.setMethodName(methodNode.getMethodName());
-                exceptionInfo.setOccurClassName(methodNode.getClassName());
-                if (!exceptionInfos.contains(exceptionInfo)) {
-                    exceptionInfos.add(exceptionInfo);
-                }
-            }
-        }
-        return exceptionInfos;
-    }
 
     @Override
     public List<MethodInfo> getChildren(String methodId) {

@@ -8,7 +8,8 @@ public class KoSqlConstant {
     public final static String queryMethodByType = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE method_type=?";
     public final static String updateMethod = "UPDATE ko_method_node SET name=?, class_name=?, method_name=?, route_name=?, method_type=? WHERE id=?";
     public final static String addException = "INSERT INTO ko_exception_node(id, name, class_name) VALUES (?, ?, ?)";
-    public final static String queryExceptions = "SELECT id, name, class_name FROM ko_exception_node";
+    public final static String queryExceptions = "select distinct e.*,r.message from ko_exception_node e " +
+            "join ko_exception_relation r on e.id = r.target_id";
     public final static String queryException = "SELECT id, name, class_name FROM ko_exception_node  WHERE id=?";
     public final static String queryExceptionExist = "SELECT id FROM ko_exception_node  WHERE id=?";
     public final static String addMethodRe = "INSERT INTO ko_method_relation(id, source_id, target_id, avg_run_time, max_run_time, min_run_time) VALUES (?, ?, ?, ?, ?, ?)";
@@ -20,6 +21,7 @@ public class KoSqlConstant {
     public final static String queryExceptionRe = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE id=?";
     public final static String queryExceptionReExist = "SELECT id FROM ko_exception_relation WHERE id=?";
     public final static String queryExceptionReByTarget = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE target_id=?";
+    public final static String queryExceptionReByTargetAndMessage = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE target_id=? and message=?";
     public final static String addParamsAna = "INSERT INTO ko_param_ana (source_id, params, avg_run_time, max_run_time, min_run_time) VALUES (?, ?, ?, ?, ?)";
     public final static String queryParamsAna = "SELECT source_id, params, avg_run_time, max_run_time, min_run_time FROM ko_param_ana WHERE source_id=? and params=?";
     public final static String queryParamsAnaBySource = "SELECT source_id, params, avg_run_time, max_run_time, min_run_time FROM ko_param_ana WHERE source_id=?";

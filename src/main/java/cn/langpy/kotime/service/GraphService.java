@@ -48,7 +48,7 @@ public interface GraphService {
 
     List<MethodInfo> getChildren(String methodId);
 
-    List<ExceptionInfo> getExceptionInfos(String exceptionId);
+    List<ExceptionInfo> getExceptionInfos(String exceptionId,String message);
 
     List<ExceptionInfo> getExceptions(String methodId);
 

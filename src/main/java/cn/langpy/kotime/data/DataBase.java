@@ -342,30 +342,7 @@ public class DataBase implements GraphService {
 
     @Override
     public List<MethodInfo> getControllers() {
-        List<MethodInfo> methodInfos = new ArrayList<>();
-        List<MethodInfo> controllers = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryController, new Object[]{MethodType.Controller.name()}, MethodInfo.class);
-        for (MethodInfo methodNode : controllers) {
-            String id = methodNode.getId();
-            List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
-            if (relations.size() == 0) {
-                continue;
-            }
-            MethodRelation relation = relations.get(0);
-            MethodInfo methodInfo = new MethodInfo();
-            methodInfo.setId(methodNode.getId());
-            methodInfo.setName(methodNode.getName());
-            methodInfo.setClassName(methodNode.getClassName());
-            methodInfo.setMethodName(methodNode.getMethodName());
-            methodInfo.setMethodType(methodNode.getMethodType());
-            methodInfo.setRouteName(methodNode.getRouteName());
-            methodInfo.setValue(relation.getAvgRunTime());
-            methodInfo.setAvgRunTime(relation.getAvgRunTime());
-            methodInfo.setMaxRunTime(relation.getMaxRunTime());
-            methodInfo.setMinRunTime(relation.getMinRunTime());
-            if (!methodInfos.contains(methodInfo)) {
-                methodInfos.add(methodInfo);
-            }
-        }
+        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryControllers,null,MethodInfo.class);
         return methodInfos;
     }
 
@@ -381,65 +358,52 @@ public class DataBase implements GraphService {
 
     @Override
     public List<MethodInfo> searchMethods(String question) {
-        List<MethodInfo> methodInfos = new ArrayList<>();
-        List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodLikeName, new Object[]{"%" + question + "%"}, MethodNode.class);
-        for (MethodNode methodNode : methodNodes) {
-            String id = methodNode.getId();
-            List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReByTarget, new Object[]{id}, MethodRelation.class);
-            if (relations.size() == 0) {
-                continue;
-            }
-            MethodRelation relation = relations.get(0);
-            MethodInfo methodInfo = new MethodInfo();
-            methodInfo.setId(methodNode.getId());
-            methodInfo.setName(methodNode.getName());
-            methodInfo.setClassName(methodNode.getClassName());
-            methodInfo.setMethodName(methodNode.getMethodName());
-            methodInfo.setMethodType(methodNode.getMethodType());
-            methodInfo.setRouteName(methodNode.getRouteName());
-            methodInfo.setValue(relation.getAvgRunTime());
-            methodInfo.setAvgRunTime(relation.getAvgRunTime());
-            methodInfo.setMaxRunTime(relation.getMaxRunTime());
-            methodInfo.setMinRunTime(relation.getMinRunTime());
-            if (!methodInfos.contains(methodInfo)) {
-                methodInfos.add(methodInfo);
-            }
-        }
+        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.searchMethodsByName,new Object[]{"%" + question + "%"},MethodInfo.class);
         return methodInfos;
     }
 
     @Override
     public List<MethodInfo> getChildren(String methodId) {
-
-        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReBySource, new Object[]{methodId}, MethodRelation.class);
-
-        List<MethodInfo> methodInfos = new ArrayList<>();
-        for (MethodRelation methodRelation : relations) {
-            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{methodRelation.getTargetId()}, MethodNode.class);
-            if (methodNodes.size() == 0) {
-                continue;
-            }
-            MethodNode methodNode = methodNodes.get(0);
-            MethodInfo methodInfo = new MethodInfo();
-            methodInfo.setId(methodNode.getId());
-            methodInfo.setName(methodNode.getName());
-            methodInfo.setClassName(methodNode.getClassName());
-            methodInfo.setMethodName(methodNode.getMethodName());
-            methodInfo.setRouteName(methodNode.getRouteName());
-            methodInfo.setMethodType(methodNode.getMethodType());
-            methodInfo.setValue(methodRelation.getAvgRunTime());
-            methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
-            methodInfo.setMaxRunTime(methodRelation.getMaxRunTime());
-            methodInfo.setMinRunTime(methodRelation.getMinRunTime());
-
-            List<ExceptionInfo> exceptionInfos = getExceptions(methodNode.getId());
+        List<MethodInfo> methodInfosResult = new ArrayList<>();
+        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryChildrenByParent,new Object[]{methodId},MethodInfo.class);
+        for (MethodInfo methodInfo : methodInfos) {
+            List<ExceptionInfo> exceptionInfos = getExceptions(methodInfo.getId());
             methodInfo.setExceptionNum(exceptionInfos.size());
             methodInfo.setExceptions(exceptionInfos);
-            if (!methodInfos.contains(methodInfo)) {
-                methodInfos.add(methodInfo);
+            if (!methodInfosResult.contains(methodInfo)) {
+                methodInfosResult.add(methodInfo);
             }
         }
-        return methodInfos;
+        return methodInfosResult;
+
+//        List<MethodRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethodReBySource, new Object[]{methodId}, MethodRelation.class);
+//
+//        for (MethodRelation methodRelation : relations) {
+//            List<MethodNode> methodNodes = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryMethod, new Object[]{methodRelation.getTargetId()}, MethodNode.class);
+//            if (methodNodes.size() == 0) {
+//                continue;
+//            }
+//            MethodNode methodNode = methodNodes.get(0);
+//            MethodInfo methodInfo = new MethodInfo();
+//            methodInfo.setId(methodNode.getId());
+//            methodInfo.setName(methodNode.getName());
+//            methodInfo.setClassName(methodNode.getClassName());
+//            methodInfo.setMethodName(methodNode.getMethodName());
+//            methodInfo.setRouteName(methodNode.getRouteName());
+//            methodInfo.setMethodType(methodNode.getMethodType());
+//            methodInfo.setValue(methodRelation.getAvgRunTime());
+//            methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
+//            methodInfo.setMaxRunTime(methodRelation.getMaxRunTime());
+//            methodInfo.setMinRunTime(methodRelation.getMinRunTime());
+//
+//            List<ExceptionInfo> exceptionInfos = getExceptions(methodNode.getId());
+//            methodInfo.setExceptionNum(exceptionInfos.size());
+//            methodInfo.setExceptions(exceptionInfos);
+//            if (!methodInfos.contains(methodInfo)) {
+//                methodInfos.add(methodInfo);
+//            }
+//        }
+//        return methodInfos;
     }
 
     @Override

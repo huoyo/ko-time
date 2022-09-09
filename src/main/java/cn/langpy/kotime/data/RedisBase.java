@@ -59,7 +59,7 @@ public class RedisBase implements GraphService {
         }
     }
 
-
+    @Override
     public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
         String paramsKey = Common.getPramsStr(names, values);
         String key = paramValueMetricMapPre + methodId;

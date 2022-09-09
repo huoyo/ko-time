@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class DataBaseUtil {
     private static Logger log = Logger.getLogger(DataBaseUtil.class.toString());
 
-    static Map<String, ColumnInfo> tableInfoMap = new ConcurrentHashMap<>();
+    private static Map<String, ColumnInfo> tableInfoMap = new ConcurrentHashMap<>();
 
     public static DataSource getDataSource() {
         return Context.getDataSource();

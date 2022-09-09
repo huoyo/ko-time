@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class Common {
     private static Logger log = Logger.getLogger(Common.class.toString());
 
-    final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
+    private final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
 
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();

@@ -92,7 +92,7 @@ public class DataBase implements GraphService {
     }
 
     @Override
-    public void addMethodNode(MethodNode methodNode) {
+    public synchronized void addMethodNode(MethodNode methodNode) {
         if (null == methodNode) {
             return;
         }

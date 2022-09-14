@@ -11,7 +11,17 @@
     <ul>
         <li>实时监听方法，统计运行时长</li>
         <li>web展示方法调用链路，瓶颈可视化追踪</li>
+        <li>追踪系统异常，精确定位到方法</li>
     </ul>
+
+---
+
+<h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
+<ul>
+    <li>Tracking the Java methods and calculating their execution times</li>
+    <li>Show the paths of methods</li>
+    <li>Find exceptions occured in methods</li>
+</ul>
 </div>
 
 

@@ -7,10 +7,11 @@
     <img src='https://shields.io/badge/version-2.2.3-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
-    <h4>A springboot tool for tracking the paths of the methods,which can help you to find methods's performances easily.</h4>
+    <h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
         <ul>
             <li>Tracking the Java methods and calculating their execution times</li>
-            <li>Show the paths of the methods</li>
+            <li>Show the paths of methods</li>
+            <li>Find exceptions occured in methods</li>
         </ul>
 </div>
 

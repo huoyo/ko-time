@@ -30,7 +30,7 @@ public class Common {
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
         String[] classRoute = getRouteValue(targetClass);
-        StringBuilder routes = new StringBuilder();
+        StringBuilder routes = new StringBuilder("");
         if (classRoute != null && classRoute.length > 0) {
             routes = new StringBuilder(classRoute[0]);
         }

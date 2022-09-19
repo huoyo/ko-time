@@ -92,10 +92,11 @@ public class DataBase implements GraphService {
     }
 
     @Override
-    public synchronized void addMethodNode(MethodNode methodNode) {
+    public void addMethodNode(MethodNode methodNode) {
         if (null == methodNode) {
             return;
         }
+
         boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryMethodExist, methodNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
@@ -124,21 +125,22 @@ public class DataBase implements GraphService {
 
 
     @Override
-    public synchronized void addExceptionNode(ExceptionNode exceptionNode) {
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionExist, exceptionNode.getId());
-        if (!existsById) {
-            Object[] params = new Object[]{
-                    exceptionNode.getId(),
-                    exceptionNode.getName(),
-                    exceptionNode.getClassName()
-            };
-            DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addException, params);
+    public void addExceptionNode(ExceptionNode exceptionNode) {
+        if (exceptionNode == null) {
+            return;
         }
+
+        Object[] params = new Object[]{
+                exceptionNode.getId(),
+                exceptionNode.getName(),
+                exceptionNode.getClassName()
+        };
+        DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addException, params);
     }
 
 
     @Override
-    public synchronized MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode) {
+    public MethodRelation addMethodRelation(MethodNode sourceMethodNode, MethodNode targetMethodNode) {
         if (null == sourceMethodNode || null == targetMethodNode) {
             return null;
         }
@@ -184,7 +186,7 @@ public class DataBase implements GraphService {
     }
 
     @Override
-    public synchronized ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
+    public ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
         boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionReExist, sourceMethodNode.getId() + exceptionNode.getId());
         if (!existsById) {
             Object[] params = new Object[]{
@@ -200,7 +202,7 @@ public class DataBase implements GraphService {
     }
 
     @Override
-    public synchronized void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
+    public void addParamAnalyse(String methodId, Parameter[] names, Object[] values, double v) {
         String paramsKey = Common.getPramsStr(names, values);
         List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryParamsAna, new Object[]{methodId, paramsKey});
         if (query.size() == 0) {
@@ -342,7 +344,7 @@ public class DataBase implements GraphService {
 
     @Override
     public List<MethodInfo> getControllers() {
-        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryControllers,null,MethodInfo.class);
+        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryControllers, null, MethodInfo.class);
         return methodInfos;
     }
 
@@ -358,14 +360,14 @@ public class DataBase implements GraphService {
 
     @Override
     public List<MethodInfo> searchMethods(String question) {
-        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.searchMethodsByName,new Object[]{"%" + question + "%"},MethodInfo.class);
+        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.searchMethodsByName, new Object[]{"%" + question + "%"}, MethodInfo.class);
         return methodInfos;
     }
 
     @Override
     public List<MethodInfo> getChildren(String methodId) {
         List<MethodInfo> methodInfosResult = new ArrayList<>();
-        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryChildrenByParent,new Object[]{methodId},MethodInfo.class);
+        List<MethodInfo> methodInfos = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryChildrenByParent, new Object[]{methodId}, MethodInfo.class);
         for (MethodInfo methodInfo : methodInfos) {
             List<ExceptionInfo> exceptionInfos = getExceptions(methodInfo.getId());
             methodInfo.setExceptionNum(exceptionInfos.size());
@@ -378,8 +380,8 @@ public class DataBase implements GraphService {
     }
 
     @Override
-    public List<ExceptionInfo> getExceptionInfos(String exceptionId,String message) {
-        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptionReByTargetAndMessage, new Object[]{exceptionId,message}, ExceptionRelation.class);
+    public List<ExceptionInfo> getExceptionInfos(String exceptionId, String message) {
+        List<ExceptionRelation> relations = DataBaseUtil.query(getReadConnection(), KoSqlConstant.queryExceptionReByTargetAndMessage, new Object[]{exceptionId, message}, ExceptionRelation.class);
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
         for (ExceptionRelation relation : relations) {
             String sourceMethodId = relation.getSourceId();
@@ -441,16 +443,17 @@ public class DataBase implements GraphService {
 
     /**
      * delete all data
+     *
      * @return
      */
     @Override
     public boolean clearAll() {
-        synchronized (this){
-            DataBaseUtil.truncateByTable(getReadConnection(),"ko_method_node");
-            DataBaseUtil.truncateByTable(getReadConnection(),"ko_method_relation");
-            DataBaseUtil.truncateByTable(getReadConnection(),"ko_exception_node");
-            DataBaseUtil.truncateByTable(getReadConnection(),"ko_exception_relation");
-            DataBaseUtil.truncateByTable(getReadConnection(),"ko_param_ana");
+        synchronized (this) {
+            DataBaseUtil.truncateByTable(getReadConnection(), "ko_method_node");
+            DataBaseUtil.truncateByTable(getReadConnection(), "ko_method_relation");
+            DataBaseUtil.truncateByTable(getReadConnection(), "ko_exception_node");
+            DataBaseUtil.truncateByTable(getReadConnection(), "ko_exception_relation");
+            DataBaseUtil.truncateByTable(getReadConnection(), "ko_param_ana");
         }
 
         return true;

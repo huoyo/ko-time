@@ -1,13 +1,13 @@
 package cn.langpy.kotime.constant;
 
 public class KoSqlConstant {
-    public final static String addMethod = "INSERT INTO ko_method_node(id, name, class_name, method_name, route_name, method_type) VALUES (?, ?, ?, ?, ?, ?)";
+    public final static String addMethod = "REPLACE INTO ko_method_node(id, name, class_name, method_name, route_name, method_type) VALUES (?, ?, ?, ?, ?, ?)";
     public final static String queryMethod = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE id=?";
     public final static String queryMethodExist = "SELECT id FROM ko_method_node  WHERE id=?";
     public final static String queryMethodLikeName = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE name like ?";
     public final static String queryMethodByType = "SELECT id, name, class_name, method_name, route_name, method_type FROM ko_method_node  WHERE method_type=?";
     public final static String updateMethod = "UPDATE ko_method_node SET name=?, class_name=?, method_name=?, route_name=?, method_type=? WHERE id=?";
-    public final static String addException = "INSERT INTO ko_exception_node(id, name, class_name) VALUES (?, ?, ?)";
+    public final static String addException = "REPLACE INTO ko_exception_node(id, name, class_name) VALUES (?, ?, ?)";
     public final static String queryExceptions = "select distinct e.*,r.message from ko_exception_node e " +
             "join ko_exception_relation r on e.id = r.target_id";
     public final static String queryException = "SELECT id, name, class_name FROM ko_exception_node  WHERE id=?";

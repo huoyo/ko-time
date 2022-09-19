@@ -42,7 +42,7 @@ public class DataBaseUtil {
             int n = statement.executeUpdate();
             return n;
         } catch (SQLIntegrityConstraintViolationException e) {
-            log.info("Duplicate Method id：" + values[0]);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {

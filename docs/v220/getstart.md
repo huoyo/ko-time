@@ -7,7 +7,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.3</version>
+    <version>2.2.4</version>
   </dependency>
 ```
 

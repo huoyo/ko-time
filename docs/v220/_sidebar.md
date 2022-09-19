@@ -4,4 +4,3 @@
 * [UI页面说明](v220/uiguide)
 * [API数据接口](v220/apiintro)
 * [常见问题](v220/questions)
-* [赞助与合作](v220/donate)

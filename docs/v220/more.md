@@ -4,12 +4,16 @@ v2.2.0开始支持数据库存储接口信息功能，可在内存和数据库�
 
 ### 内存存储
 
+> 内存豪华贵族推荐使用方式
+
 更改配置：
 
 > ko-time.saver=memory #默认存储方式，无需此配置也行
 
 
 ### Redis存储
+
+> 正常推荐使用方式
 
 1.更改配置：
 
@@ -56,7 +60,7 @@ public StringRedisTemplate getRedisTemplate(RedisConnectionFactory connectionFac
 
 ### 数据库存储
 
-> 注： 使用mysql
+> 注： 使用mysql  不推荐的使用方式，占用项目数据资源
 
 1.更改配置：
 

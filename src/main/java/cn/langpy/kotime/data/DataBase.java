@@ -150,6 +150,9 @@ public class DataBase implements GraphService {
         try {
             List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryMethodRe, new Object[]{sourceMethodNode.getId() + targetMethodNode.getId()});
             if (query.size() > 0) {
+                if (Math.random()<Context.getConfig().getDiscardRate()) {
+                    return null;
+                }
                 Map<String, Object> old = query.get(0);
                 double oldAvg = (double)old.get("avg_run_time");
                 double oldMax = (double)old.get("max_run_time");
@@ -215,6 +218,9 @@ public class DataBase implements GraphService {
             };
             DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addParamsAna, params);
         } else {
+            if (Math.random()<Context.getConfig().getDiscardRate()) {
+                return;
+            }
             Map<String, Object> old = query.get(0);
             double oldAvg = (double)old.get("avg_run_time");
             double oldMax = (double)old.get("max_run_time");

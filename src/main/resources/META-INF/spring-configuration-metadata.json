@@ -110,6 +110,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.discardRate",
+      "type": "java.lang.Double",
+      "defaultValue": 0.3,
+      "description": "data will be discard if Math.random()<discardRate",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.auth-enable",
       "type": "java.lang.Boolean",
       "defaultValue": false,

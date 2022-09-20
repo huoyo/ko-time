@@ -64,6 +64,9 @@ public class MemoryBase implements GraphService {
         if (paramValueMetricMap.containsKey(methodId)) {
             Map<String, ParamMetric> paramMetricMap = paramValueMetricMap.get(methodId);
             if (paramMetricMap.containsKey(paramsKey)) {
+                if (Math.random()<Context.getConfig().getDiscardRate()) {
+                    return;
+                }
                 ParamMetric paramMetric = paramMetricMap.get(paramsKey);
                 BigDecimal bg = BigDecimal.valueOf((paramMetric.getAvgRunTime() + v) / 2.0);
                 double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -117,6 +120,9 @@ public class MemoryBase implements GraphService {
             methodRelations.put(methodRelation.getId(), methodRelation);
             return methodRelation;
         } else {
+            if (Math.random()<Context.getConfig().getDiscardRate()) {
+                return null;
+            }
             BigDecimal bg = BigDecimal.valueOf((methodRelation.getAvgRunTime() + old.getAvgRunTime()) / 2.0);
             double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
             old.setAvgRunTime(avg);

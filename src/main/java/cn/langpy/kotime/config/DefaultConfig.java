@@ -16,6 +16,7 @@ public class DefaultConfig {
     private String logLanguage;
     private Boolean logEnable;
     private Double threshold;
+    private Double discardRate;
     private String pointcut;
     private Boolean exceptionEnable;
     private Boolean paramAnalyse;
@@ -29,6 +30,14 @@ public class DefaultConfig {
     private Boolean authEnable;
     private String userName;
     private String password;
+
+    public Double getDiscardRate() {
+        return discardRate;
+    }
+
+    public void setDiscardRate(Double discardRate) {
+        this.discardRate = discardRate;
+    }
 
     public Boolean getDataReset() {
         return dataReset;

@@ -74,6 +74,7 @@ public class LoadConfig {
         config.setContextPath(defaultConfig.getContextPath());
         config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());
         config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
+        config.setDiscardRate(defaultConfig.getDiscardRate() == null ? 0.3 : defaultConfig.getDiscardRate());
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
         config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());

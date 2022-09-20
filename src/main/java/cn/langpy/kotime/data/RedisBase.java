@@ -66,6 +66,9 @@ public class RedisBase implements GraphService {
         if (redisTemplate.hasKey(key)) {
             Map<String, JSONObject> paramMetricMap = query(key, Map.class);
             if (paramMetricMap.containsKey(paramsKey)) {
+                if (Math.random()<Context.getConfig().getDiscardRate()) {
+                    return;
+                }
                 ParamMetric paramMetric = paramMetricMap.get(paramsKey).toJavaObject(ParamMetric.class);
                 BigDecimal bg = BigDecimal.valueOf((paramMetric.getAvgRunTime() + v) / 2.0);
                 double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -122,6 +125,9 @@ public class RedisBase implements GraphService {
             insert(key, methodRelation);
             return methodRelation;
         } else {
+            if (Math.random()<Context.getConfig().getDiscardRate()) {
+                return null;
+            }
             BigDecimal bg = BigDecimal.valueOf((methodRelation.getAvgRunTime() + old.getAvgRunTime()) / 2.0);
             double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
             old.setAvgRunTime(avg);

@@ -60,10 +60,10 @@ public class DataBaseUtil {
     public static int truncateByTable(Connection connection, String table) {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("truncate table "+table);
+            statement = connection.prepareStatement("truncate table " + table);
             int n = statement.executeUpdate();
             return n;
-        }  catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
             if (statement != null) {
@@ -307,10 +307,10 @@ public class DataBaseUtil {
     private static Object getColumnValue(ResultSet resultSet, ColumnInfo column) throws SQLException {
         if ("VARCHAR".equals(column.getDataType()) || "TEXT".equals(column.getDataType())) {
             return resultSet.getString(column.getName());
-        } else if ("DOUBLE".equalsIgnoreCase(column.getDataType())) {
-            return resultSet.getDouble(column.getName());
         } else if ("DECIMAL".equalsIgnoreCase(column.getDataType())) {
             return resultSet.getBigDecimal(column.getName()).doubleValue();
+        } else if ("DOUBLE".equalsIgnoreCase(column.getDataType())) {
+            return resultSet.getDouble(column.getName());
         } else if ("INT".equalsIgnoreCase(column.getDataType())) {
             return resultSet.getInt(column.getName());
         } else if ("DATETIME".equalsIgnoreCase(column.getDataType())) {

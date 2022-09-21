@@ -7,7 +7,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.4</version>
+    <version>2.2.5</version>
   </dependency>
 ```
 
@@ -37,6 +37,7 @@ ko-time.password=xxxx # 登录密码 v2.0.2开始支持
 ko-time.param-analyse=true # 是否开启入参组合分析 默认开启 v2.0.8开始支持 双击方法节点即可看到效果 
 ko-time.data-reset=false # 启动时是否删除过往数据 默认false v2.2.3开始支持
 ko-time.thread-num=2 # 调用信息存储线程数（为了不影响项目本身性能，链路存储异步进行），默认2，该值并非越大越好，瓶颈取决于数据库性能和服务器配置，尽可能少占用项目资源为上  v2.2.0-BETA开始支持
+ko-time.discard-rate=0.3 # 丢弃率（0-1） 同一个方法在多次连续调用时，耗时差距并不大，为了存储的IO性能考虑，可以随机丢弃一部分耗时数据。默认30% v2.2.5开始支持
 ```
 
 ## 访问

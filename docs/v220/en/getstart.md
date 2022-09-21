@@ -7,7 +7,7 @@ add a dependency in pom.xml.
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.4</version>
+    <version>2.2.5</version>
   </dependency>
 ```
 
@@ -37,6 +37,7 @@ ko-time.password=xxxx # password added in v2.0.2
 ko-time.data-reset=false # delete data switch ,default false. added in v2.2.3
 ko-time.param-analyse=true # param-analyse switch, default true. added in v2.0.8(you can see it when you dblclick on the method node) 
 ko-time.thread-num=2 # thread-num to to store data,default 2. this value is up to the performance of cpu and database.added in v2.2.0-BETA
+ko-time.discard-rate=0.3 # discard rate（0-1） you can give up some data for IO performance,default 30%. added in v2.2.5
 ```
 
 ## Visit

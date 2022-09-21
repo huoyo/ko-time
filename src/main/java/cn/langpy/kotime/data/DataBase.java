@@ -150,13 +150,13 @@ public class DataBase implements GraphService {
         try {
             List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryMethodRe, new Object[]{sourceMethodNode.getId() + targetMethodNode.getId()});
             if (query.size() > 0) {
-                if (Math.random()<Context.getConfig().getDiscardRate()) {
+                if (Math.random() < Context.getConfig().getDiscardRate()) {
                     return null;
                 }
                 Map<String, Object> old = query.get(0);
-                double oldAvg = (double)old.get("avg_run_time");
-                double oldMax = (double)old.get("max_run_time");
-                double oldMin = (double)old.get("min_run_time");
+                double oldAvg = (double) old.get("avg_run_time");
+                double oldMax = (double) old.get("max_run_time");
+                double oldMin = (double) old.get("min_run_time");
                 BigDecimal bg = BigDecimal.valueOf((targetMethodNode.getValue() + oldAvg) / 2.0);
                 double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 double max = targetMethodNode.getValue() > oldMax ? targetMethodNode.getValue() : oldMax;
@@ -218,13 +218,13 @@ public class DataBase implements GraphService {
             };
             DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addParamsAna, params);
         } else {
-            if (Math.random()<Context.getConfig().getDiscardRate()) {
+            if (Math.random() < Context.getConfig().getDiscardRate()) {
                 return;
             }
             Map<String, Object> old = query.get(0);
-            double oldAvg = (double)old.get("avg_run_time");
-            double oldMax = (double)old.get("max_run_time");
-            double oldMin = (double)old.get("min_run_time");
+            double oldAvg = (double) old.get("avg_run_time");
+            double oldMax = (double) old.get("max_run_time");
+            double oldMin = (double) old.get("min_run_time");
             BigDecimal bg = BigDecimal.valueOf((v + oldAvg) / 2.0);
             double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
             double max = v > oldMax ? v : oldMax;

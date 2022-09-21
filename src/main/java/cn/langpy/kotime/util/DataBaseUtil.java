@@ -6,10 +6,7 @@ import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -17,6 +14,7 @@ public class DataBaseUtil {
     private static Logger log = Logger.getLogger(DataBaseUtil.class.toString());
 
     private static Map<String, ColumnInfo> tableInfoMap = new ConcurrentHashMap<>();
+    private static Map<String, List<ColumnInfo>> sqlColumns = new ConcurrentHashMap<>();
 
     public static DataSource getDataSource() {
         return Context.getDataSource();
@@ -27,7 +25,7 @@ public class DataBaseUtil {
             Connection connection = getDataSource().getConnection();
             return insert(connection, sql, values);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            log.severe("Error insert:"+sql);
         }
         return 0;
     }
@@ -44,7 +42,7 @@ public class DataBaseUtil {
         } catch (SQLIntegrityConstraintViolationException e) {
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            log.severe("Error insert:"+sql);
         } finally {
             if (statement != null) {
                 try {
@@ -81,7 +79,7 @@ public class DataBaseUtil {
         try (Connection connection = getDataSource().getConnection()) {
             return update(connection, sql, values);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            log.severe("Error update:"+sql);
         }
         return 0;
     }
@@ -108,9 +106,16 @@ public class DataBaseUtil {
             if (null != values) {
                 statement = setParams(statement, values);
             }
-            final ResultSetMetaData metaData = statement.getMetaData();
+            statement.setQueryTimeout(15);
             resultSet = statement.executeQuery();
-            List<ColumnInfo> columns = getColumns(metaData);
+            List<ColumnInfo> columns = null;
+            if (sqlColumns.containsKey(sql)) {
+                columns = sqlColumns.get(sql);
+            }else {
+                final ResultSetMetaData metaData = statement.getMetaData();
+                columns = getColumns(metaData);
+                sqlColumns.put(sql,columns);
+            }
             while (resultSet.next()) {
                 Map<String, Object> map = new HashMap<>();
                 for (ColumnInfo column : columns) {
@@ -118,8 +123,12 @@ public class DataBaseUtil {
                 }
                 list.add(map);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            log.severe("Error query for database");
+            if (!e.getClass().getSimpleName().equals("CommunicationsException")) {
+                connection = null;
+                log.severe("Failure database connection!");
+            }
         } finally {
             if (statement != null) {
                 try {
@@ -145,6 +154,7 @@ public class DataBaseUtil {
         try {
             statement = connection.prepareStatement(sql);
             statement = setParams(statement, id);
+            statement.setQueryTimeout(15);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return true;
@@ -179,9 +189,17 @@ public class DataBaseUtil {
             if (null != values) {
                 statement = setParams(statement, values);
             }
-            final ResultSetMetaData metaData = statement.getMetaData();
+            statement.setQueryTimeout(15);
             resultSet = statement.executeQuery();
-            List<ColumnInfo> columns = getColumns(metaData);
+            List<ColumnInfo> columns = null;
+            if (sqlColumns.containsKey(sql)) {
+                columns = sqlColumns.get(sql);
+            }else {
+                final ResultSetMetaData metaData = statement.getMetaData();
+                resultSet = statement.executeQuery();
+                columns = getColumns(metaData);
+                sqlColumns.put(sql,columns);
+            }
             Field[] fields = null;
             while (resultSet.next()) {
                 T object = c.newInstance();
@@ -214,12 +232,16 @@ public class DataBaseUtil {
                 }
                 list.add(object);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        }catch (SQLException e) {
+            log.severe("Error query for database!");
+            if (e.getClass().getSimpleName().equals("CommunicationsException")) {
+                connection = null;
+                log.severe("Failure database connection!");
+            }
+        }catch (IllegalAccessException e) {
+            log.severe("Error access for database!");
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.severe("Error instance for database!");
         } finally {
             if (statement != null) {
                 try {

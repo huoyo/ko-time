@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.2.3-green.svg'>
+    <img src='https://shields.io/badge/version-2.2.5-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
@@ -97,6 +97,9 @@
 > V2.2.2：添加英文支持
 
 > V2.2.3：添加redis存储支持
+
+> V2.2.5：添加ko-time.discard-rate配置，允许丢弃一部分数据提高性能；
+            修复数据库查询超时的bug
 
 ## 特别说明
 

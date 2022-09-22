@@ -88,14 +88,6 @@ public class DataBaseUtil {
         return insert(connection, sql, values);
     }
 
-    public static List<Map<String, Object>> query(String sql, Object[] values) {
-        try (Connection connection = getDataSource().getConnection()) {
-            return query(connection, sql, values);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
 
     public static List<Map<String, Object>> query(Connection connection, String sql, Object[] values) {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -234,7 +226,7 @@ public class DataBaseUtil {
             }
         }catch (SQLException e) {
             log.severe("Error query for database!");
-            if (e.getClass().getSimpleName().equals("CommunicationsException")) {
+            if (e.getClass().getSimpleName().equals("CommunicationsException") ||e.getClass().getSimpleName().equals("MySQLTimeoutException") ) {
                 connection = null;
                 log.severe("Failure database connection!");
             }
@@ -263,12 +255,13 @@ public class DataBaseUtil {
     }
 
     public static <T> List<T> query(String sql, Object[] values, Class<T> c) {
+        List<T> list = null;
         try (Connection connection = getDataSource().getConnection()) {
-            return query(connection, sql, values, c);
+            list = query(connection, sql, values, c);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            list = new ArrayList<>();
         }
-        return new ArrayList<>();
+        return list;
     }
 
     public static ColumnInfo matchColumn(Field field, List<ColumnInfo> columns) {

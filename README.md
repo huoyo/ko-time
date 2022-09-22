@@ -36,7 +36,7 @@
 
 [英文简介/ENGLISH](README-EN.md)
 
-[使用教程](http://kotimedoc.langpy.cn/)
+[使用教程](http://kotimedoc.langpy.cn/?source=git)
 
 
 

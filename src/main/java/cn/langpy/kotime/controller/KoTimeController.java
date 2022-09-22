@@ -35,6 +35,11 @@ public class KoTimeController {
     private String password;
 
     private static Logger log = Logger.getLogger(KoTimeController.class.toString());
+    private final String uiKitCssText = getResourceText("kostatic/uikit.min.css");
+    private final String uiKitJsText = getResourceText("kostatic/uikit.min.js");
+    private final String metricFlowJsText = getResourceText("kostatic/Metricflow.js");
+    private final String jQueryJsText = getResourceText("kostatic/JQuery.min.js");
+    private final String uiKitIconsJs = getResourceText("kostatic/uikit-icons.js");
 
     @PostMapping("/login")
     @ResponseBody
@@ -86,23 +91,27 @@ public class KoTimeController {
             }
             StringBuilder stringBuilder = new StringBuilder();
             String line = "";
-            int n = 0;
             while ((line = reader.readLine()) != null) {
-                if (n > 14) {
-                    if (line.indexOf(KoConstant.globalThreshold) > -1) {
-                        line = line.replace(KoConstant.globalThreshold, Context.getConfig().getThreshold() + "");
-                    } else if (line.indexOf(KoConstant.globalNeedLogin) > -1) {
-                        line = line.replace(KoConstant.globalNeedLogin, Context.getConfig().getAuthEnable() + "");
-                    } else if (line.indexOf(KoConstant.contextPath) > -1) {
-                        line = line.replace(KoConstant.contextPath, context);
-                    } else if (line.indexOf(KoConstant.exceptionTitleStyle) > -1) {
-                        line = line.replace(KoConstant.exceptionTitleStyle, Context.getConfig().getExceptionEnable() == true ? "" : "display:none;");
-                    }
-                    stringBuilder.append(line + "\n");
-                } else {
-                    stringBuilder.append(line + "\n");
+                if (line.indexOf(KoConstant.globalThreshold) > -1) {
+                    line = line.replace(KoConstant.globalThreshold, Context.getConfig().getThreshold() + "");
+                } else if (line.indexOf(KoConstant.globalNeedLogin) > -1) {
+                    line = line.replace(KoConstant.globalNeedLogin, Context.getConfig().getAuthEnable() + "");
+                } else if (line.indexOf(KoConstant.contextPath) > -1) {
+                    line = line.replace(KoConstant.contextPath, context);
+                } else if (line.indexOf(KoConstant.exceptionTitleStyle) > -1) {
+                    line = line.replace(KoConstant.exceptionTitleStyle, Context.getConfig().getExceptionEnable() == true ? "" : "display:none;");
+                } else if (line.indexOf("UIKitCss") > -1) {
+                    line = line.replace("UIKitCss", uiKitCssText);
+                } else if (line.indexOf("UIKitJs") > -1) {
+                    line = line.replace("UIKitJs", uiKitJsText);
+                } else if (line.indexOf("MetricFlowJs") > -1) {
+                    line = line.replace("MetricFlowJs", metricFlowJsText);
+                }else if (line.indexOf("jQueryJs") > -1) {
+                    line = line.replace("jQueryJs", jQueryJsText);
+                }else if (line.indexOf("uiKitIconsJs") > -1) {
+                    line = line.replace("uiKitIconsJs", uiKitIconsJs);
                 }
-                n++;
+                stringBuilder.append(line + "\n");
             }
             line = stringBuilder.toString();
             out.write(line);
@@ -110,6 +119,22 @@ public class KoTimeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private String getResourceText(String fileName) {
+        ClassPathResource classPathResource = new ClassPathResource(fileName);
+        try (InputStream inputStream = classPathResource.getInputStream();
+             InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
+             BufferedReader reader = new BufferedReader(streamReader)) {
+            String line = "";
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+            return stringBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 

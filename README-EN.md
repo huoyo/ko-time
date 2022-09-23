@@ -50,6 +50,13 @@ After clicking a inteface method,you can find paths of the method
 
 ![输入图片说明](docs/v203/ff.png)
 
+
+4.Email
+
+You can open email to receive a warning about overtime method since v2.2.5
+
+![输入图片说明](docs/v200/image.png)
+
 ## Important Versions
 
 > V1.0：Basic functions

@@ -232,6 +232,50 @@ public class TestInvoke implements InvokedHandler {
 }
 ```
 
+## 耗时预警通知
+
+> v2.2.5开始加入了邮件通知功能，当方法耗时超过阈值之后，可以选择进行邮件通知
+
+### 配置
+
+1.必填
+
+```properties
+ko-time.mail-user=xxxx@qq.com # 设置发送者 可以设置为你的QQ邮箱 必填
+ko-time.mail-code=xxxxxxx # 邮箱授权码 请到QQ邮箱申请 必填
+ko-time.mail-receivers=xxxx@qq.com # 邮件接收者 多个请用英文逗号隔开 必填
+```
+
+2.选填
+
+> 默认为qq邮箱服务器
+
+> qq邮箱授权码申请：https://service.mail.qq.com/cgi-bin/help?subtype=1&id=28&no=1001256
+
+
+```properties
+ko-time.mail-enable=true # 开启邮件通知 默认false
+ko-time.mail-protocol=smtp # 邮件协议 默认smtp 可以不配置
+ko-time.mail-host=smtp.qq.com # 邮件服务器 默认smtp.qq.com（QQ邮件） 可以不配置
+ko-time.mail-port=587 # 邮件服务器 默认587（QQ邮件端口） 可以不配置
+ko-time.mail-encoding=UTF-8 # 邮件编码 默认UTF-8 可以不配置
+ko-time.mail-threshold=4 # 邮件触发阈值 默认4 耗时n次超过阈值即发送邮件  可以不配置
+ko-time.mail-scope=Controller # 邮件检测范围 默认Controller（接口层）   可选{All,Controller,Service,Dao,Other}
+```
+
+### 添加依赖
+
+```
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+
+```
+
+### 接收邮件
+
 ---
 
 

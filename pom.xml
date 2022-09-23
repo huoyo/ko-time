@@ -30,6 +30,7 @@
         <spring-webmvc.version>5.3.6</spring-webmvc.version>
         <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
         <spring-redis.version>2.6.2</spring-redis.version>
+        <spring-mail.version>2.7.3</spring-mail.version>
         <fastjson.version>2.0.9</fastjson.version>
     </properties>
     <dependencies>
@@ -73,6 +74,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${spring-redis.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>${spring-mail.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

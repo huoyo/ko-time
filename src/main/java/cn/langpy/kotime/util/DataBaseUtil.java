@@ -24,8 +24,12 @@ public class DataBaseUtil {
         try {
             Connection connection = getDataSource().getConnection();
             return insert(connection, sql, values);
-        } catch (SQLException throwables) {
-            log.severe("Error insert:"+sql);
+        } catch (SQLException e) {
+            if (e.getClass().getSimpleName().equals("CommunicationsException") ||e.getClass().getSimpleName().equals("MySQLTimeoutException") ) {
+                log.severe("Failure database connection!");
+            }else {
+                log.severe("Error insert:"+sql);
+            }
         }
         return 0;
     }
@@ -41,8 +45,12 @@ public class DataBaseUtil {
             return n;
         } catch (SQLIntegrityConstraintViolationException e) {
 
-        } catch (SQLException throwables) {
-            log.severe("Error insert:"+sql);
+        } catch (SQLException e) {
+            if (e.getClass().getSimpleName().equals("CommunicationsException") ||e.getClass().getSimpleName().equals("MySQLTimeoutException") ) {
+                log.severe("Failure database connection!");
+            }else {
+                log.severe("Error insert:"+sql);
+            }
         } finally {
             if (statement != null) {
                 try {
@@ -78,8 +86,12 @@ public class DataBaseUtil {
     public static int update(String sql, Object[] values) {
         try (Connection connection = getDataSource().getConnection()) {
             return update(connection, sql, values);
-        } catch (SQLException throwables) {
-            log.severe("Error update:"+sql);
+        } catch (SQLException e) {
+            if (e.getClass().getSimpleName().equals("CommunicationsException") ||e.getClass().getSimpleName().equals("MySQLTimeoutException") ) {
+                log.severe("Failure database connection!");
+            }else {
+                log.severe("Error update:"+sql);
+            }
         }
         return 0;
     }
@@ -117,7 +129,7 @@ public class DataBaseUtil {
             }
         } catch (SQLException e) {
             log.severe("Error query for database");
-            if (!e.getClass().getSimpleName().equals("CommunicationsException")) {
+            if (e.getClass().getSimpleName().equals("CommunicationsException") ||e.getClass().getSimpleName().equals("MySQLTimeoutException") ) {
                 connection = null;
                 log.severe("Failure database connection!");
             }

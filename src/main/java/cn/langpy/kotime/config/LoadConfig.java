@@ -3,6 +3,7 @@ package cn.langpy.kotime.config;
 import cn.langpy.kotime.annotation.KoListener;
 import cn.langpy.kotime.handler.RunTimeHandler;
 import cn.langpy.kotime.handler.InvokedHandler;
+import cn.langpy.kotime.service.EmailSendService;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.util.Context;
@@ -15,6 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -48,12 +50,25 @@ public class LoadConfig {
     private Boolean exceptionEnable;
     @Value("${koTime.saver:memory}")
     private String saveSaver;
-    @Value("${koTime.thread-num:2}")
-    private Integer threadNum;
     @Value("${server.port:8080}")
     private Integer serverPort;
     @Value("${server.servlet.context-path:}")
     private String serverContext;
+
+    @Value("${ko-time.mail-host:smtp.qq.com}")
+    private String host;
+    @Value("${ko-time.mail-port:587}")
+    private Integer port;
+    @Value("${ko-time.mail-protocol:smtp}")
+    private String protocol;
+    @Value("${ko-time.mail-encoding:UTF-8}")
+    private String encoding;
+    @Value("${ko-time.mail-user:}")
+    private String user;
+    @Value("${ko-time.mail-code:}")
+    private String mailCode;
+    @Value("${ko-time.mail-enable:false}")
+    private Boolean mailEnable;
 
     @Resource
     private DefaultConfig defaultConfig;
@@ -105,6 +120,19 @@ public class LoadConfig {
         initMethodHandlers();
     }
 
+    @Bean
+    @Lazy
+    public EmailSendService emailSendService() {
+        EmailSendService sender = new EmailSendService();
+        sender.setHost(host);
+        sender.setPort(port);
+        sender.setUsername(user);
+        sender.setPassword(mailCode);
+        sender.setProtocol(protocol);
+        sender.setDefaultEncoding(encoding);
+        return sender;
+    }
+
     public void configDataSource(DefaultConfig config) {
         if (!"database".equals(config.getSaver())) {
             return;
@@ -152,6 +180,9 @@ public class LoadConfig {
     public void initMethodHandlers() {
         String[] names = applicationContext.getBeanNamesForType(InvokedHandler.class);
         for (String name : names) {
+            if ("emailHandler".equals(name) && !mailEnable) {
+                continue;
+            }
             InvokedHandler bean = (InvokedHandler) applicationContext.getBean(name);
             if (null != bean) {
                 KoListener annotation = bean.getClass().getAnnotation(KoListener.class);

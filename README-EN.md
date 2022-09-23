@@ -86,6 +86,9 @@ After clicking a inteface method,you can find paths of the method
 
 > V2.2.3：Support using redis to store data
 
+> V2.2.5：Add `ko-time.discard-rate` to allow project discard some data;
+    Fix a bug for DataBase;
+    Add email;
 ## Copyright
 
 > 1.This project belongs to Chang Zhang,and Its open source protocol is Apache-2.0；

@@ -242,6 +242,7 @@ public class TestInvoke implements InvokedHandler {
 1.必填
 
 ```properties
+ko-time.mail-enable=true # 开启邮件通知 默认false
 ko-time.mail-user=xxxx@qq.com # 设置发送者 可以设置为你的QQ邮箱 必填
 ko-time.mail-code=xxxxxxx # 邮箱授权码 请到QQ邮箱申请 必填
 ko-time.mail-receivers=xxxx@qq.com # 邮件接收者 多个请用英文逗号隔开 必填
@@ -255,7 +256,6 @@ ko-time.mail-receivers=xxxx@qq.com # 邮件接收者 多个请用英文逗号隔
 
 
 ```properties
-ko-time.mail-enable=true # 开启邮件通知 默认false
 ko-time.mail-protocol=smtp # 邮件协议 默认smtp 可以不配置
 ko-time.mail-host=smtp.qq.com # 邮件服务器 默认smtp.qq.com（QQ邮件） 可以不配置
 ko-time.mail-port=587 # 邮件服务器 默认587（QQ邮件端口） 可以不配置
@@ -276,6 +276,10 @@ ko-time.mail-scope=Controller # 邮件检测范围 默认Controller（接口层�
 ```
 
 ### 接收邮件
+
+> 不用但心同一个接口耗时严重时重复疯狂地收到邮件，发过一次之后会等很久的
+
+![输入图片说明](../../v200/image.png)
 
 ---
 

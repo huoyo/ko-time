@@ -235,6 +235,8 @@ public class TestInvoke implements InvokedHandler {
 ## 耗时预警通知
 
 > v2.2.5开始加入了邮件通知功能，当方法耗时超过阈值之后，可以选择进行邮件通知
+> 
+> Note: 请先确保网络通常
 
 ### 配置
 

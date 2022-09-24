@@ -42,26 +42,34 @@ public class EmailSendService extends JavaMailSenderImpl {
             return;
         }
         if (redMethods.containsKey(current.getId())) {
-            try {
-                int n = redMethods.get(current.getId());
-                n += 1;
-                if (n >= threshold) {
-                    MimeMessage mimeMessage = this.createMimeMessage();
-                    configMessage(current, mimeMessage);
-                    this.send(mimeMessage);
-                    redMethods.put(current.getId(), -2000);
-                } else {
-                    redMethods.put(current.getId(), n);
-                }
-            } catch (MessagingException e) {
-                log.severe("Failure email:" + e.getMessage());
+            int n = redMethods.get(current.getId());
+            n += 1;
+            if (n >= threshold) {
+                this.send(createMessage(current));
+                redMethods.put(current.getId(), -2000);
+            } else {
+                redMethods.put(current.getId(), n);
             }
         } else {
             redMethods.put(current.getId(), 1);
+            if (threshold == 1) {
+                this.send(createMessage(current));
+            }
         }
     }
 
-    public void configMessage(MethodNode current, MimeMessage mimeMessage) throws MessagingException {
+    private MimeMessage createMessage(MethodNode current) {
+        MimeMessage mimeMessage = null;
+        try {
+            mimeMessage = this.createMimeMessage();
+            configMessage(current, mimeMessage);
+        } catch (MessagingException e) {
+            log.severe("Error email message!");
+        }
+        return mimeMessage;
+    }
+
+    private void configMessage(MethodNode current, MimeMessage mimeMessage) throws MessagingException {
         String[] receiversArray = receivers.split(",");
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
         messageHelper.setSubject("KoTime耗时预警-" + dataPrefix + "-" + current.getId());
@@ -72,7 +80,7 @@ public class EmailSendService extends JavaMailSenderImpl {
     }
 
     private String createNoticeTemplate(MethodNode current) {
-        return "<h4>您有一个方法耗时有"+threshold+"次超过了阈值（"+ Context.getConfig().getThreshold() +"），详情如下：</h4>\n" +
+        return "<h4>您有一个方法耗时有" + threshold + "次超过了阈值（" + Context.getConfig().getThreshold() + "），详情如下：</h4>\n" +
                 "<div style=\"background-color: #fafdfd;border-radius: 5px;width: 500px;padding: 10px;box-shadow: #75f1bf 2px 2px 2px 2px\">\n" +
                 "    <div>项目：" + dataPrefix + "</div>\n" +
                 "    <div>类名：" + current.getClassName() + "</div>\n" +

@@ -72,7 +72,7 @@ public class EmailSendService extends JavaMailSenderImpl {
     private void configMessage(MethodNode current, MimeMessage mimeMessage) throws MessagingException {
         String[] receiversArray = receivers.split(",");
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-        messageHelper.setSubject("KoTime耗时预警-" + dataPrefix + "-" + current.getId());
+        messageHelper.setSubject("KoTime耗时预警-" + dataPrefix + "-" + current.getName());
         messageHelper.setFrom(user);
         messageHelper.setTo(receiversArray);
         messageHelper.setSentDate(new Date());

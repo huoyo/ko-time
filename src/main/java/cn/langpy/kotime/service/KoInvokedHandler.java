@@ -18,6 +18,9 @@ public final class KoInvokedHandler implements InvokedHandler {
 
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
+        if (current!=null && current.getValue()==0.0) {
+            return;
+        }
         GraphService graphService = GraphService.getInstance();
         graphService.addMethodNode(filter(parent));
         graphService.addMethodNode(filter(current));
@@ -29,6 +32,7 @@ public final class KoInvokedHandler implements InvokedHandler {
             Common.showLog(current);
         }
     }
+
 
     @Override
     public void onException(MethodNode current, MethodNode parent, ExceptionNode exception, Parameter[] names, Object[] values) {

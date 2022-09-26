@@ -81,7 +81,7 @@ public class EmailSendService extends JavaMailSenderImpl {
 
     private String createNoticeTemplate(MethodNode current) {
         return "<h4>您有一个方法耗时有" + threshold + "次超过了阈值（" + Context.getConfig().getThreshold() + "），详情如下：</h4>\n" +
-                "<div style=\"background-color: #fafdfd;border-radius: 5px;width: 500px;padding: 10px;box-shadow: #75f1bf 2px 2px 2px 2px\">\n" +
+                "<div style=\"background-color: #fafdfd;border-radius: 5px;width: 600px;padding: 10px;box-shadow: #75f1bf 2px 2px 2px 2px\">\n" +
                 "    <div>项目：" + dataPrefix + "</div>\n" +
                 "    <div>类名：" + current.getClassName() + "</div>\n" +
                 "    <div>方法：" + current.getMethodName() + "</div>\n" +

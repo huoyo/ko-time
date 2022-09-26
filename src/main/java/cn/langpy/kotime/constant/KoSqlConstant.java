@@ -20,7 +20,7 @@ public class KoSqlConstant {
     public final static String addExceptionRe = "INSERT INTO ko_exception_relation(id, source_id, target_id, location,message) VALUES (?, ?, ?, ?, ?)";
     public final static String queryExceptionRe = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE id=?";
     public final static String queryExceptionReExist = "SELECT id FROM ko_exception_relation WHERE id=?";
-    public final static String queryExceptionReByTarget = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE target_id=?";
+    public final static String queryExceptionReBySource = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE source_id=?";
     public final static String queryExceptionReByTargetAndMessage = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE target_id=? and message=?";
     public final static String addParamsAna = "INSERT INTO ko_param_ana (source_id, params, avg_run_time, max_run_time, min_run_time) VALUES (?, ?, ?, ?, ?)";
     public final static String queryParamsAna = "SELECT source_id, params, avg_run_time, max_run_time, min_run_time FROM ko_param_ana WHERE source_id=? and params=?";

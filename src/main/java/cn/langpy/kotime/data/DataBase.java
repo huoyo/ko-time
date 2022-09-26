@@ -165,10 +165,11 @@ public class DataBase implements GraphService {
 
     @Override
     public ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
-        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionReExist, sourceMethodNode.getId() + exceptionNode.getId());
+        String id = sourceMethodNode.getId()+exceptionNode.getId()+exceptionNode.getMessage()+exceptionNode.getValue();
+        boolean existsById = DataBaseUtil.existsById(getWriteConnection(), KoSqlConstant.queryExceptionReExist, id);
         if (!existsById) {
             Object[] params = new Object[]{
-                    sourceMethodNode.getId() + exceptionNode.getId(),
+                    id,
                     sourceMethodNode.getId(),
                     exceptionNode.getId(),
                     exceptionNode.getValue(),
@@ -396,7 +397,7 @@ public class DataBase implements GraphService {
     @Override
     public List<ExceptionInfo> getExceptions(String methodId) {
         List<ExceptionInfo> exceptionInfos = new ArrayList<>();
-        List<ExceptionRelation> relations = DataBaseUtil.query(KoSqlConstant.queryExceptionReByTarget, new Object[]{methodId}, ExceptionRelation.class);
+        List<ExceptionRelation> relations = DataBaseUtil.query(KoSqlConstant.queryExceptionReBySource, new Object[]{methodId}, ExceptionRelation.class);
         for (ExceptionRelation relation : relations) {
             String exceptionId = relation.getTargetId();
             List<ExceptionNode> exceptionNodes = DataBaseUtil.query(KoSqlConstant.queryException, new Object[]{exceptionId}, ExceptionNode.class);

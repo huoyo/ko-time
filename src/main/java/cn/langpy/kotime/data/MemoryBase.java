@@ -134,8 +134,10 @@ public class MemoryBase implements GraphService {
 
     @Override
     public ExceptionRelation addExceptionRelation(MethodNode sourceMethodNode, ExceptionNode exceptionNode) {
+        String id = sourceMethodNode.getId()+exceptionNode.getId()+exceptionNode.getMessage()+exceptionNode.getValue();
+
         ExceptionRelation exceptionRelation = new ExceptionRelation();
-        exceptionRelation.setId(sourceMethodNode.getId() + exceptionNode.getId());
+        exceptionRelation.setId(id);
         exceptionRelation.setSourceId(sourceMethodNode.getId());
         exceptionRelation.setTargetId(exceptionNode.getId());
         exceptionRelation.setLocation(exceptionNode.getValue());

@@ -165,6 +165,7 @@ public class DataBaseUtil {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            connection = null;
         } finally {
             if (statement != null) {
                 try {

@@ -1,5 +1,11 @@
 package cn.langpy.kotime.util;
 
+import cn.langpy.kotime.handler.InvokedHandler;
+import cn.langpy.kotime.model.ExceptionNode;
+import cn.langpy.kotime.model.InvokedInfo;
+import cn.langpy.kotime.model.MethodNode;
+import cn.langpy.kotime.service.InvokedQueue;
+import cn.langpy.kotime.service.MethodNodeService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -66,12 +72,45 @@ public class KoUtil {
 
 
     /**
-     * record the exception to ko-time
+     * throw the exception to ko-time
      * this method will throw an exception named RecordException,and RunTimeHandler will receive it so that it can be record by ko-time
      */
     public static void throwException(Exception e) {
         RecordException recordException = new RecordException(e);
         throw recordException;
+    }
+
+    /**
+     * record the exception to ko-time
+     * this method will throw an exception named RecordException,and RunTimeHandler will receive it so that it can be record by ko-time
+     */
+    public static void recordException(Exception e) {
+        ExceptionNode exception = new ExceptionNode();
+        exception.setName(e.getClass().getSimpleName());
+        exception.setClassName(e.getClass().getName());
+        exception.setMessage(e.getMessage()+"");
+        exception.setId(exception.getClassName() +"."+ exception.getName());
+        MethodNode current =  getCurrentMethodInfo();
+        for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+            if (stackTraceElement.getClassName().equals(current.getClassName())) {
+                exception.setValue(stackTraceElement.getLineNumber());
+                InvokedInfo invokedInfo = new InvokedInfo();
+                invokedInfo.setCurrent(current);
+                invokedInfo.setException(exception);
+                InvokedQueue.add(invokedInfo);
+                InvokedQueue.wake();
+                break;
+            }
+        }
+    }
+
+    /**
+     * get the current method
+     * @return
+     */
+    public static MethodNode getCurrentMethodInfo() {
+        MethodNode methodNode = MethodNodeService.getParentMethodNode();
+        return methodNode;
     }
 
 

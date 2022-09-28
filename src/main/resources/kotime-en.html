@@ -16,7 +16,6 @@
         var globalNeedLogin = globalNeedLoginValue;
         var globalToken = sessionStorage.getItem("kotimeToken")
         $(document).ready(function () {
-            document.querySelector("#classForm").action='contextPath/koTime/updateClass?token='+globalToken
             let globalIsLogin = false;
             $.ajaxSettings.async = false;
             $.get('contextPath/koTime/isLogin?token='+globalToken, function (data) {
@@ -352,7 +351,7 @@
             formData.append('className', className );
 
             $.ajax({
-                url: document.querySelector("#classForm").action,
+                url: 'contextPath/koTime/updateClass?token='+globalToken,
                 type: 'POST',
                 cache: false,
                 data: formData,
@@ -371,6 +370,7 @@
                 error: function (XmlHttpRequest, textStatus, errorThrown) {
                     UIkit.notification.closeAll();
                     UIkit.notification("<font color='red'>Fail</font>",{});
+                    location.reload();
                 },
                 complete: function () {}
             })
@@ -451,7 +451,7 @@
     </li>
     <li style="margin-left: 35%;margin-right: 35%;">
         <div class="uk-card uk-card-default uk-card-body">
-            <form id="classForm" method="post" enctype="multipart/form-data" action="">
+            <div id="classForm" >
                 <div uk-form-custom="target: true"  class="uk-form-controls">
                     <input id="classFile" name="classFile"  type="file" >
                     <input id="form-file" style="width: 500px;border-radius: 5px"  class="uk-input" type="text" placeholder="class file needed to update：compiled class file" >
@@ -462,7 +462,7 @@
                 <br>
                 <br>
                 <button type="button"  onclick="updateClass();" style="width: 500px;background-color: #19985d;border-radius: 5px"  class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">OK</button>
-            </form>
+            </div>
         </div>
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">

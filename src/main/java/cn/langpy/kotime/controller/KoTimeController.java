@@ -271,7 +271,7 @@ public class KoTimeController {
             jar = ClassUtil.createJar();
             agentPath = jar.getAbsolutePath();
         }
-        ClassUtil.updateClass(agentPath,className,file.getAbsolutePath());
+        ClassUtil.updateClass(agentPath,className.trim(),file.getAbsolutePath());
         file.delete();
         if (jar!=null) {
             jar.delete();
@@ -284,7 +284,7 @@ public class KoTimeController {
     public static File uploadFile(byte[] file,String fileName) throws IOException {
         FileOutputStream out = null;
         try {
-            File targetFile = File.createTempFile(fileName,  ".class");
+            File targetFile = File.createTempFile(fileName,  ".class", new File(System.getProperty("java.io.tmpdir")));
             out = new FileOutputStream(targetFile.getAbsolutePath());
             out.write(file);
             out.flush();

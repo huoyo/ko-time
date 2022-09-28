@@ -24,7 +24,7 @@ public class ClassUtil {
         } catch (IOException e) {
             e.printStackTrace();
             log.severe("Fail to update class:" + className);
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -34,19 +34,23 @@ public class ClassUtil {
         try {
             jarFile = File.createTempFile("classTrans-", ".jar", new File(System.getProperty("java.io.tmpdir")));
             JarOutputStream out = new JarOutputStream(new FileOutputStream(jarFile));
-            ClassPathResource redefineClassPath = new ClassPathResource("retrans/RedefineClass.class");
-            ClassPathResource classTransformerPath = new ClassPathResource("retrans/ClassTransformer.class");
-            ClassPathResource pomPath = new ClassPathResource("retrans/META-INF/maven/cn.langpy/ko-time-retrans/pom.xml");
-            ClassPathResource propertyPath = new ClassPathResource("retrans/META-INF/maven/cn.langpy/ko-time-retrans/pom.properties");
-            ClassPathResource manifestPath = new ClassPathResource("retrans/MANIFEST.MF");
-            ClassPathResource manifestInPath = new ClassPathResource("retrans/META-INF/MANIFEST.MF");
-            addClassFile(out, "cn/langpy/kotime/RedefineClass.class", redefineClassPath.getInputStream());
-            addClassFile(out, "cn/langpy/kotime/ClassTransformer.class", classTransformerPath.getInputStream());
-            addClassFile(out, "META-INF/maven/cn.langpy/ko-time-retrans/pom.xml", pomPath.getInputStream());
-            addClassFile(out, "META-INF/maven/cn.langpy/ko-time-retrans/pom.properties", propertyPath.getInputStream());
-            addClassFile(out, "MANIFEST.MF", manifestPath.getInputStream());
-            addClassFile(out, "META-INF/MANIFEST.MF", manifestInPath.getInputStream());
-            out.closeEntry();
+            String[] jarNames = new String[]{
+                    "cn/langpy/kotime/RedefineClass.class",
+                    "cn/langpy/kotime/ClassTransformer.class",
+                    "META-INF/maven/cn.langpy/ko-time-retrans/pom.xml",
+                    "META-INF/maven/cn.langpy/ko-time-retrans/pom.properties",
+                    "MANIFEST.MF",
+                    "META-INF/MANIFEST.MF",
+            };
+            String[] jarFilePaths = new String[]{
+                    "retrans/RedefineClass.class",
+                    "retrans/ClassTransformer.class",
+                    "retrans/META-INF/maven/cn.langpy/ko-time-retrans/pom.xml",
+                    "retrans/META-INF/maven/cn.langpy/ko-time-retrans/pom.properties",
+                    "retrans/MANIFEST.MF",
+                    "retrans/META-INF/MANIFEST.MF"
+            };
+            buildElement(out, jarNames, jarFilePaths);
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,8 +58,15 @@ public class ClassUtil {
         return jarFile;
     }
 
+    private static void buildElement(JarOutputStream out, String[] fileNames, String[] filePaths) throws IOException {
+        for (int i = 0; i < fileNames.length; i++) {
+            ClassPathResource classPathResource = new ClassPathResource(filePaths[i]);
+            addJarFile(out, fileNames[i], classPathResource.getInputStream());
+        }
+    }
 
-    public static void addClassFile(JarOutputStream out, String packagePath, InputStream in) {
+
+    private static void addJarFile(JarOutputStream out, String packagePath, InputStream in) {
         try {
             out.putNextEntry(new JarEntry(packagePath));
             byte[] buffer = new byte[1024];

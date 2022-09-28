@@ -4,7 +4,7 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.2.5-green.svg'>
+    <img src='https://shields.io/badge/version-2.2.8-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
@@ -12,6 +12,7 @@
             <li>Tracking the Java methods and calculating their execution times</li>
             <li>Show the paths of methods</li>
             <li>Find exceptions occured in methods</li>
+            <li>Hot update</li>
         </ul>
 </div>
 
@@ -96,6 +97,9 @@ You can open email to receive a warning about overtime method since v2.2.5
 > V2.2.5：Add `ko-time.discard-rate` to allow project discard some data;
     Fix a bug for DataBase;
     Add email;
+
+> V2.2.8：Hot update
+
 ## Copyright
 
 > 1.This project belongs to Chang Zhang,and Its open source protocol is Apache-2.0；

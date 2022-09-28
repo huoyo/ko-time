@@ -245,6 +245,7 @@ public class KoTimeController {
     }
     @PostMapping("/updateClass")
     @ResponseBody
+    @Auth
     public Map updateClass(@RequestParam("classFile") MultipartFile classFile,String className) throws ClassNotFoundException {
         Map map = new HashMap();
         if (classFile==null || classFile.isEmpty()) {

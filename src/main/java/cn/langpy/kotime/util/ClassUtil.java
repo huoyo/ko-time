@@ -8,6 +8,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.logging.Logger;
 
+/**
+ * zhangchang
+ */
 public class ClassUtil {
 
     private static Logger log = Logger.getLogger(ClassUtil.class.toString());

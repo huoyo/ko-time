@@ -7,7 +7,7 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.5</version>
+    <version>2.2.6</version>
   </dependency>
 ```
 
@@ -17,8 +17,8 @@
 
 * 必填配置
 
-> 
-> ko-time.pointcut=`execution(public * com.huoyo..*.*(..))` # 需要监测的切面范围，参考aop的@pointcut 或者左侧`常见问题`
+>
+> ko-time.pointcut=`execution(public * com.huoyo..*.*(..))` # 需要监测的范围，是链路包含的范围，不仅仅是接口层，参考aop的@pointcut 或者左侧`常见问题`
 >
 
 
@@ -45,8 +45,16 @@ ko-time.discard-rate=0.3 # 丢弃率（0-1） 同一个方法在多次连续调�
 > 注意：    
 > 1.引入了上面的依赖和配置以后，确认项目中是否有aop相关的包，koTime使用了@Aspect注解，未引入的自行引入，如aspectj或者spring-boot-starter-aop        
 > 2.做完前面的步骤，koTime的集成已经完毕，无需进行其他配置   
-> 3.如果后台有权限认证，需要放开`/koTime`和`/koTime/**`
-                                   
+> 3.如果后台有权限认证，需要放开`/koTime`和`/koTime/**`  
+> 4.v2.2.5集成了邮件功能，如果项目报错javamail相关的类NotFoundException时，需要引入：
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+
 
 
 * 启动项目访问 `/koTime` 路径即可

@@ -82,7 +82,6 @@ public class KoUtil {
 
     /**
      * record the exception to ko-time
-     * this method will throw an exception named RecordException,and RunTimeHandler will receive it so that it can be record by ko-time
      */
     public static void recordException(Exception e) {
         ExceptionNode exception = new ExceptionNode();

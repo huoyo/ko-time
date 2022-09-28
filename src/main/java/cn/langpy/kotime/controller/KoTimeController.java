@@ -5,6 +5,7 @@ import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.constant.KoConstant;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.GraphService;
+import cn.langpy.kotime.util.ClassUtil;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.InvalidAuthInfoException;
 import cn.langpy.kotime.util.KoUtil;
@@ -13,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +35,9 @@ public class KoTimeController {
     private String userName;
     @Value("${ko-time.password:}")
     private String password;
+
+    @Value("${ko-time.agent-path:}")
+    private String agentPath;
 
     private static Logger log = Logger.getLogger(KoTimeController.class.toString());
     private final String uiKitCssText = getResourceText("kostatic/uikit.min.css");
@@ -237,5 +242,61 @@ public class KoTimeController {
             koTimeConfig.setLanguage(config.getLanguage());
         }
         return true;
+    }
+    @PostMapping("/updateClass")
+    @ResponseBody
+    public Map updateClass(@RequestParam("classFile") MultipartFile classFile,String className) throws ClassNotFoundException {
+        Map map = new HashMap();
+        if (classFile==null || classFile.isEmpty()) {
+            map.put("state", 0);
+            map.put("message", "文件不能为空");
+            return map;
+        }
+        File file = null;
+        try {
+            String originalFilename = classFile.getOriginalFilename();
+            if (!originalFilename.endsWith(".class")) {
+                map.put("state", 0);
+                map.put("message", "仅支持.class文件");
+                return map;
+            }
+            String[] filename = originalFilename.split("\\.");
+            file = uploadFile(classFile.getBytes(),filename[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File jar = null;
+        if (StringUtils.hasText(agentPath)) {
+            jar = ClassUtil.createJar();
+            agentPath = jar.getAbsolutePath();
+        }
+        ClassUtil.updateClass(agentPath,className,file.getAbsolutePath());
+        file.delete();
+        if (jar!=null) {
+            jar.delete();
+        }
+        map.put("state", 1);
+        map.put("message", "更新成功");
+        return map;
+    }
+
+    public static File uploadFile(byte[] file,String fileName) throws IOException {
+        FileOutputStream out = null;
+        try {
+            File targetFile = File.createTempFile(fileName,  ".class");
+            out = new FileOutputStream(targetFile.getAbsolutePath());
+            out.write(file);
+            out.flush();
+            out.close();
+            return targetFile;
+        } catch (Exception e) {
+            log.severe("" + e);
+        }finally {
+            if(out !=null){
+                out.flush();
+                out.close();
+            }
+        }
+        return null;
     }
 }

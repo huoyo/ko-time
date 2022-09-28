@@ -6,6 +6,7 @@ import cn.langpy.kotime.service.GraphService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.sql.DataSource;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,14 @@ public class Context {
         config.setEnable(true);
         config.setLogLanguage("chinese");
         invokedHandlers = new ArrayList<>();
+    }
+
+
+
+
+    public static String getPid() {
+        String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+        return jvmName.split("@")[0];
     }
 
     public static StringRedisTemplate getStringRedisTemplate() {

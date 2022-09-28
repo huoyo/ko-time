@@ -246,13 +246,19 @@ public class KoTimeController {
     @PostMapping("/updateClass")
     @ResponseBody
     @Auth
-    public Map updateClass(@RequestParam("classFile") MultipartFile classFile,String className) throws ClassNotFoundException {
+    public Map updateClass(@RequestParam("classFile") MultipartFile classFile,String className) {
         Map map = new HashMap();
         if (classFile==null || classFile.isEmpty()) {
             map.put("state", 0);
             map.put("message", "文件不能为空");
             return map;
         }
+        if (!StringUtils.hasText(className)) {
+            map.put("state", 0);
+            map.put("message", "文类名不能为空");
+            return map;
+        }
+        className = className.trim();
         File file = null;
         try {
             String originalFilename = classFile.getOriginalFilename();
@@ -262,33 +268,43 @@ public class KoTimeController {
                 return map;
             }
             String[] filename = originalFilename.split("\\.");
+            String substring = className.substring(className.lastIndexOf(".") + 1);
+            if (!substring.equals(filename[0])) {
+                map.put("state", 0);
+                map.put("message", "请确认类名是否正确");
+                return map;
+            }
             file = uploadFile(classFile.getBytes(),filename[0]);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.severe("Error class file!");
+            map.put("state", 0);
+            map.put("message", "无法解析文件");
+            return map;
         }
         File jar = null;
-        if (StringUtils.hasText(agentPath)) {
+        if (!StringUtils.hasText(agentPath)) {
             jar = ClassUtil.createJar();
             agentPath = jar.getAbsolutePath();
         }
-        ClassUtil.updateClass(agentPath,className.trim(),file.getAbsolutePath());
-        file.delete();
+        ClassUtil.updateClass(agentPath,className,file.getAbsolutePath());
+        file.deleteOnExit();
         if (jar!=null) {
-            jar.delete();
+            jar.deleteOnExit();
         }
         map.put("state", 1);
         map.put("message", "更新成功");
         return map;
     }
 
-    public static File uploadFile(byte[] file,String fileName) throws IOException {
+
+
+    private static File uploadFile(byte[] file,String fileName) throws IOException {
         FileOutputStream out = null;
         try {
             File targetFile = File.createTempFile(fileName,  ".class", new File(System.getProperty("java.io.tmpdir")));
             out = new FileOutputStream(targetFile.getAbsolutePath());
             out.write(file);
             out.flush();
-            out.close();
             return targetFile;
         } catch (Exception e) {
             log.severe("" + e);

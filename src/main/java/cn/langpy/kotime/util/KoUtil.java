@@ -1,6 +1,5 @@
 package cn.langpy.kotime.util;
 
-import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.model.ExceptionNode;
 import cn.langpy.kotime.model.InvokedInfo;
 import cn.langpy.kotime.model.MethodNode;

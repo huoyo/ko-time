@@ -4,8 +4,8 @@ import cn.langpy.kotime.annotation.Auth;
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.constant.KoConstant;
 import cn.langpy.kotime.model.*;
+import cn.langpy.kotime.service.ClassService;
 import cn.langpy.kotime.service.GraphService;
-import cn.langpy.kotime.util.ClassUtil;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.InvalidAuthInfoException;
 import cn.langpy.kotime.util.KoUtil;
@@ -35,9 +35,6 @@ public class KoTimeController {
     private String userName;
     @Value("${ko-time.password:}")
     private String password;
-
-    @Value("${ko-time.agent-path:}")
-    private String agentPath;
 
     private static Logger log = Logger.getLogger(KoTimeController.class.toString());
     private final String uiKitCssText = getResourceText("kostatic/uikit.min.css");
@@ -281,16 +278,10 @@ public class KoTimeController {
             map.put("message", "无法解析文件");
             return map;
         }
-        File jar = null;
-        if (!StringUtils.hasText(agentPath)) {
-            jar = ClassUtil.createJar();
-            agentPath = jar.getAbsolutePath();
-        }
-        ClassUtil.updateClass(agentPath,className,file.getAbsolutePath());
+        final ClassService classService = ClassService.getInstance();
+        classService.updateClass(className,file.getAbsolutePath());
         file.deleteOnExit();
-        if (jar!=null) {
-            jar.deleteOnExit();
-        }
+
         map.put("state", 1);
         map.put("message", "更新成功");
         return map;

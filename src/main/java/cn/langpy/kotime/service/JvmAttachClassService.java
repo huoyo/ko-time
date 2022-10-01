@@ -1,24 +1,34 @@
-package cn.langpy.kotime.util;
+package cn.langpy.kotime.service;
 
+import cn.langpy.kotime.util.Context;
 import net.bytebuddy.agent.VirtualMachine;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.logging.Logger;
 
-/**
- * zhangchang
- */
-public class ClassUtil {
+public class JvmAttachClassService implements ClassService{
+    private static Logger log = Logger.getLogger(JvmAttachClassService.class.toString());
 
-    private static Logger log = Logger.getLogger(ClassUtil.class.toString());
+    private File agentJar;
 
-    public static void updateClass(String jarPath, String className, String classPath) {
+    public JvmAttachClassService() {
+        this.agentJar = createAgentJar();
+    }
+
+    @Override
+    public void updateClass(String className, String classPath) {
         try {
+            if (agentJar==null || !agentJar.exists()) {
+                agentJar = createAgentJar();
+            }
             VirtualMachine virtualMachine = VirtualMachine.ForHotSpot.attach(Context.getPid());
-            virtualMachine.loadAgent(jarPath, className + "-" + classPath);
+            virtualMachine.loadAgent(agentJar.getAbsolutePath(), className + "-" + classPath);
             Thread.sleep(500);
             virtualMachine.detach();
         } catch (IOException e) {
@@ -29,7 +39,7 @@ public class ClassUtil {
         }
     }
 
-    public static File createJar() {
+    public File createAgentJar() {
         File jarFile = null;
         try {
             jarFile = File.createTempFile("classTrans-", ".jar", new File(System.getProperty("java.io.tmpdir")));
@@ -55,10 +65,11 @@ public class ClassUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        jarFile.deleteOnExit();
         return jarFile;
     }
 
-    private static void buildElement(JarOutputStream out, String[] fileNames, String[] filePaths) throws IOException {
+    private void buildElement(JarOutputStream out, String[] fileNames, String[] filePaths) throws IOException {
         for (int i = 0; i < fileNames.length; i++) {
             ClassPathResource classPathResource = new ClassPathResource(filePaths[i]);
             addJarFile(out, fileNames[i], classPathResource.getInputStream());
@@ -66,7 +77,7 @@ public class ClassUtil {
     }
 
 
-    private static void addJarFile(JarOutputStream out, String packagePath, InputStream in) {
+    private void addJarFile(JarOutputStream out, String packagePath, InputStream in) {
         try {
             out.putNextEntry(new JarEntry(packagePath));
             byte[] buffer = new byte[1024];
@@ -81,5 +92,4 @@ public class ClassUtil {
             e.printStackTrace();
         }
     }
-
 }

@@ -19,7 +19,7 @@ class ClassServiceFactory {
 
     public static ClassService getInstance() {
         if (instance == null) {
-            synchronized (ClassService.class) {
+            synchronized (ClassServiceFactory.class) {
                 if (instance == null) {
                     instance = new JvmAttachClassService();
                 }

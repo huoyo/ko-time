@@ -4,16 +4,19 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.2.8-green.svg'>
+    <img src='https://shields.io/badge/version-2.2.9-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
-        <ul>
-            <li>Tracking the Java methods and calculating their execution times</li>
-            <li>Show the paths of methods</li>
-            <li>Find exceptions occured in methods</li>
-            <li>Hot update</li>
-        </ul>
+    <ul>
+        <li>Tracking the Java methods and calculating their execution times</li>
+        <li>Show the paths of methods</li>
+        <li>Find exceptions occured in methods</li>
+        <li>Email you after finding an overtime method</li>
+        <li>Hot update online:you needn't restart it</li>
+        <li>Easy to use:you needn't additional learning costs</li>
+        <li>Enough to add a pom dependency:you needn't additional deployment costs</li>
+    </ul>
 </div>
 
 

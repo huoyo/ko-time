@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.2.8-green.svg'>
+    <img src='https://shields.io/badge/version-2.2.9-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
@@ -12,7 +12,10 @@
         <li>实时监听方法，统计运行时长</li>
         <li>web展示方法调用链路，瓶颈可视化追踪</li>
         <li>追踪系统异常，精确定位到方法</li>
+        <li>接口超时邮件通知，无需实时查看</li>
         <li>热更新：无需重启更新代码</li>
+        <li>使用简单，无需技术学习成本</li>
+        <li>pom依赖即可，无多余部署成本</li>
     </ul>
 
 ---
@@ -22,9 +25,13 @@
     <li>Tracking the Java methods and calculating their execution times</li>
     <li>Show the paths of methods</li>
     <li>Find exceptions occured in methods</li>
-    <li>Hot update</li>
+    <li>Email you after finding an overtime method</li>
+    <li>Hot update online:you needn't restart it</li>
+    <li>Easy to use:you needn't additional learning costs</li>
+    <li>Enough to add a pom dependency:you needn't additional deployment costs</li>
 </ul>
 </div>
+
 
 ![222](docs/kotime.gif)
 

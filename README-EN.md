@@ -105,11 +105,9 @@ You can open email to receive a warning about overtime method since v2.2.5
 
 ## Copyright
 
-> 1.This project belongs to Chang Zhang,and Its open source protocol is Apache-2.0；
+> 1.This project belongs to Chang Zhang,and Its open source protocol is LGPL-2.1；
 >
-> 2.You can use it freely  but please respect copyright;
->
-> 3.Please specify the differences if you update codes；
+> 2.You can use it freely by linking it but you can not do secondary development based on this before auhtor's authorization.;
 >
 
 

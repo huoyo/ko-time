@@ -2,6 +2,10 @@
 <head>
     <meta charset="UTF-8">
     <title>KoTime</title>
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/css/uikit.min.css"/>-->
+    <!-- UIkit JS -->
+<!--    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/js/uikit.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/js/uikit-icons.min.js"></script>-->
     <style>
         UIKitCss
     </style>
@@ -79,40 +83,43 @@
             $.get('contextPath/koTime/getStatistic?token='+globalToken, function (data) {
                 let totalNum = data['totalNum'];
                 let systemTotalNum = document.getElementById("systemTotalNum");
-                systemTotalNum.innerHTML=systemTotalNum.innerHTML+"<br>"+totalNum;
+                systemTotalNum.innerHTML=totalNum;
 
                 let normalNum = data['normalNum'];
                 let systemNormalNum = document.getElementById("systemNormalNum");
-                systemNormalNum.innerHTML=systemNormalNum.innerHTML+"<br>"+normalNum;
+                systemNormalNum.innerHTML=normalNum;
 
                 let delayNum = data['delayNum'];
                 let systemDelayNum = document.getElementById("systemDelayNum");
-                systemDelayNum.innerHTML=systemDelayNum.innerHTML+"<br>"+delayNum;
-                if (delayNum>0) {
-                    systemDelayNum.className+=' uk-label-danger';
-                };
+                systemDelayNum.innerHTML=delayNum;
 
                 let avgRunTime = data['avgRunTime'];
                 let systemAvgRunTime = document.getElementById("systemAvgRunTime");
-                systemAvgRunTime.innerHTML=systemAvgRunTime.innerHTML+"<br>"+avgRunTime;
+                systemAvgRunTime.innerHTML=avgRunTime;
                 if (avgRunTime>globalThreshold) {
-                    systemAvgRunTime.className+=' uk-label-danger';
+                    document.getElementById("systemAvgRunTime").style.color='#cc0c0c';
+                }else {
+                    document.getElementById("systemAvgRunTime").style.color='#29da93';
                 };
 
                 let maxRunTime = data['maxRunTime'];
                 let systemMaxRunTime = document.getElementById("systemMaxRunTime");
-                systemMaxRunTime.innerHTML=systemMaxRunTime.innerHTML+"<br>"+maxRunTime;
+                systemMaxRunTime.innerHTML=maxRunTime;
                 if (maxRunTime>globalThreshold) {
-                    systemMaxRunTime.className+=' uk-label-danger';
+                    document.getElementById("systemMaxRunTime").style.color='#cc0c0c';
+                }else {
+                    document.getElementById("systemMaxRunTime").style.color='#29da93';
                 };
+
 
                 let minRunTime = data['minRunTime'];
                 let systemMinRunTime = document.getElementById("systemMinRunTime");
-                systemMinRunTime.innerHTML=systemMinRunTime.innerHTML+"<br>"+minRunTime;
+                systemMinRunTime.innerHTML=minRunTime;
                 if (minRunTime>globalThreshold) {
-                    systemMinRunTime.className+=' uk-label-danger';
+                    document.getElementById("systemMinRunTime").style.color='#cc0c0c';
+                }else {
+                    document.getElementById("systemMinRunTime").style.color='#29da93';
                 };
-
             });
             $.ajaxSettings.async = false;
             let searchText = $("#searchText").val();
@@ -129,9 +136,9 @@
                     let apiId = className+"."+methodName;
                     let  color = avgRunTime>globalThreshold?'danger':'success';
                     if (methodType=='Controller' && routeName!=null && routeName!='') {
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                     }else{
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                     }
                 };
                 element.innerHTML = html;
@@ -323,9 +330,9 @@
                         let  color = avgRunTime>globalThreshold?'danger':'success';
 
                         if (methodType=='Controller' && routeName!=null && routeName!='') {
-                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
+                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                         }else{
-                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
+                            html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
                         }
                     };
                     element.innerHTML = html;
@@ -377,60 +384,84 @@
         }
     </script>
 </head>
-<body>
+<!--endreplace-->
+<body  style="background-color: #f2f3f2" >
 
-
-<nav class="uk-navbar-container" style="background-color: white" uk-navbar>
+<nav class="uk-navbar-container" style="background-color: #404b67;height: 85px" uk-navbar>
     <div class="uk-navbar-center">
         <div class="uk-grid-small" uk-grid>
-            <div style="margin-top: 20px;font-size: 20px;" class="uk-width-expand" >KoTime</div>
+            <div style="margin-top: 20px;font-size: 24px;color: white" class="uk-width-expand" >KoTime</div>
         </div>
     </div>
 </nav>
 
-<ul class="uk-flex-center" uk-tab>
-    <li id="zl" class="uk-active"><a href="#" >Summary</a></li>
-    <li id="jklb"><a href="#" >Interfaces</a></li>
-    <li><a href="#" >Exceptions</a></li>
-    <li><a href="#" >Hot update</a></li>
-    <li><a href="#" >Configurations</a></li>
-    <li><a href="#" >Contact me</a></li>
+<ul class="uk-flex-center" uk-tab style="background-color: #404b67;margin-top: 0px;">
+    <li id="zl" class="uk-active"><a href="#"  style="color: #edeef1;font-size: 14px;text-transform: capitalize">Summary</a></li>
+    <li id="jklb"><a href="#"  style="color: #edeef1;font-size: 14px;text-transform: capitalize">Interfaces</a></li>
+    <li><a href="#"  style="color: #edeef1;font-size: 14px;text-transform: capitalize">Exceptions</a></li>
+    <li><a href="#"  style="color: #edeef1;font-size: 14px;text-transform: capitalize">Hot update</a></li>
+    <li><a href="#"  style="color: #edeef1;font-size: 14px;text-transform: capitalize">Configurations</a></li>
+    <li><a href="#"  style="color: #edeef1;font-size: 14px;text-transform: capitalize">Contact me</a></li>
 </ul>
 
 <ul class="uk-switcher uk-margin">
     <li style="margin-left: 30%;margin-right: 30%;">
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#" >Number of Interface</a></li>
+            <li class="uk-active"><a href="#" style="text-transform: capitalize" >Number of Interface</a></li>
         </ul>
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
-                <div id="systemTotalNum" style="border-radius: 10px;" class="uk-card uk-card-default uk-card-body uk-label-success"><span style="font-size: 10px;">all</span></div>
+                <div id="systemTotalNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
+                     className="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 10px;color: #3b3f4f">All</span><br>
+                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemTotalNum">0</span>
+                </div>
             </div>
             <div>
-                <div id="systemDelayNum" style="border-radius: 10px;" class="uk-card uk-card-default uk-card-body uk-label-success"><span style="font-size: 10px;">delayed</span></div>
+                <div id="systemDelayNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
+                     className="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 10px;color: #3b3f4f">Delayed</span>
+                    <br>
+                    <span style="font-size: 30px;color: #cc0c0c;font-weight: bold" id="systemDelayNum">0</span></div>
             </div>
             <div>
-                <div id="systemNormalNum" style="border-radius: 10px;" class="uk-card uk-card-default uk-card-body uk-label-success"><span style="font-size: 10px;">normal</span></div>
+                <div id="systemNormalNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
+                     className="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 10px;color: #3b3f4f">Normal</span>
+                    <br>
+                    <span style="font-size: 30px;color: #29da93;font-weight: bold" id="systemNormalNum">0</span></div>
             </div>
         </div>
 
         <ul style="margin-top: 10px;" class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#" >Response Time</a></li>
+            <li class="uk-active"><a href="#"  style="text-transform: capitalize">Response Time</a></li>
         </ul>
         <div style="margin-top: 10px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
-                <div id="systemAvgRunTime" style="border-radius: 10px;" class="uk-card uk-card-default uk-card-body uk-label-success"><span style="font-size: 10px;">avg（ms）</span></div>
+                <div id="systemAvgRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
+                     className="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 10px;color: #3b3f4f">Avg（ms）</span>
+                    <br>
+                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemAvgRunTime">0</span></div>
             </div>
             <div>
-                <div id="systemMaxRunTime" style="border-radius: 10px;" class="uk-card uk-card-default uk-card-body uk-label-success"><span style="font-size: 10px;">max（ms）</span></div>
+                <div id="systemMaxRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
+                     className="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 10px;color: #3b3f4f">Max（ms）</span>
+                    <br>
+                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMaxRunTime">0</span></div>
             </div>
             <div>
-                <div id="systemMinRunTime" style="border-radius: 10px;" class="uk-card uk-card-default uk-card-body uk-label-success"><span style="font-size: 10px;">min（ms）</span></div>
+                <div id="systemMinRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
+                     className="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 10px;color: #3b3f4f">Min（ms）</span>
+                    <br>
+                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMinRunTime">0</span></div>
             </div>
         </div>
         <div class="uk-alert-success" uk-alert>
             <a class="uk-alert-close" uk-close></a>
-            <p id="apiTip">Please refresh this page after updating configurations</p>
+            <p id="apiTip">Please call apis before visiting this page!</p>
         </div>
     </li>
     <li style="margin-left: 20%;margin-right: 20%;">

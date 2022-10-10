@@ -31,6 +31,16 @@ public class DefaultConfig {
     private String userName;
     private String password;
 
+    private Long authExpire;
+
+    public Long getAuthExpire() {
+        return authExpire;
+    }
+
+    public void setAuthExpire(Long authExpire) {
+        this.authExpire = authExpire;
+    }
+
     public Double getDiscardRate() {
         return discardRate;
     }

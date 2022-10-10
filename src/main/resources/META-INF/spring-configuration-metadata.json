@@ -124,6 +124,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.auth-expire",
+      "type": "java.lang.Long",
+      "defaultValue":43200 ,
+      "description": "expire within 43200 s",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.user-name",
       "type": "java.lang.String",
       "defaultValue": "",

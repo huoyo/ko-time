@@ -22,7 +22,7 @@ public class KoUtil {
      * nothing to introduce for this, that everyone knows!
      */
     public static String login(String userName) {
-        String token = encode(userName + "KOTO" + (System.currentTimeMillis() + (12 * 60 * 60 * 1000)));
+        String token = encode(userName + "KOTO" + (System.currentTimeMillis() + (Context.getConfig().getAuthExpire() * 1000)));
         return token;
     }
 

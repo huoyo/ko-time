@@ -4,7 +4,7 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.0-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.1-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
@@ -102,6 +102,10 @@ You can open email to receive a warning about overtime method since v2.2.5
     Add email;
 
 > V2.2.8：Hot update
+> 
+> V2.3.0：Add `ko-time.auth-expire` to allow users define timeout value;optimize ui
+> 
+> V2.3.1：Remove StringStack to adapt jdk17+
 
 ## Copyright
 

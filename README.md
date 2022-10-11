@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.0-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.1-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
@@ -21,7 +21,7 @@
 
 ---
 
-<h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
+<h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
 <ul>
     <li>Tracking the Java methods and calculating their execution times</li>
     <li>Show the paths of methods</li>
@@ -120,6 +120,10 @@ v2.2.5开始加入了邮件通知功能，当方法耗时超过阈值之后，�
             添加邮件通知功能;
 
 > V2.2.8：热更新
+> 
+> V2.3.0：添加 `ko-time.auth-expire`，允许用户自定义登录超时时间;优化ui页面
+>
+> V2.3.1：移除 StringStack 以适配jdk17+
 
 ## 项目起因
 

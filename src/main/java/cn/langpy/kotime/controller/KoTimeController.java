@@ -252,7 +252,7 @@ public class KoTimeController {
         }
         if (!StringUtils.hasText(className)) {
             map.put("state", 0);
-            map.put("message", "文类名不能为空");
+            map.put("message", "类名不能为空");
             return map;
         }
         className = className.trim();

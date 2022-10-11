@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.2.9-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.0-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>

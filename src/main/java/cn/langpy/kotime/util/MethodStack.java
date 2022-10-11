@@ -1,6 +1,5 @@
 package cn.langpy.kotime.util;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringStack;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.util.Stack;
@@ -17,7 +16,7 @@ public class MethodStack {
         String methodName = pjp.getMethod().getName();
         Stack<String> queue = null;
         if (null==threadMethods.get()) {
-            queue = new StringStack();
+            queue = new Stack<String>();
         }else {
              queue = threadMethods.get();
         }

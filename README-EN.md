@@ -45,8 +45,7 @@
 
 Finding the methods that need optimize
 
-![输入图片说明](docs/v201/zl.png)
-
+![输入图片说明](docs/v220/syy.png)
 2. Interface methods can be seen as follows
 
 You can see every interface method that was called, and you need optimize them when they are red
@@ -57,7 +56,7 @@ You can see every interface method that was called, and you need optimize them w
 
 After clicking a inteface method,you can find paths of the method
 
-![输入图片说明](docs/v203/ff.png)
+![输入图片说明](docs/v204/ff.png)
 
 
 4.Email

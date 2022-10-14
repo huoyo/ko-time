@@ -45,7 +45,8 @@
 
 Finding the methods that need optimize
 
-![输入图片说明](docs/v220/syy.png)
+> ![输入图片说明](docs/v220/syy.png)
+
 2. Interface methods can be seen as follows
 
 You can see every interface method that was called, and you need optimize them when they are red

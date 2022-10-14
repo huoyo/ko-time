@@ -7,11 +7,11 @@
     <img src='https://shields.io/badge/version-2.3.1-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
-    <h4>A springboot tool for tracking the paths of methods,which can help you to find methods's performances easily.</h4>
+    <h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
     <ul>
         <li>Tracking the Java methods and calculating their execution times</li>
         <li>Show the paths of methods</li>
-        <li>Find exceptions occured in methods</li>
+        <li>Find exceptions occurred in methods</li>
         <li>Email you after finding an overtime method</li>
         <li>Hot update online:you needn't restart it</li>
         <li>Easy to use:you needn't additional learning costs</li>
@@ -20,11 +20,16 @@
 </div>
 
 
+![222](docs/kotime.gif)
+
+
 ## Locations
 
 [Gitee](https://gitee.com/huoyo/ko-time.git)
 
 [Github](https://github.com/huoyo/ko-time.git)
+
+[Support](https://www.patreon.com/chongyang)
 
 ## Documents
 

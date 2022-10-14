@@ -399,6 +399,9 @@ public class RedisBase implements GraphService {
     public MethodInfo getTree(String methodId) {
         MethodInfo rootInfo = new MethodInfo();
         MethodNode methodNode = query(methodPre + methodId, MethodNode.class);
+        if (null==methodNode) {
+            return rootInfo;
+        }
         rootInfo.setId(methodNode.getId());
         rootInfo.setName(methodNode.getName());
         rootInfo.setClassName(methodNode.getClassName());

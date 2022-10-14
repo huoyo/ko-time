@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.1-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.2-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
@@ -31,6 +31,8 @@
     <li>Enough to add a pom dependency:you needn't additional deployment costs</li>
 </ul>
 </div>
+
+> 无学习成本直接使用，让软件工程师的卓越思维和宝贵时间用于创造
 
 
 ![222](docs/kotime.gif)

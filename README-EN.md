@@ -4,7 +4,7 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.1-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.2-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
     <h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>

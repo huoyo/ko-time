@@ -420,7 +420,7 @@
     <li><a href="#" style="color: #edeef1;font-size: 14px">异常列表</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px">热更新</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px">配置</a></li>
-    <li><a href="#" style="color: #edeef1;font-size: 14px">技术支持</a><span style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset" class="uk-label" id="version-notice" onclick="window.location.href='http://kotimedoc.langpy.cn/docs/kaiyuan#/v220/introduce'"></span></li>
+    <li><a href="#" style="color: #edeef1;font-size: 14px">技术支持</a><span title="点击查看版本发布信息" style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset" class="uk-label" id="version-notice" onclick="window.location.href='http://kotimedoc.langpy.cn/docs/kaiyuan#/v220/introduce'"></span></li>
 </ul>
 
 <ul class="uk-switcher uk-margin">
@@ -581,27 +581,21 @@
 
 <div id="modal-login" class="uk-modal-full" uk-modal>
 
-    <div class="uk-modal-dialog">
+    <div class="uk-modal-dialog" style="background-color: rgb(242, 243, 242)">
         <div class="uk-grid-collapse uk-child-width-1-1@s uk-flex-middle" uk-grid>
             <div   uk-height-viewport>
-                <div class="uk-text-center" uk-grid>
-                    <div class="uk-width-1-4@m">
-                    </div>
-                    <div class="uk-width-2-4@m" style="margin-top: 100px;">
-                        <div class="uk-grid-small" uk-grid>
-                            <div style="font-size: 35px;" class="uk-width-expand" >KoTime调用链路追踪</div>
-                        </div>
-                    </div>
-                    <div class="uk-width-1-4@m">
-                    </div>
-                </div>
 
                 <div class="uk-text-center" uk-grid>
                     <div class="uk-width-1-3@m">
                     </div>
-                    <div class="uk-width-1-3@m" style="margin-top: 10px;">
-                        <form >
-
+                    <div class="uk-width-1-3@m" style="margin-top: 100px;">
+                        <form  class="uk-card uk-card-default uk-card-body" style="border-radius: 5px">
+                            <div class="uk-margin">
+                                <div class="uk-inline">
+                                    <div style="font-size: 35px;" class="uk-width-expand" >KoTime调用链路追踪</div>
+                                </div>
+                            </div>
+                            <br>
                             <div class="uk-margin">
                                 <div class="uk-inline">
                                     <span class="uk-form-icon" uk-icon="icon: user"></span>
@@ -616,10 +610,9 @@
                             </div>
                             <div class="uk-margin">
                                 <div class="uk-inline">
-                                    <a class="uk-button uk-button-default uk-label-success" onclick="login();"  >确定</a>
+                                    <a class="uk-button uk-button-default uk-label-success" style="border-radius: 5px" onclick="login();"  >确定</a>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                     <div class="uk-width-1-3@m">

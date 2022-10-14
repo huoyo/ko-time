@@ -65,6 +65,9 @@ public class RedisBase implements GraphService {
         String key = paramValueMetricMapPre + methodId;
         if (redisTemplate.hasKey(key)) {
             Map<String, JSONObject> paramMetricMap = query(key, Map.class);
+            if (paramMetricMap==null) {
+                return;
+            }
             if (paramMetricMap.containsKey(paramsKey)) {
                 if (Math.random()<Context.getConfig().getDiscardRate()) {
                     return;

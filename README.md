@@ -11,43 +11,25 @@
 
 <h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
 
-<ul class="task-list">
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > 实时监听方法，统计运行时长</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > web展示方法调用链路，瓶颈可视化追踪</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > 追踪系统异常，精确定位到方法</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > 接口超时邮件通知，无需实时查看</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > 线上热更新：无需重启更新代码</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > 使用简单，无技术学习成本</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > pom依赖即可，无代码侵入，无多余部署成本</li>
-</ul>
+- [x] 实时监听方法，统计运行时长
+- [x] web展示方法调用链路，瓶颈可视化追踪
+- [x] 追踪系统异常，精确定位到方法
+- [x] 接口超时邮件通知，无需实时查看
+- [x] 线上热更新：无需重启更新代码
+- [x] 使用简单，无技术学习成本
+- [x] pom依赖即可，无代码侵入，无多余部署成本
 
 ---
 
 <h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
 
-<ul class="task-list">
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Tracking the Java methods and calculating their execution times</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Show the paths of methods</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Find exceptions occurred in methods</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Email you after finding an overtime method</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Hot update online:you needn't restart it</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Easy to use:you needn't additional learning costs</li>
-    <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked="" > Enough to add a pom dependency:you needn't additional deployment costs</li>
-</ul>
+- [x] Tracking the Java methods and calculating their execution times
+- [x] Show the paths of methods
+- [x] Find exceptions occurred in methods
+- [x] Email you after finding an overtime method
+- [x] Hot update online:you needn't restart it
+- [x] Easy to use:you needn't additional learning costs
+- [x] Enough to add a pom dependency:you needn't additional deployment costs
 
 
 > 无学习成本直接使用，让软件工程师的卓越思维和宝贵时间用于创造

@@ -13,19 +13,19 @@
 
 <ul class="task-list">
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked style=""> 实时监听方法，统计运行时长</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > 实时监听方法，统计运行时长</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > web展示方法调用链路，瓶颈可视化追踪</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > web展示方法调用链路，瓶颈可视化追踪</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > 追踪系统异常，精确定位到方法</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > 追踪系统异常，精确定位到方法</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > 接口超时邮件通知，无需实时查看</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > 接口超时邮件通知，无需实时查看</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > 线上热更新：无需重启更新代码</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > 线上热更新：无需重启更新代码</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > 使用简单，无技术学习成本</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > 使用简单，无技术学习成本</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > pom依赖即可，无代码侵入，无多余部署成本</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > pom依赖即可，无代码侵入，无多余部署成本</li>
 </ul>
 
 ---
@@ -34,19 +34,19 @@
 
 <ul class="task-list">
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Tracking the Java methods and calculating their execution times</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Tracking the Java methods and calculating their execution times</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Show the paths of methods</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Show the paths of methods</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Find exceptions occurred in methods</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Find exceptions occurred in methods</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Email you after finding an overtime method</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Email you after finding an overtime method</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Hot update online:you needn't restart it</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Hot update online:you needn't restart it</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Easy to use:you needn't additional learning costs</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Easy to use:you needn't additional learning costs</li>
     <li class="task-list-item">
-    <input type="checkbox" class="task-list-item-checkbox" checked > Enough to add a pom dependency:you needn't additional deployment costs</li>
+    <input type="checkbox" class="task-list-item-checkbox" checked="" > Enough to add a pom dependency:you needn't additional deployment costs</li>
 </ul>
 
 

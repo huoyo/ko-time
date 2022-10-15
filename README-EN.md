@@ -11,13 +11,22 @@
 
 <h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
 
-- [x] Tracking the Java methods and calculating their execution times
-- [x] Show the paths of methods
-- [x] Find exceptions occurred in methods
-- [x] Email you after finding an overtime method
-- [x] Hot update online:you needn't restart it
-- [x] Easy to use:you needn't additional learning costs
-- [x] Enough to add a pom dependency:you needn't additional deployment costs
+<ul class="task-list">
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Tracking the Java methods and calculating their execution times</li>
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Show the paths of methods</li>
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Find exceptions occurred in methods</li>
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Email you after finding an overtime method</li>
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Hot update online:you needn't restart it</li>
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Easy to use:you needn't additional learning costs</li>
+    <li class="task-list-item">
+    <input type="checkbox" class="task-list-item-checkbox" checked > Enough to add a pom dependency:you needn't additional deployment costs</li>
+</ul>
 
 
 ![222](docs/kotime.gif)

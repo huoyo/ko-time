@@ -7,17 +7,17 @@
     <img src='https://shields.io/badge/version-2.3.2-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit-r.svg'>
-    <h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
-    <ul>
-        <li>Tracking the Java methods and calculating their execution times</li>
-        <li>Show the paths of methods</li>
-        <li>Find exceptions occurred in methods</li>
-        <li>Email you after finding an overtime method</li>
-        <li>Hot update online:you needn't restart it</li>
-        <li>Easy to use:you needn't additional learning costs</li>
-        <li>Enough to add a pom dependency:you needn't additional deployment costs</li>
-    </ul>
 </div>
+
+<h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
+
+- [x] Tracking the Java methods and calculating their execution times
+- [x] Show the paths of methods
+- [x] Find exceptions occurred in methods
+- [x] Email you after finding an overtime method
+- [x] Hot update online:you needn't restart it
+- [x] Easy to use:you needn't additional learning costs
+- [x] Enough to add a pom dependency:you needn't additional deployment costs
 
 
 ![222](docs/kotime.gif)

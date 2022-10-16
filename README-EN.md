@@ -9,7 +9,7 @@
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>
 
-<h4>A springboot tool for tracking the paths of methods,which can help you find method's performances easily.</h4>
+<h4>A springboot tool for tracing call graph ,which can help you find method's performances easily.</h4>
 
 - [x] Tracking the Java methods and calculating their execution times
 - [x] Show the paths of methods

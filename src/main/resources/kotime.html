@@ -155,6 +155,9 @@
             });
             $.ajaxSettings.async = true;
             loadLatestVersion();
+            loadCpuInfo();
+            loadHeapMemoryInfo();
+            loadPhysicalMemoryInfo();
         });
 
         let methodParamMap  = new Map();
@@ -400,6 +403,63 @@
                 complete: function () {}
             })
         }
+        function loadCpuInfo() {
+            $.get('contextPath/koTime/getCpuInfo?token='+globalToken, function (data) {
+                let systemLoad = data['systemLoad']*100;
+                let userRate = data['userRate']*100;
+                let sysRate = data['sysRate']*100;
+                let logicalNum = data['logicalNum'];
+                var systemLoadDom = document.querySelector("#systemLoad");
+                if (systemLoad>50) {
+                    systemLoadDom.style.color='#cc0c0c';
+                }else {
+                    systemLoadDom.style.color='#29da93';
+                };
+                systemLoadDom.innerHTML = `${systemLoad.toFixed(2)}%`;
+                document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
+                document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
+                document.querySelector("#cpuLogicalAmount").innerHTML = `${logicalNum}个`;
+
+
+            });
+        }
+        function loadHeapMemoryInfo() {
+            $.get('contextPath/koTime/getHeapMemoryInfo?token='+globalToken, function (data) {
+                let initValue = data['initValue']/1024/1024;
+                let maxValue = data['maxValue']/1024/1024;
+                let usedValue = data['usedValue']/1024/1024;
+                let usedRate = data['usedRate']*100;
+                var heapUsedRateDom = document.querySelector("#heapUsedRate");
+                if (usedRate>50) {
+                    heapUsedRateDom.style.color='#cc0c0c';
+                }else {
+                    heapUsedRateDom.style.color='#29da93';
+                };
+                document.querySelector("#heapInit").innerHTML = `${initValue.toFixed()}M`;
+                document.querySelector("#heapMax").innerHTML = `${maxValue.toFixed()}M`;
+                document.querySelector("#heapUsed").innerHTML = `${usedValue.toFixed()}M`;
+                heapUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+            });
+        }
+        function loadPhysicalMemoryInfo() {
+            $.get('contextPath/koTime/getPhysicalMemoryInfo?token='+globalToken, function (data) {
+                let initValue = data['initValue']/1024/1024;
+                let freeValue = data['freeValue']/1024/1024;
+                let usedValue = data['usedValue']/1024/1024;
+                let usedRate = data['usedRate']*100;
+                var physicalUsedRateDom = document.querySelector("#physicalUsedRate");
+                if (usedRate>50) {
+                    physicalUsedRateDom.style.color='#cc0c0c';
+                }else {
+                    physicalUsedRateDom.style.color='#29da93';
+                };
+                document.querySelector("#physicalAmount").innerHTML = `${initValue.toFixed()}M`;
+                document.querySelector("#physicalFree").innerHTML = `${freeValue.toFixed()}M`;
+                document.querySelector("#physicalUsed").innerHTML = `${usedValue.toFixed()}M`;
+                physicalUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+            });
+        }
+
     </script>
 </head>
 <!--endreplace-->
@@ -473,6 +533,45 @@
                     <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMinRunTime">0</span></div>
             </div>
         </div>
+        <ul class="uk-flex-left" uk-tab>
+            <li class="uk-active"><a href="#" >系统使用情况</a></li>
+        </ul>
+        <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
+            <div>
+                <div id="cpuInfo-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px" class="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">CPU负载：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad" >0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px">
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">用户使用率：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuUserRate" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">系统使用率：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuSysRate" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">逻辑核心数：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuLogicalAmount" >0</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div id="heapMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px" class="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">堆内存：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="heapUsedRate" >0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px">
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">初始值：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="heapInit" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">最大值：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="heapMax" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">已使用：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="heapUsed" >0</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div id="physicalMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px" class="uk-card uk-card-default uk-card-body uk-label-success">
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">物理内存：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="physicalUsedRate" >0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px">
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">总内存：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="physicalAmount" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">已使用：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="physicalUsed" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">未使用：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="physicalFree" >0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div class="uk-alert-success" uk-alert>
             <a class="uk-alert-close" uk-close></a>
             <p id="apiTip">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</p>

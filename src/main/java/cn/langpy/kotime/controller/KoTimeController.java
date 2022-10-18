@@ -6,6 +6,7 @@ import cn.langpy.kotime.constant.KoConstant;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.ClassService;
 import cn.langpy.kotime.service.GraphService;
+import cn.langpy.kotime.service.SysUsageService;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.InvalidAuthInfoException;
 import cn.langpy.kotime.util.KoUtil;
@@ -306,5 +307,31 @@ public class KoTimeController {
             }
         }
         return null;
+    }
+
+    @GetMapping("/getCpuInfo")
+    @ResponseBody
+    @Auth
+    public CpuInfo getCpuInfo() {
+        SysUsageService usageService = SysUsageService.newInstance();
+        CpuInfo cpuInfo = usageService.getCpuInfo();
+        return cpuInfo;
+    }
+
+    @GetMapping("/getHeapMemoryInfo")
+    @ResponseBody
+    @Auth
+    public HeapMemoryInfo getHeapMemoryInfo() {
+        SysUsageService usageService = SysUsageService.newInstance();
+        HeapMemoryInfo heapMemoryInfo = usageService.getHeapMemoryInfo();
+        return heapMemoryInfo;
+    }
+    @GetMapping("/getPhysicalMemoryInfo")
+    @ResponseBody
+    @Auth
+    public PhysicalMemoryInfo getPhysicalMemoryInfo() {
+        SysUsageService usageService = SysUsageService.newInstance();
+        PhysicalMemoryInfo physicalMemoryInfo = usageService.getPhysicalMemoryInfo();
+        return physicalMemoryInfo;
     }
 }

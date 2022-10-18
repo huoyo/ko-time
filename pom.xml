@@ -6,7 +6,7 @@
 
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.3.2</version>
+    <version>2.3.3</version>
     <name>KoTime</name>
     <description>A springboot tool for tracking the paths of the methods,which can help you find method's performances easily.</description>
     <licenses>
@@ -32,7 +32,7 @@
         <spring-redis.version>2.6.2</spring-redis.version>
         <spring-mail.version>2.7.3</spring-mail.version>
         <fastjson.version>2.0.9</fastjson.version>
-        <oshi-core.version>4.4.2</oshi-core.version>
+        <oshi-core.version>6.2.2</oshi-core.version>
         <byte-agent.version>1.12.13</byte-agent.version>
     </properties>
     <dependencies>

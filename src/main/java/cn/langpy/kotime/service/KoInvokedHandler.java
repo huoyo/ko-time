@@ -44,7 +44,7 @@ public final class KoInvokedHandler implements InvokedHandler {
 
     private MethodNode filter(MethodNode currentNode) {
         if (BloomFilter.exists(currentNode.getId())) {
-            //allow controllers's routes to be updated
+            //allow controller's routes to be updated
             if (!StringUtils.isEmpty(currentNode.getRouteName())) {
                 return currentNode;
             }

@@ -25,9 +25,7 @@ public class EmailHandler implements InvokedHandler {
         if (current == null || current.getValue() < Context.getConfig().getThreshold()) {
             return;
         }
-        if (mailScope.equals("All")) {
-            emailSendService.sendNoticeAsync(current);
-        }else if (current.getMethodType().name().equals(mailScope)) {
+        if (mailScope.equals("All") || current.getMethodType().name().equals(mailScope)) {
             emailSendService.sendNoticeAsync(current);
         }
     }

@@ -124,6 +124,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.version-notice",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "to enable version-notice",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.auth-expire",
       "type": "java.lang.Long",
       "defaultValue":43200 ,

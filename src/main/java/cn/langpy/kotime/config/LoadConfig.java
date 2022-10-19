@@ -94,6 +94,7 @@ public class LoadConfig {
         config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
         config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
+        config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
         configDataSource(config);
         configRedisTemplate(config);
         Context.setConfig(config);

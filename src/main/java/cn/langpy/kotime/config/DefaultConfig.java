@@ -15,6 +15,7 @@ public class DefaultConfig {
     @Deprecated
     private String logLanguage;
     private Boolean logEnable;
+    private Boolean versionNotice;
     private Double threshold;
     private Double discardRate;
     private String pointcut;
@@ -32,6 +33,14 @@ public class DefaultConfig {
     private String password;
 
     private Long authExpire;
+
+    public Boolean getVersionNotice() {
+        return versionNotice;
+    }
+
+    public void setVersionNotice(Boolean versionNotice) {
+        this.versionNotice = versionNotice;
+    }
 
     public Long getAuthExpire() {
         return authExpire;

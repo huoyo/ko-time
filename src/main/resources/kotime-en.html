@@ -31,6 +31,10 @@
                 return;
             };
             $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
+                let versionNoticeEnable = data['versionNotice'];
+                if (versionNoticeEnable) {
+                    loadLatestVersion();
+                }
                 let exceptionEnable = data['exceptionEnable'];
 
                 let exceptionEnableDom = document.getElementById('exceptionEnable');
@@ -155,7 +159,6 @@
                 element.innerHTML = html;
             });
             $.ajaxSettings.async = true;
-            loadLatestVersion();
             loadCpuInfo();
             loadHeapMemoryInfo();
             loadPhysicalMemoryInfo();
@@ -387,7 +390,7 @@
             })
         }
         function loadLatestVersion(){
-            /*get latest version so that you can update kotime immediately*/
+            /*get the latest version so that you can update kotime immediately*/
             $.ajax({
                 url: 'http://kotimedoc.langpy.cn/common/latestVersion',
                 type: 'GET',
@@ -411,6 +414,8 @@
                 let userRate = data['userRate']*100;
                 let sysRate = data['sysRate']*100;
                 let logicalNum = data['logicalNum'];
+                let waitRate = data['waitRate'];
+
                 var systemLoadDom = document.querySelector("#systemLoad");
                 if (systemLoad>50) {
                     systemLoadDom.style.color='#cc0c0c';
@@ -420,8 +425,8 @@
                 systemLoadDom.innerHTML = `${systemLoad.toFixed(2)}%`;
                 document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
                 document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
-                document.querySelector("#cpuLogicalAmount").innerHTML = `${logicalNum}`;
-
+                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate}%`;
+                document.querySelector("#cpuLogicalAmount").innerHTML = `CPU Usage(${logicalNum})：`;
 
             });
         }
@@ -544,12 +549,12 @@
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
                 <div id="cpuInfo-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px" class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;text-transform: unset">CPU Usage：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad" >0</span>
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;text-transform: unset" id="cpuLogicalAmount">CPU Usage：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad" >0</span>
                     <hr style="margin-top: 7px">
                     <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px">
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">User Usage：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuUserRate" >0</span></li>
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">System Usage：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuSysRate" >0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">Logical Core：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuLogicalAmount" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">IO Wait Rate：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuWaitRate" >0</span></li>
                     </ul>
                 </div>
             </div>

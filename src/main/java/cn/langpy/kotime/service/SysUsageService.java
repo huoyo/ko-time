@@ -57,6 +57,7 @@ public class SysUsageService {
         cpuInfo.setLogicalNum(processor.getLogicalProcessorCount());
         cpuInfo.setUserRate(user * 1.0 / totalCpu);
         cpuInfo.setSysRate(cSys * 1.0 / totalCpu);
+        cpuInfo.setWaitRate(iowait * 1.0 / totalCpu);
         cpuInfo.setSystemLoad(processor.getSystemCpuLoad(1000));
         return cpuInfo;
     }

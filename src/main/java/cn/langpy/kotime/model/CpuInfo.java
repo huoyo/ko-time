@@ -4,7 +4,16 @@ public class CpuInfo {
     private Double systemLoad;
     private Double userRate;
     private Double sysRate;
+    private Double waitRate;
     private Integer logicalNum;
+
+    public Double getWaitRate() {
+        return waitRate;
+    }
+
+    public void setWaitRate(Double waitRate) {
+        this.waitRate = waitRate;
+    }
 
     public Double getSystemLoad() {
         return systemLoad;

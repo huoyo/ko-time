@@ -31,6 +31,11 @@
                 return;
             };
             $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
+                let versionNoticeEnable = data['versionNotice'];
+                if (versionNoticeEnable) {
+                    loadLatestVersion();
+                }
+
                 let exceptionEnable = data['exceptionEnable'];
 
                 let exceptionEnableDom = document.getElementById('exceptionEnable');
@@ -154,7 +159,6 @@
                 element.innerHTML = html;
             });
             $.ajaxSettings.async = true;
-            loadLatestVersion();
             loadCpuInfo();
             loadHeapMemoryInfo();
             loadPhysicalMemoryInfo();
@@ -401,7 +405,7 @@
                 error: function (XmlHttpRequest, textStatus, errorThrown) {
                 },
                 complete: function () {}
-            })
+            });
         }
         function loadCpuInfo() {
             $.get('contextPath/koTime/getCpuInfo?token='+globalToken, function (data) {
@@ -409,6 +413,7 @@
                 let userRate = data['userRate']*100;
                 let sysRate = data['sysRate']*100;
                 let logicalNum = data['logicalNum'];
+                let waitRate = data['waitRate'];
                 var systemLoadDom = document.querySelector("#systemLoad");
                 if (systemLoad>50) {
                     systemLoadDom.style.color='#cc0c0c';
@@ -418,9 +423,8 @@
                 systemLoadDom.innerHTML = `${systemLoad.toFixed(2)}%`;
                 document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
                 document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
-                document.querySelector("#cpuLogicalAmount").innerHTML = `${logicalNum}个`;
-
-
+                document.querySelector("#cpuLogicalAmount").innerHTML = `CPU使用率（${logicalNum}）：`;
+                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate}%`;
             });
         }
         function loadHeapMemoryInfo() {
@@ -539,12 +543,12 @@
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
                 <div id="cpuInfo-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px" class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">CPU负载：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad" >0</span>
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;" id="cpuLogicalAmount">CPU使用率：</span><span style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad" >0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px">
+                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px;">
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">用户使用率：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuUserRate" >0</span></li>
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">系统使用率：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuSysRate" >0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">逻辑核心数：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuLogicalAmount" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">IO&nbsp;&nbsp;&nbsp;等待率：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="cpuWaitRate" >0</span></li>
                     </ul>
                 </div>
             </div>

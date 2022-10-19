@@ -413,7 +413,7 @@
                 let userRate = data['userRate']*100;
                 let sysRate = data['sysRate']*100;
                 let logicalNum = data['logicalNum'];
-                let waitRate = data['waitRate'];
+                let waitRate = data['waitRate']*100;
                 var systemLoadDom = document.querySelector("#systemLoad");
                 if (systemLoad>50) {
                     systemLoadDom.style.color='#cc0c0c';
@@ -424,7 +424,7 @@
                 document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
                 document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
                 document.querySelector("#cpuLogicalAmount").innerHTML = `CPU使用率（${logicalNum}）：`;
-                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate}%`;
+                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate.toFixed(2)}%`;
             });
         }
         function loadHeapMemoryInfo() {

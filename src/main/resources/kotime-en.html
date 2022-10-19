@@ -414,7 +414,7 @@
                 let userRate = data['userRate']*100;
                 let sysRate = data['sysRate']*100;
                 let logicalNum = data['logicalNum'];
-                let waitRate = data['waitRate'];
+                let waitRate = data['waitRate']*100;
 
                 var systemLoadDom = document.querySelector("#systemLoad");
                 if (systemLoad>50) {
@@ -425,7 +425,7 @@
                 systemLoadDom.innerHTML = `${systemLoad.toFixed(2)}%`;
                 document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
                 document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
-                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate}%`;
+                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate.toFixed(2)}%`;
                 document.querySelector("#cpuLogicalAmount").innerHTML = `CPU Usage(${logicalNum})：`;
 
             });

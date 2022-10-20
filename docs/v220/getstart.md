@@ -7,9 +7,11 @@
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.2.6</version>
+    <version>2.3.4</version>
   </dependency>
 ```
+
+> 该网址已迁移，新版本与使用方式请[前往这里](http://kotimedoc.langpy.cn/)
 
 ## 配置
 

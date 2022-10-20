@@ -45,7 +45,7 @@ ko-time.discard-rate=0.3 # discard rate（0-1） you can give up some data for I
 > Notice：    
 > 1.after adding above configurations，you need also add some dependencies about aop such as aspectj or spring-boot-starter-aop.   
 > 2.allow `/koTime` and `/koTime/**` to access you service without authorization 
-> 3.stop here,you done all jobs.  
+> 3.stop here,and you have done all jobs.  
                                    
 
 

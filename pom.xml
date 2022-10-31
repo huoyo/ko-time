@@ -11,8 +11,8 @@
     <description>A springboot tool for tracking the paths of the methods,which can help you find method's performances easily.</description>
     <licenses>
         <license>
-            <name>Apache License</name>
-            <url>http://www.apache.org/licenses/</url>
+            <name>GNU Lesser General Public License v2.1</name>
+            <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
         </license>
     </licenses>
     <url>https://gitee.com/huoyo/ko-time</url>

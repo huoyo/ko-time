@@ -18,71 +18,68 @@
         var d = 180;
         var globalThreshold = globalThresholdValue;
         var globalNeedLogin = globalNeedLoginValue;
-        var globalToken = sessionStorage.getItem("kotimeToken")
-        $(document).ready(function () {
-            let globalIsLogin = false;
-            $.ajaxSettings.async = false;
+        var globalToken = sessionStorage.getItem("kotimeToken");
+        let globalIsLogin = false;
+
+        function refreshData() {
             $.get('contextPath/koTime/isLogin?token='+globalToken, function (data) {
                 globalIsLogin  = data['isLogin']==1?true:false;
-            });
-            $.ajaxSettings.async = true;
-            if (globalNeedLogin==true && globalIsLogin == false) {
-                UIkit.modal(document.getElementById("modal-login")).show();
-                return;
-            };
-            $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
-                let versionNoticeEnable = data['versionNotice'];
-                if (versionNoticeEnable) {
-                    loadLatestVersion();
+                if (globalNeedLogin==true && globalIsLogin == false) {
+                    UIkit.modal(document.getElementById("modal-login")).show();
+                    return;
+                }else {
+                    loadStatistic();
+                    loadConfig();
+                    addConfigEvent();
+                    loadApis();
+                    loadExceptions();
+                    loadCpuInfo();
+                    loadHeapMemoryInfo();
+                    loadPhysicalMemoryInfo();
                 }
-
-                let exceptionEnable = data['exceptionEnable'];
-
-                let exceptionEnableDom = document.getElementById('exceptionEnable');
-                exceptionEnableDom.checked = exceptionEnable;
-
-                let kotimeEnable = data['enable'];
-                let kotimeEnableDom = document.getElementById('kotimeEnable');
-                kotimeEnableDom.checked = kotimeEnable;
-
-                let apiTip = document.getElementById('apiTip');
-                apiTip.innerHTML = kotimeEnable==true?"接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口":"方法调用监测已关闭，数据将不会更新，需要开启请到配置面板";
-
-
-                let threshold = data['threshold'];
-                let timeThresholdDom = document.getElementById('timeThreshold');
-                timeThresholdDom.value = threshold;
-
-                let logEnable = data['logEnable'];
-                let logEnableDom = document.getElementById('logEnable');
-                logEnableDom.checked = logEnable;
-
-                let language = data['language'];
-                $("#languageSwitch").val(language)
             });
 
-            document.getElementById('kotimeEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
+        }
 
-            document.getElementById('exceptionEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+        function loadExceptions() {
+            $.get('contextPath/koTime/getExceptions?token='+globalToken, function (data) {
+                let element = document.getElementById('exceptionList');
+                html = '';
+                for (let i = 0; i < data.length; i++) {
+                    let id = data[i]['id'];
+                    let className = data[i]['className'];
+                    let message = data[i]['message'];
+                    html += "<li onclick=\"showExceptions('"+id+"','"+message+"')\" style='' id=\""+id+"\"><span style='font-size: 16px;font-weight: 500;'>"+className+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-danger\">"+message+"</span></li>";
+                };
+                element.innerHTML = html;
+            });
+        }
 
-            };
+        function loadApis() {
+            let searchText = $("#searchText").val();
+            $.get('contextPath/koTime/getApis?question='+searchText+'&token='+globalToken, function (data) {
+                let element = document.getElementById('apiList');
+                html = '';
+                for (let i = 0; i < data.length; i++) {
+                    let className = data[i]['className'];
+                    let methodName = data[i]['methodName'];
+                    let avgRunTime = data[i]['avgRunTime'];
+                    let methodType = data[i]['methodType'];
+                    let routeName = data[i]['routeName'];
 
-            document.getElementById('logEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
+                    let apiId = className+"."+methodName;
+                    let  color = avgRunTime>globalThreshold?'danger':'success';
+                    if (methodType=='Controller' && routeName!=null && routeName!='') {
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" ms</span></li>";
+                    }else{
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" ms</span></li>";
+                    }
+                };
+                element.innerHTML = html;
+            });
+        }
 
-            document.getElementById('languageSwitch').onchange = function(){
-                let selectedObj = document.getElementById('languageSwitch');
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
-
-            document.getElementById("timeThresholdYes").onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
-
+        function loadStatistic() {
             $.get('contextPath/koTime/getStatistic?token='+globalToken, function (data) {
                 let totalNum = data['totalNum'];
                 let systemTotalNum = document.getElementById("systemTotalNum");
@@ -125,44 +122,64 @@
                 };
 
             });
-            $.ajaxSettings.async = false;
-            let searchText = $("#searchText").val();
-            $.get('contextPath/koTime/getApis?question='+searchText+'&token='+globalToken, function (data) {
-                let element = document.getElementById('apiList');
-                html = '';
-                for (let i = 0; i < data.length; i++) {
-                    let className = data[i]['className'];
-                    let methodName = data[i]['methodName'];
-                    let avgRunTime = data[i]['avgRunTime'];
-                    let methodType = data[i]['methodType'];
-                    let routeName = data[i]['routeName'];
+        }
 
-                    let apiId = className+"."+methodName;
-                    let  color = avgRunTime>globalThreshold?'danger':'success';
-                    if (methodType=='Controller' && routeName!=null && routeName!='') {
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" ms</span></li>";
-                    }else{
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">平均响应 "+avgRunTime+" ms</span></li>";
-                    }
-                };
-                element.innerHTML = html;
+        function addConfigEvent() {
+            document.getElementById('kotimeEnable').onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+
+            document.getElementById('exceptionEnable').onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+
+            };
+
+            document.getElementById('logEnable').onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+
+            document.getElementById('languageSwitch').onchange = function(){
+                let selectedObj = document.getElementById('languageSwitch');
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+
+            document.getElementById("timeThresholdYes").onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+        }
+
+        function loadConfig() {
+            $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
+                let versionNoticeEnable = data['versionNotice'];
+                if (versionNoticeEnable) {
+                    loadLatestVersion();
+                }
+
+                let exceptionEnable = data['exceptionEnable'];
+
+                let exceptionEnableDom = document.getElementById('exceptionEnable');
+                exceptionEnableDom.checked = exceptionEnable;
+
+                let kotimeEnable = data['enable'];
+                let kotimeEnableDom = document.getElementById('kotimeEnable');
+                kotimeEnableDom.checked = kotimeEnable;
+
+                let apiTip = document.getElementById('apiTip');
+                apiTip.innerHTML = kotimeEnable==true?"接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口":"方法调用监测已关闭，数据将不会更新，需要开启请到配置面板";
+
+
+                let threshold = data['threshold'];
+                let timeThresholdDom = document.getElementById('timeThreshold');
+                timeThresholdDom.value = threshold;
+
+                let logEnable = data['logEnable'];
+                let logEnableDom = document.getElementById('logEnable');
+                logEnableDom.checked = logEnable;
+
+                let language = data['language'];
+                $("#languageSwitch").val(language)
             });
-            $.get('contextPath/koTime/getExceptions?token='+globalToken, function (data) {
-                let element = document.getElementById('exceptionList');
-                html = '';
-                for (let i = 0; i < data.length; i++) {
-                    let id = data[i]['id'];
-                    let className = data[i]['className'];
-                    let message = data[i]['message'];
-                    html += "<li onclick=\"showExceptions('"+id+"','"+message+"')\" style='' id=\""+id+"\"><span style='font-size: 16px;font-weight: 500;'>"+className+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-danger\">"+message+"</span></li>";
-                };
-                element.innerHTML = html;
-            });
-            $.ajaxSettings.async = true;
-            loadCpuInfo();
-            loadHeapMemoryInfo();
-            loadPhysicalMemoryInfo();
-        });
+        }
 
         let methodParamMap  = new Map();
         function paramGraph(e) {
@@ -387,7 +404,7 @@
                     location.reload();
                 },
                 complete: function () {}
-             })
+            })
         }
 
         function loadLatestVersion(){
@@ -463,6 +480,11 @@
                 physicalUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
             });
         }
+        $(document).ready(function () {
+            refreshData();
+        });
+
+
 
     </script>
 </head>
@@ -473,7 +495,7 @@
 <nav class="uk-navbar-container" style="background-color: #404b67;height: 85px" uk-navbar>
     <div class="uk-navbar-center">
         <div class="uk-grid-small" uk-grid>
-            <div style="margin-top: 20px;font-size: 24px;color: white" class="uk-width-expand" >KoTime调用链路追踪</div>
+            <div title="刷新数据" style="margin-top: 20px;font-size: 24px;color: white;cursor: pointer" class="uk-width-expand"   onclick="refreshData()" >KoTime调用链路追踪</div>
         </div>
     </div>
 </nav>

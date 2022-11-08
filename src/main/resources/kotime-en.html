@@ -18,151 +18,9 @@
         var d = 180;
         var globalThreshold = globalThresholdValue;
         var globalNeedLogin = globalNeedLoginValue;
-        var globalToken = sessionStorage.getItem("kotimeToken")
-        $(document).ready(function () {
-            let globalIsLogin = false;
-            $.ajaxSettings.async = false;
-            $.get('contextPath/koTime/isLogin?token='+globalToken, function (data) {
-                globalIsLogin  = data['isLogin']==1?true:false;
-            });
-            $.ajaxSettings.async = true;
-            if (globalNeedLogin==true && globalIsLogin == false) {
-                UIkit.modal(document.getElementById("modal-login")).show();
-                return;
-            };
-            $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
-                let versionNoticeEnable = data['versionNotice'];
-                if (versionNoticeEnable) {
-                    loadLatestVersion();
-                }
-                let exceptionEnable = data['exceptionEnable'];
+        var globalToken = sessionStorage.getItem("kotimeToken");
+        let globalIsLogin = false;
 
-                let exceptionEnableDom = document.getElementById('exceptionEnable');
-                exceptionEnableDom.checked = exceptionEnable;
-
-
-                let kotimeEnable = data['enable'];
-                let kotimeEnableDom = document.getElementById('kotimeEnable');
-                kotimeEnableDom.checked = kotimeEnable;
-
-                let apiTip = document.getElementById('apiTip');
-                apiTip.innerHTML = kotimeEnable==true?"We can see interfaces after invoking methods!":"KoTime switch was closed!";
-
-
-                let threshold = data['threshold'];
-                let timeThresholdDom = document.getElementById('timeThreshold');
-                timeThresholdDom.value = threshold;
-
-                let logEnable = data['logEnable'];
-                let logEnableDom = document.getElementById('logEnable');
-                logEnableDom.checked = logEnable;
-
-                let language = data['language'];
-                $("#languageSwitch").val(language)
-            });
-
-            document.getElementById('kotimeEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
-
-            document.getElementById('exceptionEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-
-            };
-
-            document.getElementById('logEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
-
-            document.getElementById('languageSwitch').onchange = function(){
-                let selectedObj = document.getElementById('languageSwitch');
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
-
-
-            document.getElementById("timeThresholdYes").onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-            };
-
-            $.get('contextPath/koTime/getStatistic?token='+globalToken, function (data) {
-                let totalNum = data['totalNum'];
-                let systemTotalNum = document.getElementById("systemTotalNum");
-                systemTotalNum.innerHTML=totalNum;
-
-                let normalNum = data['normalNum'];
-                let systemNormalNum = document.getElementById("systemNormalNum");
-                systemNormalNum.innerHTML=normalNum;
-
-                let delayNum = data['delayNum'];
-                let systemDelayNum = document.getElementById("systemDelayNum");
-                systemDelayNum.innerHTML=delayNum;
-
-                let avgRunTime = data['avgRunTime'];
-                let systemAvgRunTime = document.getElementById("systemAvgRunTime");
-                systemAvgRunTime.innerHTML=avgRunTime;
-                if (avgRunTime>globalThreshold) {
-                    document.getElementById("systemAvgRunTime").style.color='#cc0c0c';
-                }else {
-                    document.getElementById("systemAvgRunTime").style.color='#29da93';
-                };
-
-                let maxRunTime = data['maxRunTime'];
-                let systemMaxRunTime = document.getElementById("systemMaxRunTime");
-                systemMaxRunTime.innerHTML=maxRunTime;
-                if (maxRunTime>globalThreshold) {
-                    document.getElementById("systemMaxRunTime").style.color='#cc0c0c';
-                }else {
-                    document.getElementById("systemMaxRunTime").style.color='#29da93';
-                };
-
-
-                let minRunTime = data['minRunTime'];
-                let systemMinRunTime = document.getElementById("systemMinRunTime");
-                systemMinRunTime.innerHTML=minRunTime;
-                if (minRunTime>globalThreshold) {
-                    document.getElementById("systemMinRunTime").style.color='#cc0c0c';
-                }else {
-                    document.getElementById("systemMinRunTime").style.color='#29da93';
-                };
-            });
-            $.ajaxSettings.async = false;
-            let searchText = $("#searchText").val();
-            $.get('contextPath/koTime/getApis?question='+searchText+'&token='+globalToken, function (data) {
-                let element = document.getElementById('apiList');
-                html = '';
-                for (let i = 0; i < data.length; i++) {
-                    let className = data[i]['className'];
-                    let methodName = data[i]['methodName'];
-                    let avgRunTime = data[i]['avgRunTime'];
-                    let methodType = data[i]['methodType'];
-                    let routeName = data[i]['routeName'];
-
-                    let apiId = className+"."+methodName;
-                    let  color = avgRunTime>globalThreshold?'danger':'success';
-                    if (methodType=='Controller' && routeName!=null && routeName!='') {
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
-                    }else{
-                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
-                    }
-                };
-                element.innerHTML = html;
-            });
-            $.get('contextPath/koTime/getExceptions?token='+globalToken, function (data) {
-                let element = document.getElementById('exceptionList');
-                html = '';
-                for (let i = 0; i < data.length; i++) {
-                    let id = data[i]['id'];
-                    let className = data[i]['className'];
-                    let message = data[i]['message'];
-                    html += "<li onclick=\"showExceptions('"+id+"','"+message+"')\" style='' id=\""+id+"\"><span style='font-size: 16px;font-weight: 500;'>"+className+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-danger\">"+message+"</span></li>";
-                };
-                element.innerHTML = html;
-            });
-            $.ajaxSettings.async = true;
-            loadCpuInfo();
-            loadHeapMemoryInfo();
-            loadPhysicalMemoryInfo();
-        });
 
         let methodParamMap  = new Map();
         function paramGraph(e) {
@@ -466,6 +324,172 @@
                 physicalUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
             });
         }
+
+        function loadConfig() {
+            $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
+                let versionNoticeEnable = data['versionNotice'];
+                if (versionNoticeEnable) {
+                    loadLatestVersion();
+                }
+                let exceptionEnable = data['exceptionEnable'];
+
+                let exceptionEnableDom = document.getElementById('exceptionEnable');
+                exceptionEnableDom.checked = exceptionEnable;
+
+
+                let kotimeEnable = data['enable'];
+                let kotimeEnableDom = document.getElementById('kotimeEnable');
+                kotimeEnableDom.checked = kotimeEnable;
+
+                let apiTip = document.getElementById('apiTip');
+                apiTip.innerHTML = kotimeEnable==true?"We can see interfaces after invoking methods!":"KoTime switch was closed!";
+
+
+                let threshold = data['threshold'];
+                let timeThresholdDom = document.getElementById('timeThreshold');
+                timeThresholdDom.value = threshold;
+
+                let logEnable = data['logEnable'];
+                let logEnableDom = document.getElementById('logEnable');
+                logEnableDom.checked = logEnable;
+
+                let language = data['language'];
+                $("#languageSwitch").val(language)
+            });
+        }
+
+        function addConfigEvent() {
+
+            document.getElementById('kotimeEnable').onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+
+            document.getElementById('exceptionEnable').onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+
+            };
+
+            document.getElementById('logEnable').onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+
+            document.getElementById('languageSwitch').onchange = function(){
+                let selectedObj = document.getElementById('languageSwitch');
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+
+
+            document.getElementById("timeThresholdYes").onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+            };
+        }
+
+        function loadStatistic() {
+            $.get('contextPath/koTime/getStatistic?token='+globalToken, function (data) {
+                let totalNum = data['totalNum'];
+                let systemTotalNum = document.getElementById("systemTotalNum");
+                systemTotalNum.innerHTML=totalNum;
+
+                let normalNum = data['normalNum'];
+                let systemNormalNum = document.getElementById("systemNormalNum");
+                systemNormalNum.innerHTML=normalNum;
+
+                let delayNum = data['delayNum'];
+                let systemDelayNum = document.getElementById("systemDelayNum");
+                systemDelayNum.innerHTML=delayNum;
+
+                let avgRunTime = data['avgRunTime'];
+                let systemAvgRunTime = document.getElementById("systemAvgRunTime");
+                systemAvgRunTime.innerHTML=avgRunTime;
+                if (avgRunTime>globalThreshold) {
+                    document.getElementById("systemAvgRunTime").style.color='#cc0c0c';
+                }else {
+                    document.getElementById("systemAvgRunTime").style.color='#29da93';
+                };
+
+                let maxRunTime = data['maxRunTime'];
+                let systemMaxRunTime = document.getElementById("systemMaxRunTime");
+                systemMaxRunTime.innerHTML=maxRunTime;
+                if (maxRunTime>globalThreshold) {
+                    document.getElementById("systemMaxRunTime").style.color='#cc0c0c';
+                }else {
+                    document.getElementById("systemMaxRunTime").style.color='#29da93';
+                };
+
+
+                let minRunTime = data['minRunTime'];
+                let systemMinRunTime = document.getElementById("systemMinRunTime");
+                systemMinRunTime.innerHTML=minRunTime;
+                if (minRunTime>globalThreshold) {
+                    document.getElementById("systemMinRunTime").style.color='#cc0c0c';
+                }else {
+                    document.getElementById("systemMinRunTime").style.color='#29da93';
+                };
+            });
+        }
+
+        function loadApis() {
+            let searchText = $("#searchText").val();
+            $.get('contextPath/koTime/getApis?question='+searchText+'&token='+globalToken, function (data) {
+                let element = document.getElementById('apiList');
+                html = '';
+                for (let i = 0; i < data.length; i++) {
+                    let className = data[i]['className'];
+                    let methodName = data[i]['methodName'];
+                    let avgRunTime = data[i]['avgRunTime'];
+                    let methodType = data[i]['methodType'];
+                    let routeName = data[i]['routeName'];
+
+                    let apiId = className+"."+methodName;
+                    let  color = avgRunTime>globalThreshold?'danger':'success';
+                    if (methodType=='Controller' && routeName!=null && routeName!='') {
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>"+routeName+"</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
+                    }else{
+                        html += "<li onclick=\"showMethods('"+apiId+"')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\""+apiId+"-list\">"+ className+"#<span style='font-size: 16px;font-weight: 500;'>"+methodName+"</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-"+color+"\">avg  "+avgRunTime+" ms</span></li>";
+                    }
+                };
+                element.innerHTML = html;
+            });
+
+        }
+
+        function loadExceptions() {
+            $.get('contextPath/koTime/getExceptions?token='+globalToken, function (data) {
+                let element = document.getElementById('exceptionList');
+                html = '';
+                for (let i = 0; i < data.length; i++) {
+                    let id = data[i]['id'];
+                    let className = data[i]['className'];
+                    let message = data[i]['message'];
+                    html += "<li onclick=\"showExceptions('"+id+"','"+message+"')\" style='' id=\""+id+"\"><span style='font-size: 16px;font-weight: 500;'>"+className+"</span>&nbsp &nbsp<span style='font-size: 10px;' class=\"uk-label uk-label-danger\">"+message+"</span></li>";
+                };
+                element.innerHTML = html;
+            });
+
+        }
+
+        function refreshData() {
+            $.get('contextPath/koTime/isLogin?token='+globalToken, function (data) {
+                globalIsLogin  = data['isLogin']==1?true:false;
+                if (globalNeedLogin==true && globalIsLogin == false) {
+                    UIkit.modal(document.getElementById("modal-login")).show();
+                    return;
+                }else {
+                    loadStatistic();
+                    loadConfig();
+                    addConfigEvent();
+                    loadApis();
+                    loadExceptions();
+                    loadCpuInfo();
+                    loadHeapMemoryInfo();
+                    loadPhysicalMemoryInfo();
+                }
+            });
+        }
+        $(document).ready(function () {
+            refreshData();
+        });
+
     </script>
 </head>
 <!--endreplace-->
@@ -474,7 +498,7 @@
 <nav class="uk-navbar-container" style="background-color: #404b67;height: 85px" uk-navbar>
     <div class="uk-navbar-center">
         <div class="uk-grid-small" uk-grid>
-            <div style="margin-top: 20px;font-size: 24px;color: white" class="uk-width-expand" >KoTime</div>
+            <div  onclick="refreshData()"  style="margin-top: 20px;font-size: 24px;color: white;cursor: pointer" class="uk-width-expand" >KoTime</div>
         </div>
     </div>
 </nav>

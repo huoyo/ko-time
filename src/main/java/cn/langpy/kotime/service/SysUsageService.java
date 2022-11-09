@@ -3,16 +3,25 @@ package cn.langpy.kotime.service;
 import cn.langpy.kotime.model.CpuInfo;
 import cn.langpy.kotime.model.HeapMemoryInfo;
 import cn.langpy.kotime.model.PhysicalMemoryInfo;
+import cn.langpy.kotime.util.Context;
 import com.sun.management.OperatingSystemMXBean;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class SysUsageService {
+    private static Logger log = Logger.getLogger(SysUsageService.class.toString());
 
     public static SysUsageService newInstance() {
         return new SysUsageService();
@@ -27,7 +36,7 @@ public class SysUsageService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        long[] ticks =     processor.getSystemCpuLoadTicks();
+        long[] ticks = processor.getSystemCpuLoadTicks();
         long nice = ticks[CentralProcessor.TickType.NICE.getIndex()]
                 - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
 
@@ -84,7 +93,51 @@ public class SysUsageService {
         physicalMemoryInfo.setFreeValue(osmxb.getFreePhysicalMemorySize());
         physicalMemoryInfo.setUsedValue(physicalMemoryInfo.getInitValue() - physicalMemoryInfo.getFreeValue());
         physicalMemoryInfo.setUsedRate(physicalMemoryInfo.getUsedValue() * 1.0 / physicalMemoryInfo.getInitValue());
+        if (isLinux()) {
+            Map<String, String> processInfo = getProcessInfo();
+            if (processInfo.containsKey("VmSize")) {
+                String VmRSSStr = processInfo.get("VmRSS");
+                String VmSizeStr = VmRSSStr.split(" ")[0].trim();
+                long VmRSS = Long.valueOf(VmSizeStr);
+                physicalMemoryInfo.setThisUsedValue(VmRSS*1024);
+                double rate = physicalMemoryInfo.getThisUsedValue()*1.0 / physicalMemoryInfo.getInitValue();
+                physicalMemoryInfo.setThisUsedRate(rate);
+            }
+        }
         return physicalMemoryInfo;
+    }
+
+    public boolean isLinux() {
+        return System.getProperty("os.name").toLowerCase().contains("linux");
+    }
+
+    public Map<String,String> getProcessInfo() {
+        Map<String,String> processMetrics = new HashMap();
+        Runtime runtime = Runtime.getRuntime();
+        Process process = null;
+        try {
+            process = runtime.exec("cat /proc/" + Context.getPid() + "/status");
+        } catch (IOException e) {
+            log.severe("Can not execute '"+"cat /proc/" + Context.getPid() + "/status"+"'");
+            return processMetrics;
+        }
+        try (InputStream inputStream = process.getInputStream();
+             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)
+        ) {
+            String line ="";
+            while ((line = bufferedReader.readLine()) != null){
+                String[] split = line.split(":");
+                if (split.length==2) {
+                    String key = split[0].trim();
+                    String value = split[1].trim();
+                    processMetrics.put(key,value);
+                }
+            }
+        } catch (Exception e) {
+            log.severe("Can not read the result of '"+"cat /proc/" + Context.getPid() + "/status"+"'");
+        }
+        return processMetrics;
     }
 
 }

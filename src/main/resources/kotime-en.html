@@ -309,7 +309,7 @@
         function loadPhysicalMemoryInfo() {
             $.get('contextPath/koTime/getPhysicalMemoryInfo?token='+globalToken, function (data) {
                 let initValue = data['initValue']/1024/1024;
-                let freeValue = data['freeValue']/1024/1024;
+                let thisUsedValue = data['thisUsedValue']/1024/1024;
                 let usedValue = data['usedValue']/1024/1024;
                 let usedRate = data['usedRate']*100;
                 var physicalUsedRateDom = document.querySelector("#physicalUsedRate");
@@ -318,10 +318,10 @@
                 }else {
                     physicalUsedRateDom.style.color='#29da93';
                 };
-                document.querySelector("#physicalAmount").innerHTML = `${initValue.toFixed()}M`;
-                document.querySelector("#physicalFree").innerHTML = `${freeValue.toFixed()}M`;
-                document.querySelector("#physicalUsed").innerHTML = `${usedValue.toFixed()}M`;
                 physicalUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+                document.querySelector("#physicalAmount").innerHTML = `${initValue.toFixed()}M`;
+                document.querySelector("#physicalUsed").innerHTML = `${usedValue.toFixed()}M`;
+                document.querySelector("#thisUsed").innerHTML = `${thisUsedValue.toFixed()}M`;
             });
         }
 
@@ -600,7 +600,7 @@
                     <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px">
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">All：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="physicalAmount" >0</span></li>
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">Used：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="physicalUsed" >0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">Free：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="physicalFree" >0</span></li>
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;text-transform: unset">ThisUsed：</span><span style="font-size: 12px;color: #020718;font-weight: bold" id="thisUsed" >0</span></li>
                     </ul>
                 </div>
             </div>

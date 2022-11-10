@@ -362,25 +362,29 @@
 
             document.getElementById('kotimeEnable').onclick = function(){
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById('exceptionEnable').onclick = function(){
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
-
+                UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById('logEnable').onclick = function(){
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById('languageSwitch').onchange = function(){
                 let selectedObj = document.getElementById('languageSwitch');
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>OK</font>",{});
             };
 
 
             document.getElementById("timeThresholdYes").onclick = function(){
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>OK</font>",{});
             };
         }
 

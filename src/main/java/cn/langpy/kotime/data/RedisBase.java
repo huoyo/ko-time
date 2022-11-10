@@ -112,6 +112,9 @@ public class RedisBase implements GraphService {
         if (sourceMethodNode.getId().equals(targetMethodNode.getId())) {
             return null;
         }
+        if (targetMethodNode.getMethodType()==MethodType.Controller && !"Controller.dispatch".equals(sourceMethodNode.getName())) {
+            return null;
+        }
         if (redisTemplate.hasKey(methodRelationPre + targetMethodNode.getId() + sourceMethodNode.getId())) {
             return null;
         }

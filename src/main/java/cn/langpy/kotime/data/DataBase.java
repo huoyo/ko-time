@@ -122,6 +122,9 @@ public class DataBase implements GraphService {
         if (sourceMethodNode.getId().equals(targetMethodNode.getId())) {
             return null;
         }
+        if (targetMethodNode.getMethodType()==MethodType.Controller && !"Controller.dispatch".equals(sourceMethodNode.getName())) {
+            return null;
+        }
         try {
             List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryMethodRe, new Object[]{sourceMethodNode.getId() + targetMethodNode.getId()});
             if (query.size() > 0) {

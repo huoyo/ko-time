@@ -105,6 +105,9 @@ public class MemoryBase implements GraphService {
         if (sourceMethodNode.getId().equals(targetMethodNode.getId())) {
             return null;
         }
+        if (targetMethodNode.getMethodType()==MethodType.Controller && !"Controller.dispatch".equals(sourceMethodNode.getName())) {
+            return null;
+        }
         if (methodRelations.containsKey(targetMethodNode.getId()+sourceMethodNode.getId())) {
             return null;
         }

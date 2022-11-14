@@ -4,7 +4,7 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.5-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.6-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>

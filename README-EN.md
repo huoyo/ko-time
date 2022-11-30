@@ -9,7 +9,7 @@
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>
 
-<h4>A springboot tool for tracing call graph ,which can help you find method's performances easily.</h4>
+<h4>A lightweight springboot tool for tracing call graph ,which can help you find method's performances easily.</h4>
 
 - [x] Tracking the Java methods and calculating their execution times
 - [x] Show the paths of methods
@@ -116,7 +116,7 @@ You can open email to receive a warning about overtime method since v2.2.5
 
 > 1.This project belongs to Chang Zhang,and Its open source protocol is LGPL-2.1；
 >
-> 2.You can use it freely by linking it but you can not do secondary development based on this before auhtor's authorization.;
+> 2.You can use it freely by linking it,but you can not do secondary development based on this before auhtor's authorization.;
 >
 
 

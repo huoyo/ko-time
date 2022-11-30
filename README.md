@@ -13,7 +13,7 @@
 </div>
 
 
-<h4>A springboot tool for tracing call graph ,which can help you find method's performances easily.</h4>
+<h4>A lightweight springboot tool for tracing call graph ,which can help you find method's performances easily.</h4>
 
 - [x] Tracking the Java methods and calculating their execution times
 - [x] Show the paths of methods
@@ -26,7 +26,7 @@
 ---
 
 
-<h4>koTime是一个springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
+<h4>koTime是一个轻量级的springboot项目性能分析工具，通过追踪方法调用链路以及对应的运行时长快速定位性能瓶颈</h4>
 
 - [x] 实时监听方法，统计运行时长
 - [x] web展示方法调用链路，瓶颈可视化追踪
@@ -54,7 +54,7 @@
 
 [英文简介/ENGLISH](README-EN.md)
 
-[使用教程](http://kotimedoc.langpy.cn/?source=git)
+[使用教程](http://www.kotime.cn/?source=git)
 
 
 

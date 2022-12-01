@@ -18,17 +18,17 @@ v2.2.0开始支持数据库存储接口信息功能，可在内存和数据库�
 1.更改配置：
 
 > ko-time.saver=redis
-> 
+>
 > ko-time.data-prefix=xxx #如果多个项目共用一个redis，最好配置此项，通过该名称区分数据,如果项目配置过`server.servlet.context-path`，则自动取该配置
-> 
+>
 > #redis配置
-> 
+>
 > spring.redis.host: xxx
-> 
+>
 > spring.redis.port: xxx
-> 
+>
 > spring.redis.password: xxx
-> 
+>
 
 
 2.引入依赖
@@ -48,10 +48,10 @@ v2.2.0开始支持数据库存储接口信息功能，可在内存和数据库�
 ```java
 @Bean("redisbean")
 public StringRedisTemplate getRedisTemplate(RedisConnectionFactory connectionFactory){
-    StringRedisTemplate template = new StringRedisTemplate();
-    template.setConnectionFactory(connectionFactory);
-    return template;
-}
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(connectionFactory);
+        return template;
+        }
 ```
 然后配置
 
@@ -60,7 +60,9 @@ public StringRedisTemplate getRedisTemplate(RedisConnectionFactory connectionFac
 
 ### 数据库存储
 
-> 注： 使用mysql  不推荐的使用方式，占用项目数据资源
+> 注： 使用mysql  非常不推荐的使用方式，占用项目数据资源
+> 
+> 为了减少占用项目资源，对数据库的连接使用做了限制，所以kotime统计数据更新比较慢
 
 1.更改配置：
 
@@ -127,46 +129,46 @@ create table ko_param_ana
 ```sql
 -- v2.2.3及以下版本
 create table ko_method_node (
-     id varchar(400) not null primary key comment '主键' ,
-     name varchar(400) null comment '类名+方法名' ,
-     class_name varchar(400) null comment '类名' ,
-     method_name varchar(400) null comment '方法名' ,
-     route_name varchar(400) null comment '路由，controller才有' ,
-     method_type varchar(64) null comment '方法类型'
+                                id varchar(400) not null primary key comment '主键' ,
+                                name varchar(400) null comment '类名+方法名' ,
+                                class_name varchar(400) null comment '类名' ,
+                                method_name varchar(400) null comment '方法名' ,
+                                route_name varchar(400) null comment '路由，controller才有' ,
+                                method_type varchar(64) null comment '方法类型'
 ) comment '方法信息表';
 
 
 create table ko_method_relation (
-     id varchar(400) not null primary key comment '' ,
-     source_id varchar(400) null comment '调用方id' ,
-     target_id varchar(400) null comment '被调用方id' ,
-     avg_run_time numeric(10,2) null comment '平均耗时' ,
-     max_run_time numeric(10,2) null comment '最大耗时' ,
-     min_run_time numeric(10,2) null comment '最小耗时'
+                                    id varchar(400) not null primary key comment '' ,
+                                    source_id varchar(400) null comment '调用方id' ,
+                                    target_id varchar(400) null comment '被调用方id' ,
+                                    avg_run_time numeric(10,2) null comment '平均耗时' ,
+                                    max_run_time numeric(10,2) null comment '最大耗时' ,
+                                    min_run_time numeric(10,2) null comment '最小耗时'
 ) comment '方法调用关系表';
 
 ;
 create table ko_exception_node (
-    id varchar(400) not null primary key comment '主键' ,
-    name varchar(400) null comment '异常名' ,
-    class_name varchar(400) null comment '类名' ,
-    message varchar(400) null comment '异常消息'
+                                   id varchar(400) not null primary key comment '主键' ,
+                                   name varchar(400) null comment '异常名' ,
+                                   class_name varchar(400) null comment '类名' ,
+                                   message varchar(400) null comment '异常消息'
 ) comment '异常表';
 
 
 create table ko_exception_relation (
-    id varchar(400) not null primary key comment '' ,
-    source_id varchar(400) null comment '调用方法id' ,
-    target_id varchar(400) null comment '异常id' ,
-    location int null comment '异常位置'
+                                       id varchar(400) not null primary key comment '' ,
+                                       source_id varchar(400) null comment '调用方法id' ,
+                                       target_id varchar(400) null comment '异常id' ,
+                                       location int null comment '异常位置'
 ) comment '异常关系表';
 
 create table ko_param_ana (
-       source_id varchar(400) null comment '调用方法id' ,
-       params varchar(400) null comment '参数组合，-分隔' ,
-       avg_run_time numeric(10,2) null comment '平均耗时' ,
-       max_run_time numeric(10,2) null comment '最大耗时' ,
-       min_run_time numeric(10,2) null comment '最小耗时'
+                              source_id varchar(400) null comment '调用方法id' ,
+                              params varchar(400) null comment '参数组合，-分隔' ,
+                              avg_run_time numeric(10,2) null comment '平均耗时' ,
+                              max_run_time numeric(10,2) null comment '最大耗时' ,
+                              min_run_time numeric(10,2) null comment '最小耗时'
 ) comment '参数分析表';
 ```
 
@@ -201,7 +203,7 @@ public class TestInvoke implements InvokedHandler {
 public class TestInvoke implements InvokedHandler {
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
-       
+
     }
 
     @Override
@@ -220,22 +222,26 @@ public class TestInvoke implements InvokedHandler {
 > 与全局异常捕获@ControllerAdvice不冲突
 
 如果自己手动进行`try-catch`捕获，无法进行监听和显示，
-可以使用`KoUtil.throwException(e)`进行改造，即可监听并显示：
+可以使用`KoUtil.throwException(e)`或者`KoUtil.recordException(e)`进行改造，即可监听并显示：
+
+两者的区别是：
+
+>  KoUtil.throwException(e)和正常throw e一样，无法继续往下执行了
+>  KoUtil.recordException(e)仅仅是记录异常，代码可以往下执行
 
 ```java
- try {
-    //你的代码
-} catch (Exception e) {
-    //做一些你自己的处理
-    KoUtil.throwException(e);
-    //经过throwException代码和正常throw e一样，无法继续往下执行了
-}
+        try {
+        //你的代码
+        } catch (Exception e) {
+        //做一些你自己的处理
+        KoUtil.throwException(e);
+        }
 ```
 
 ## 耗时预警通知
 
 > v2.2.5开始加入了邮件通知功能，当方法耗时超过阈值之后，可以选择进行邮件通知
-> 
+>
 > Note: 请先确保网络通常
 
 ### 配置
@@ -280,8 +286,20 @@ ko-time.mail-scope=Controller # 邮件检测范围 默认Controller（接口层�
 
 > 不用但心同一个接口耗时严重时重复疯狂地收到邮件，发过一次之后会等很久的
 
-![输入图片说明](../v200/image.png)
+![输入图片说明](email.png)
 
+## 热更新
+
+> v2.2.8开始 在不重启项目的情况，通过KoTime在线更新代码
+
+> 注意：该功能基于 jvm attach api 不支持在类中新增方法或者属性后进行热更新，仅支持方法内部的代码更改
+
+
+浏览器访问/koTime，找到热更新选项，上传编译过的的类文件：
+
+> 更改代码->maven compile->选择target/classes目录下需要更新的类->填写类名->提交
+
+> [使用本地化插件Idea内一键更新](http://www.kotime.cn/docs/kaiyuan#/v220/plugin)
 
 ---
 

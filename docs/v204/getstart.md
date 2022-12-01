@@ -9,6 +9,8 @@
     <artifactId>ko-time</artifactId>
     <version>2.1.1</version>
   </dependency>
+    <!--可到右上角选择最新版本，体验新功能-->
+
 ```
 
 ## 配置

@@ -3,7 +3,7 @@
 
 ## Various saver
 
- You can choose different saver in {memory,database,redis} since v2.2.0
+You can choose different saver in {memory,database,redis} since v2.2.0
 
 ### Memory saver
 
@@ -48,10 +48,10 @@ We use Springboot's StringRedisTemplate to save data for redis,and you can creat
 ```java
 @Bean("redisbean")
 public StringRedisTemplate getRedisTemplate(RedisConnectionFactory connectionFactory){
-    StringRedisTemplate template = new StringRedisTemplate();
-    template.setConnectionFactory(connectionFactory);
-    return template;
-}
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(connectionFactory);
+        return template;
+        }
 ```
 
 then Configurate:
@@ -128,46 +128,46 @@ create table ko_param_ana
 ```sql
 -- v2.2.3及以下版本
 create table ko_method_node (
-     id varchar(400) not null primary key comment '主键' ,
-     name varchar(400) null comment '类名+方法名' ,
-     class_name varchar(400) null comment '类名' ,
-     method_name varchar(400) null comment '方法名' ,
-     route_name varchar(400) null comment '路由，controller才有' ,
-     method_type varchar(64) null comment '方法类型'
+                                id varchar(400) not null primary key comment '主键' ,
+                                name varchar(400) null comment '类名+方法名' ,
+                                class_name varchar(400) null comment '类名' ,
+                                method_name varchar(400) null comment '方法名' ,
+                                route_name varchar(400) null comment '路由，controller才有' ,
+                                method_type varchar(64) null comment '方法类型'
 ) comment '方法信息表';
 
 
 create table ko_method_relation (
-     id varchar(400) not null primary key comment '' ,
-     source_id varchar(400) null comment '调用方id' ,
-     target_id varchar(400) null comment '被调用方id' ,
-     avg_run_time numeric(10,2) null comment '平均耗时' ,
-     max_run_time numeric(10,2) null comment '最大耗时' ,
-     min_run_time numeric(10,2) null comment '最小耗时'
+                                    id varchar(400) not null primary key comment '' ,
+                                    source_id varchar(400) null comment '调用方id' ,
+                                    target_id varchar(400) null comment '被调用方id' ,
+                                    avg_run_time numeric(10,2) null comment '平均耗时' ,
+                                    max_run_time numeric(10,2) null comment '最大耗时' ,
+                                    min_run_time numeric(10,2) null comment '最小耗时'
 ) comment '方法调用关系表';
 
 ;
 create table ko_exception_node (
-    id varchar(400) not null primary key comment '主键' ,
-    name varchar(400) null comment '异常名' ,
-    class_name varchar(400) null comment '类名' ,
-    message varchar(400) null comment '异常消息'
+                                   id varchar(400) not null primary key comment '主键' ,
+                                   name varchar(400) null comment '异常名' ,
+                                   class_name varchar(400) null comment '类名' ,
+                                   message varchar(400) null comment '异常消息'
 ) comment '异常表';
 
 
 create table ko_exception_relation (
-    id varchar(400) not null primary key comment '' ,
-    source_id varchar(400) null comment '调用方法id' ,
-    target_id varchar(400) null comment '异常id' ,
-    location int null comment '异常位置'
+                                       id varchar(400) not null primary key comment '' ,
+                                       source_id varchar(400) null comment '调用方法id' ,
+                                       target_id varchar(400) null comment '异常id' ,
+                                       location int null comment '异常位置'
 ) comment '异常关系表';
 
 create table ko_param_ana (
-       source_id varchar(400) null comment '调用方法id' ,
-       params varchar(400) null comment '参数组合，-分隔' ,
-       avg_run_time numeric(10,2) null comment '平均耗时' ,
-       max_run_time numeric(10,2) null comment '最大耗时' ,
-       min_run_time numeric(10,2) null comment '最小耗时'
+                              source_id varchar(400) null comment '调用方法id' ,
+                              params varchar(400) null comment '参数组合，-分隔' ,
+                              avg_run_time numeric(10,2) null comment '平均耗时' ,
+                              max_run_time numeric(10,2) null comment '最大耗时' ,
+                              min_run_time numeric(10,2) null comment '最小耗时'
 ) comment '参数分析表';
 ```
 
@@ -202,7 +202,7 @@ public class TestInvoke implements InvokedHandler {
 public class TestInvoke implements InvokedHandler {
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
-       
+
     }
 
     @Override
@@ -221,16 +221,20 @@ public class TestInvoke implements InvokedHandler {
 > 与全局异常捕获@ControllerAdvice不冲突
 
 如果自己手动进行`try-catch`捕获，无法进行监听和显示，
-可以使用`KoUtil.throwException(e)`进行改造，即可监听并显示：
+可以使用`KoUtil.throwException(e)`或者`KoUtil.recordException(e)`进行改造，即可监听并显示：
+
+两者的区别是：
+
+>  KoUtil.throwException(e)和正常throw e一样，无法继续往下执行了
+>  KoUtil.recordException(e)仅仅是记录异常，代码可以往下执行
 
 ```java
- try {
-    //你的代码
-} catch (Exception e) {
-    //做一些你自己的处理
-    KoUtil.throwException(e);
-    //经过throwException代码和正常throw e一样，无法继续往下执行了
-}
+        try {
+        //你的代码
+        } catch (Exception e) {
+        //做一些你自己的处理
+        KoUtil.throwException(e);
+        }
 ```
 
 ## 耗时预警通知
@@ -279,7 +283,17 @@ ko-time.mail-scope=Controller # 邮件检测范围 默认Controller（接口层�
 
 > 不用但心同一个接口耗时严重时重复疯狂地收到邮件，发过一次之后会等很久的
 
-![输入图片说明](../../v200/image.png)
+![输入图片说明](../email.png)
+
+
+## 热更新
+
+> v2.2.8开始 在不重启项目的情况，通过KoTime在线更新代码
+
+浏览器访问/koTime，找到热更新选项，上传编译过的的类文件：
+
+> 更改代码->maven compile->选择target/classes目录下需要更新的类->填写类名->提交
+
 
 ---
 

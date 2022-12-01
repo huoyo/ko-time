@@ -27,10 +27,10 @@ A springboot tool for tracking the paths of the methods,which can help you to fi
 > V2.0.0：Add the support for exceptions and data interfaces
 
 > V2.0.1：Remove freemarker and thymeleaf;
-          Remove 'spring.profiles.active=koTime';
-          Remove getAllStackTraces();
-          Remove layui;
-          Optimize configs；
+Remove 'spring.profiles.active=koTime';
+Remove getAllStackTraces();
+Remove layui;
+Optimize configs；
 
 > V2.0.2：Add auth;
 
@@ -48,8 +48,3 @@ A springboot tool for tracking the paths of the methods,which can help you to fi
 > Huoyo/Zhang Chang
 
 ---
-
-**Donate**
-
-<img src="v201/pay.jpg"  width="15%" height="15%">
-

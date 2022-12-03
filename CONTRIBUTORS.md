@@ -24,4 +24,5 @@
 - [x] [chnyang](https://gitee.com/chnyang)
 - [x] [Leaybc](https://gitee.com/Leaybc)
 - [x] [疯狂的逍遥](https://gitee.com/wlz-xb)
+- [x] [Mr.yuan]()
 

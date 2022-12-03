@@ -1,10 +1,10 @@
 package cn.langpy.kotime.handler;
 
-import cn.langpy.kotime.model.ExceptionNode;
 import cn.langpy.kotime.model.InvokedInfo;
 import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.service.MethodNodeService;
+import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodStack;
 import cn.langpy.kotime.util.RecordException;
@@ -29,6 +29,7 @@ public class RunTimeHandler implements MethodInterceptor {
         Object obj = null;
         MethodNode parent = MethodNodeService.getParentMethodNode();
         MethodStack.record(invocation);
+        InvokedInfo invokedInfo = new InvokedInfo();
         if (exceptionEnable) {
             try {
                 obj = invocation.proceed();
@@ -39,38 +40,21 @@ public class RunTimeHandler implements MethodInterceptor {
                 }else {
                     e = te;
                 }
-                ExceptionNode exception = new ExceptionNode();
-                exception.setName(e.getClass().getSimpleName());
-                exception.setClassName(e.getClass().getName());
-                exception.setMessage(e.getMessage()+"");
-                exception.setId(exception.getClassName() +"."+ exception.getName());
-                MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, 0.0);
-                for (StackTraceElement stackTraceElement : e.getStackTrace()) {
-                    if (stackTraceElement.getClassName().equals(current.getClassName())) {
-                        exception.setValue(stackTraceElement.getLineNumber());
-                        InvokedInfo invokedInfo = new InvokedInfo();
-                        invokedInfo.setCurrent(current);
-                        invokedInfo.setParent(parent);
-                        invokedInfo.setException(exception);
-                        invokedInfo.setNames(parameters);
-                        invokedInfo.setValues(invocation.getArguments());
-                        InvokedQueue.add(invokedInfo);
-                        InvokedQueue.wake();
-                        break;
-                    }
-                }
-                MethodStack.clear();
+                long end = System.nanoTime();
+                invokedInfo = Common.getInvokedInfoWithException(invocation,parent,e,((end - begin) / 1000000.0));
                 if (!(te instanceof RecordException)) {
                     throw te;
                 }
+            }finally {
+                InvokedQueue.add(invokedInfo);
+                InvokedQueue.wake();
+                MethodStack.clear();
+                return obj;
             }
-        } else {
-            obj = invocation.proceed();
         }
+        obj = invocation.proceed();
         long end = System.nanoTime();
         MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, ((end - begin) / 1000000.0));
-
-        InvokedInfo invokedInfo = new InvokedInfo();
         invokedInfo.setCurrent(current);
         invokedInfo.setParent(parent);
         invokedInfo.setNames(parameters);

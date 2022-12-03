@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
@@ -48,7 +47,7 @@ public class RedisBase implements GraphService {
         if (!redisTemplate.hasKey(key)) {
             insert(key, methodNode);
         } else {
-            if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
+            if (methodNode.getMethodType() == MethodType.Controller && !Common.isEmpty(methodNode.getRouteName())) {
                 MethodNode controller = query(key, MethodNode.class);
                 if (controller==null) {
                     return;

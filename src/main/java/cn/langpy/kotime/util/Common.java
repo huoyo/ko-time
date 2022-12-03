@@ -1,11 +1,13 @@
 package cn.langpy.kotime.util;
 
+import cn.langpy.kotime.model.ExceptionNode;
+import cn.langpy.kotime.model.InvokedInfo;
 import cn.langpy.kotime.model.MethodNode;
+import cn.langpy.kotime.service.MethodNodeService;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,9 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class Common {
     private static Logger log = Logger.getLogger(Common.class.toString());
 
-    private final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class);
+    private final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class, List.class);
 
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
@@ -135,66 +135,90 @@ public class Common {
     public static void showLog(String method, double value) {
         if ("chinese".equals(Context.getConfig().getLanguage())) {
             log.info("调用方法=" + method + "()，耗时=" + value + "毫秒");
-        } else if ( "english".equals(Context.getConfig().getLanguage())) {
+        } else if ("english".equals(Context.getConfig().getLanguage())) {
             log.info("method=" + method + "(),runTime=" + value + "ms");
         }
     }
 
     public static String getPramsStr(Parameter[] names, Object[] values) {
+        String paramsKey = "-";
+        if (names == null) {
+            return paramsKey;
+        }
         List<String> params = new ArrayList<>();
-        if (names!=null) {
-            int namesLen = names.length;
-            for (int i = 0; i < namesLen; i++) {
-                Class<?> type = names[i].getType();
-                if (baseTypes.contains(type)) {
-                    if (values[i] != null) {
-                        if (values[i] instanceof String) {
-                            if (!StringUtils.isEmpty(values[i])) {
-                                params.add(names[i].getName());
-                            }
-                        }else {
-                            params.add(names[i].getName());
-                        }
+        int namesLen = names.length;
+        for (int i = 0; i < namesLen; i++) {
+            Object valuesI = values[i];
+            if (isEmpty(valuesI)) {
+                continue;
+            }
+            Class<?> type = names[i].getType();
+            if (baseTypes.contains(type)) {
+                params.add(names[i].getName());
+            } else if (valuesI instanceof Map) {
+                Map<?, ?> map = (Map<?, ?>) valuesI;
+                Set<?> keys = map.keySet();
+                for (Object key : keys) {
+                    Object v = map.get(key);
+                    if (!isEmpty(v)) {
+                        params.add(key + "");
                     }
-                } else {
-                    if (type == HttpServletRequest.class) {
+                }
+            } else {
+                if (type == HttpServletRequest.class) {
+                    continue;
+                }
+                Field[] declaredFields = valuesI.getClass().getDeclaredFields();
+                for (Field field : declaredFields) {
+                    if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
                         continue;
                     }
-                    Object valuesI = values[i];
-                    if (valuesI==null) {
-                        continue;
-                    }
-                    Field[] declaredFields = valuesI.getClass().getDeclaredFields();
-                    for (Field field : declaredFields) {
-                        if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+                    try {
+                        field.setAccessible(true);
+                        Object value = field.get(valuesI);
+                        if (isEmpty(value)) {
                             continue;
                         }
-                        try {
-                            field.setAccessible(true);
-                            Object value = field.get(valuesI);
-                            if (value != null) {
-                                if (value instanceof String) {
-                                    if (!StringUtils.isEmpty(value)) {
-                                        params.add(field.getName());
-                                    }
-                                }else {
-                                    params.add(field.getName());
-                                }
-                            }
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }finally {
-                            field.setAccessible(false);
-                        }
+                        params.add(field.getName());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } finally {
+                        field.setAccessible(false);
                     }
                 }
             }
         }
-        String paramsKey = "-";
-        if (params.size()>0) {
+        if (params.size() > 0) {
             paramsKey = String.join("-", params);
         }
         return paramsKey;
+    }
+
+    public static boolean isEmpty(Object value) {
+        return value == null || "".equals(value) || ((value instanceof String) && ((String) value).trim().length() == 0);
+    }
+
+    public static InvokedInfo getInvokedInfoWithException(MethodInvocation invocation, MethodNode parent, Exception e, double runTime) {
+        ExceptionNode exception = new ExceptionNode();
+        exception.setName(e.getClass().getSimpleName());
+        exception.setClassName(e.getClass().getName());
+        exception.setMessage(e.getMessage() + "");
+        exception.setId(exception.getClassName() + "." + exception.getName());
+        MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, runTime);
+        System.out.println(parent.getName()+"->"+current.getName());
+        InvokedInfo invokedInfo = new InvokedInfo();
+        for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+            if (stackTraceElement.getClassName().equals(current.getClassName())) {
+                exception.setValue(stackTraceElement.getLineNumber());
+                invokedInfo.setCurrent(current);
+                invokedInfo.setParent(parent);
+                invokedInfo.setException(exception);
+                invokedInfo.setNames(invocation.getMethod().getParameters());
+                invokedInfo.setValues(invocation.getArguments());
+                break;
+            }
+        }
+        return invokedInfo;
     }
 
 }

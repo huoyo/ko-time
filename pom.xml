@@ -6,7 +6,7 @@
 
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.3.6</version>
+    <version>2.3.7</version>
     <name>KoTime</name>
     <description>A springboot tool for tracking the paths of the methods,which can help you find method's performances easily.</description>
     <licenses>

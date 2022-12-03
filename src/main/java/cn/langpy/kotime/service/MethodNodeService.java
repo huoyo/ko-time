@@ -41,7 +41,7 @@ public class MethodNodeService {
         return parent;
     }
 
-    public static MethodNode getCurrentMethodNode(MethodInvocation pjp, Double runTime) {
+    public static MethodNode getCurrentMethodNode(MethodInvocation pjp, double runTime) {
         String className = pjp.getMethod().getDeclaringClass().getName();
         String methodName = pjp.getMethod().getName();
         MethodNode current = new MethodNode();

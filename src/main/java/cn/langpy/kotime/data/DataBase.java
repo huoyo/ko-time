@@ -6,7 +6,6 @@ import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.*;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Parameter;
@@ -84,7 +83,7 @@ public class DataBase implements GraphService {
             };
             DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addMethod, params);
         } else {
-            if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
+            if (methodNode.getMethodType() == MethodType.Controller && !Common.isEmpty(methodNode.getRouteName())) {
                 Object[] params = new Object[]{
                         methodNode.getName(),
                         methodNode.getClassName(),

@@ -6,7 +6,6 @@ import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.MethodType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
@@ -47,7 +46,7 @@ public class MemoryBase implements GraphService {
         if (!methodNodes.containsKey(methodNode.getId())) {
             methodNodes.put(methodNode.getId(), methodNode);
         } else {
-            if (methodNode.getMethodType() == MethodType.Controller && !StringUtils.isEmpty(methodNode.getRouteName())) {
+            if (methodNode.getMethodType() == MethodType.Controller && !Common.isEmpty(methodNode.getRouteName())) {
                 MethodNode controller = methodNodes.get(methodNode.getId());
                 if (controller==null) {
                     return;

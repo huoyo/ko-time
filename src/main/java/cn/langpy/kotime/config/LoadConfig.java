@@ -6,6 +6,7 @@ import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.service.EmailSendService;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.InvokedQueue;
+import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.DataBaseException;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
@@ -143,7 +144,7 @@ public class LoadConfig {
             DataSource dataSource = applicationContext.getBean(DataSource.class);
             Context.setDataSource(dataSource);
         } catch (NoUniqueBeanDefinitionException e) {
-            if (StringUtils.isEmpty(config.getDataSource())) {
+            if (Common.isEmpty(config.getDataSource())) {
                 log.severe("kotime=>No unique bean of type 'DataSource' available,you can define it by `ko-time.data-source=xxx`");
             } else {
                 DataSource dataSource = applicationContext.getBean(config.getDataSource(), DataSource.class);
@@ -162,7 +163,7 @@ public class LoadConfig {
             StringRedisTemplate redisTemplate = applicationContext.getBean(StringRedisTemplate.class);
             Context.setStringRedisTemplate(redisTemplate);
         } catch (NoUniqueBeanDefinitionException e) {
-            if (!StringUtils.isEmpty(config.getRedisTemplate())) {
+            if (!Common.isEmpty(config.getRedisTemplate())) {
                 StringRedisTemplate redisTemplate = applicationContext.getBean(config.getRedisTemplate(), StringRedisTemplate.class);
                 Context.setStringRedisTemplate(redisTemplate);
             } else {

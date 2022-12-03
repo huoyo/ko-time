@@ -18,7 +18,7 @@ KoTime Pro主要分为两部分：Client和Server,如下图：
 
 ### 1.下载
 
-订阅以后进入**个人中心**，选择一个v1.1.0下载，也可以[试用](http://kotimedoc.langpy.cn/trialpro)
+订阅以后进入**个人中心**，选择一个v1.1.0下载，也可以[试用](http://www.kotime.cn/trialpro)
 
 
 

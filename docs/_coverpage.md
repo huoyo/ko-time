@@ -10,4 +10,4 @@
 
 [Gitee](https://gitee.com/huoyo/ko-time)
 [Github](https://github.com/huoyo/ko-time.git)
-[文档教程](http://kotimedoc.langpy.cn/)
+[文档教程](http://www.kotime.cn/)

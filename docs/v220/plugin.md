@@ -53,7 +53,7 @@ KoLocal是针对KoTime开发的一款本地化插件，旨在便捷的使用KoTi
 * 打开pom.xml
 * 在文件内右击->KoTime->Analyse Dependencies
 
-> 第一次检查需要同步版本信息，需要等一会儿，另外请确保idea环境能连接网络（http://kotimedoc.langpy.cn/）
+> 第一次检查需要同步版本信息，需要等一会儿，另外请确保idea环境能连接网络（http://www.kotime.cn/）
 > 不同的开源项目有不同的要求，使用需谨慎
 
 ![](ad.png)

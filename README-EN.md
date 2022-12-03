@@ -35,7 +35,7 @@
 
 [中文简介/CHINESE](README.md)
 
-[documents](http://kotimedoc.langpy.cn/)
+[documents](http://www.kotime.cn/)
 
 
 

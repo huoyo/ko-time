@@ -386,6 +386,11 @@
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
+
+            document.getElementById("clearDataYes").onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/clearData?token='+globalToken,dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>OK</font>",{});
+            };
         }
 
         function loadStatistic() {
@@ -660,7 +665,10 @@
                 <option value="english">English</option>
              </select>
             <br>
-            <label >time threshold：</label> <input id='timeThreshold' type="input"><button id="timeThresholdYes">OK</button>
+            <label >time threshold：</label> <input id='timeThreshold' type="input"><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="timeThresholdYes">OK</button>
+            <br>
+            <label >clear data：</label><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="clearDataYes">OK</button>
+            <br>
             <br>
             <br>
             <div class="uk-alert-success" uk-alert>

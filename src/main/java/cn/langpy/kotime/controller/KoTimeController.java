@@ -334,4 +334,13 @@ public class KoTimeController {
         PhysicalMemoryInfo physicalMemoryInfo = usageService.getPhysicalMemoryInfo();
         return physicalMemoryInfo;
     }
+
+    @PostMapping("/clearData")
+    @ResponseBody
+    @Auth
+    public boolean clearData() {
+        GraphService graphService = GraphService.getInstance();
+        graphService.clearAll();
+        return true;
+    }
 }

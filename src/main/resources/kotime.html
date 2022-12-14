@@ -150,6 +150,10 @@
                 $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>设置成功</font>",{});
             };
+            document.getElementById("clearDataYes").onclick = function(){
+                $.ajax({type:'POST',url:'contextPath/koTime/clearData?token='+globalToken,dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>清除成功</font>",{});
+            };
         }
 
         function loadConfig() {
@@ -653,7 +657,9 @@
                 <option value="english">英文</option>
             </select>
             <br>
-            <label >方法运行时间阈值：</label> <input id='timeThreshold' type="input"><button id="timeThresholdYes">确认</button>
+            <label >方法运行时间阈值：</label> <input id='timeThreshold' type="input"><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="timeThresholdYes">确认</button>
+            <br>
+            <label >清空链路数据：</label><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="clearDataYes">确认</button>
             <br>
             <br>
             <div class="uk-alert-success" uk-alert>

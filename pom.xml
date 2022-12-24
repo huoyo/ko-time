@@ -25,9 +25,9 @@
     <properties>
         <aspecttj.version>1.9.9.1</aspecttj.version>
         <tomcat.version>9.0.43</tomcat.version>
-        <spring-context.version>5.3.23</spring-context.version>
-        <spring-web.version>5.3.23</spring-web.version>
-        <spring-webmvc.version>5.3.18</spring-webmvc.version>
+        <spring-context.version>6.0.0</spring-context.version>
+        <spring-web.version>6.0.0</spring-web.version>
+        <spring-webmvc.version>6.0.0</spring-webmvc.version>
         <spring-boot.version>2.7.4</spring-boot.version>
         <spring-redis.version>2.6.2</spring-redis.version>
         <spring-mail.version>2.7.3</spring-mail.version>

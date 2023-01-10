@@ -213,6 +213,12 @@
       "description": "trigger scope of email"
     },
     {
+      "name": "ko-time.static-token",
+      "type": "java.lang.String",
+      "defaultValue": "",
+      "description": "static token of html"
+    },
+    {
       "name": "ko-time.mail-enable",
       "type": "java.lang.Boolean",
       "defaultValue": false,

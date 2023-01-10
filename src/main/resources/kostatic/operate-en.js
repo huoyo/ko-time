@@ -1,5 +1,5 @@
 function checkLogin() {
-    $.get(contextPath+'/koTime/isLogin?token=' + globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/isLogin?kotoken=' + globalToken+"&project="+globalProject, function (data) {
         globalIsLogin = data['isLogin'] == 1 ? true : false;
     });
     if (globalNeedLogin == true && globalIsLogin == false) {
@@ -10,7 +10,7 @@ function checkLogin() {
 }
 
 function loadConfig(){
-    $.get(contextPath+'/koTime/getConfig?token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getConfig?kotoken='+globalToken+"&project="+globalProject, function (data) {
         // let exceptionEnable = data['exceptionEnable'];
         //
         // let exceptionEnableDom = document.getElementById('exceptionEnable');
@@ -42,16 +42,16 @@ function addConfigEvent(){
 
     document.getElementById('languageSwitch').onchange = function(){
         let selectedObj = document.getElementById('languageSwitch');
-        $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig?token='+globalToken+"&project="+globalProject,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+        $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig?kotoken='+globalToken+"&project="+globalProject,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
     };
 
     document.getElementById("timeThresholdYes").onclick = function(){
-        $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig?token='+globalToken+"&project="+globalProject,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+        $.ajax({type:'POST',url:contextPath+'/koTime/updateConfig?kotoken='+globalToken+"&project="+globalProject,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
     };
 }
 
 function loadStatistic(){
-    $.get(contextPath+'/koTime/getStatistic?token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getStatistic?kotoken='+globalToken+"&project="+globalProject, function (data) {
         let totalNum = data['totalNum'];
         let systemTotalNum = document.getElementById("systemTotalNum");
         systemTotalNum.innerHTML=totalNum;
@@ -102,7 +102,7 @@ function loadStatistic(){
 
 function loadApis(){
     let searchText = $("#searchText").val();
-    $.get(contextPath+'/koTime/getApis?question='+searchText+'&token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getApis?question='+searchText+'&kotoken='+globalToken+"&project="+globalProject, function (data) {
         let element = document.getElementById('apiList');
         html = '';
         for (let i = 0; i < data.length; i++) {
@@ -126,7 +126,7 @@ function loadApis(){
 }
 
 function loadExceptions(){
-    $.get(contextPath+'/koTime/getExceptions?token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getExceptions?kotoken='+globalToken+"&project="+globalProject, function (data) {
         let element = document.getElementById('exceptionList');
         html = '';
         for (let i = 0; i < data.length; i++) {
@@ -150,7 +150,7 @@ function paramGraph(e) {
         graph.removeNode(clickNodeId+"ana")
         methodParamMap.delete(clickNodeId+"ana")
     }else {
-        $.get(contextPath+'/koTime/getParamGraph?token='+globalToken+"&methodId="+clickNodeId.replace('node','')+"&project="+globalProject, function (data) {
+        $.get(contextPath+'/koTime/getParamGraph?kotoken='+globalToken+"&methodId="+clickNodeId.replace('node','')+"&project="+globalProject, function (data) {
             let datas = []
             for(let key in data) {
                 datas.push( {"name":key+"：avg "+data[key]['avgRunTime']+" ms"})
@@ -222,7 +222,7 @@ function showMethods(name) {
     UIkit.notification.closeAll();
     UIkit.modal(document.getElementById("modal-method")).show();
 
-    $.get(contextPath+'/koTime/getTree?methodName=' + name+'&token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getTree?methodName=' + name+'&kotoken='+globalToken+"&project="+globalProject, function (data) {
         let rootX = 100;
         let rootY = $(window).get(0).innerHeight / 2-50;
         data['x'] = rootX;
@@ -234,7 +234,7 @@ function showMethods(name) {
 };
 
 function showExceptions(id,message) {
-    $.get(contextPath+'/koTime/getMethodsByExceptionId?exceptionId=' + id+'&message='+message+'&token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getMethodsByExceptionId?exceptionId=' + id+'&message='+message+'&kotoken='+globalToken+"&project="+globalProject, function (data) {
         let html = '';
         for (let i = 0; i < data.length; i++) {
             html +=
@@ -287,7 +287,7 @@ function login() {
 }
 function searchTip(e){
     let question =  $('#searchText').val()
-    $.get(contextPath+'/koTime/getApiTips?question='+question+'&token='+globalToken+"&project="+globalProject, function (data) {
+    $.get(contextPath+'/koTime/getApiTips?question='+question+'&kotoken='+globalToken+"&project="+globalProject, function (data) {
         $("#condidates").html("")
         for (let i = 0; i < data.length; i++) {
             let name = data[i];
@@ -297,7 +297,7 @@ function searchTip(e){
 }
 
 function loadProjects(){
-    $.get(contextPath+'/koTime/getProjects?token='+globalToken+"&project=all", function (data) {
+    $.get(contextPath+'/koTime/getProjects?kotoken='+globalToken+"&project=all", function (data) {
         $("#projects").html("")
         $("#projects").append('<option selected hidden disabled value="">Select you project</option>');
         for (let i = 0; i < data.length; i++) {
@@ -310,7 +310,7 @@ function loadProjects(){
 function searchApis(e) {
     if (e.keyCode == 13) {
         let question =  $('#searchText').val()
-        $.get(contextPath+'/koTime/getApis?question='+question+'&token='+globalToken+"&project="+globalProject, function (data) {
+        $.get(contextPath+'/koTime/getApis?question='+question+'&kotoken='+globalToken+"&project="+globalProject, function (data) {
             let element = document.getElementById('apiList');
             html = '';
             for (let i = 0; i < data.length; i++) {

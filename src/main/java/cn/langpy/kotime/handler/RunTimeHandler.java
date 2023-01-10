@@ -30,38 +30,34 @@ public class RunTimeHandler implements MethodInterceptor {
         MethodNode parent = MethodNodeService.getParentMethodNode();
         MethodStack.record(invocation);
         InvokedInfo invokedInfo = new InvokedInfo();
-        if (exceptionEnable) {
-            try {
-                obj = invocation.proceed();
-            } catch (Exception te) {
-                Exception e = null;
-                if (te instanceof RecordException) {
-                    e = ((RecordException) te).getOriginalException();
-                }else {
-                    e = te;
-                }
-                long end = System.nanoTime();
-                invokedInfo = Common.getInvokedInfoWithException(invocation,parent,e,((end - begin) / 1000000.0));
-                if (!(te instanceof RecordException)) {
-                    throw te;
-                }
-            }finally {
-                InvokedQueue.add(invokedInfo);
-                InvokedQueue.wake();
-                MethodStack.clear();
-                return obj;
+        try {
+            obj = invocation.proceed();
+        } catch (Exception te) {
+            if (!exceptionEnable) {
+                throw te;
             }
+            Exception e = null;
+            if (te instanceof RecordException) {
+                e = ((RecordException) te).getOriginalException();
+            }else {
+                e = te;
+            }
+            long end = System.nanoTime();
+            invokedInfo = Common.getInvokedInfoWithException(invocation,parent,e,((end - begin) / 1000000.0));
+            if (!(te instanceof RecordException)) {
+                throw te;
+            }
+        }finally {
+            long end = System.nanoTime();
+            MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, ((end - begin) / 1000000.0));
+            invokedInfo.setCurrent(current);
+            invokedInfo.setParent(parent);
+            invokedInfo.setNames(parameters);
+            invokedInfo.setValues(invocation.getArguments());
+            InvokedQueue.add(invokedInfo);
+            InvokedQueue.wake();
+            MethodStack.clear();
+            return obj;
         }
-        obj = invocation.proceed();
-        long end = System.nanoTime();
-        MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, ((end - begin) / 1000000.0));
-        invokedInfo.setCurrent(current);
-        invokedInfo.setParent(parent);
-        invokedInfo.setNames(parameters);
-        invokedInfo.setValues(invocation.getArguments());
-        InvokedQueue.add(invokedInfo);
-        InvokedQueue.wake();
-        MethodStack.clear();
-        return obj;
     }
 }

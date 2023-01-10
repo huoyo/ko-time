@@ -205,7 +205,6 @@ public class Common {
         exception.setMessage(e.getMessage() + "");
         exception.setId(exception.getClassName() + "." + exception.getName());
         MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, runTime);
-        System.out.println(parent.getName()+"->"+current.getName());
         InvokedInfo invokedInfo = new InvokedInfo();
         for (StackTraceElement stackTraceElement : e.getStackTrace()) {
             if (stackTraceElement.getClassName().equals(current.getClassName())) {

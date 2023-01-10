@@ -96,6 +96,7 @@ public class LoadConfig {
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
         config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
         config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
+        config.setStaticToken(defaultConfig.getStaticToken());
         configDataSource(config);
         configRedisTemplate(config);
         Context.setConfig(config);

@@ -63,22 +63,33 @@ public class KoTimeController {
 
     @GetMapping("/isLogin")
     @ResponseBody
-    public Map isLogin(String token) {
+    public Map isLogin(String kotoken) {
         Map map = new HashMap();
         map.put("state", 1);
-        boolean checkLogin = KoUtil.isLogin(token);
+        boolean checkLogin = false;
+        if (StringUtils.hasText(kotoken)) {
+            if (kotoken.equals(Context.getConfig().getStaticToken())) {
+                checkLogin = true;
+            }else {
+                checkLogin = KoUtil.isLogin(kotoken);
+            }
+        }
         map.put("isLogin", checkLogin ? 1 : 0);
         return map;
     }
 
 
     @GetMapping
-    public void index(String test, HttpServletResponse response, HttpServletRequest request) {
+    public void index(String kotoken,String test, HttpServletResponse response, HttpServletRequest request) {
         if (!Context.getConfig().getEnable()) {
             return;
         }
         if (null != test) {
             return;
+        }
+        boolean staticTokenVisit = false;
+        if (StringUtils.hasText(kotoken)) {
+            staticTokenVisit = true;
         }
         response.setContentType("text/html;charset=utf-8");
         ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName());
@@ -113,6 +124,10 @@ public class KoTimeController {
                     line = line.replace("jQueryJs", jQueryJsText);
                 }else if (line.indexOf("uiKitIconsJs") > -1) {
                     line = line.replace("uiKitIconsJs", uiKitIconsJs);
+                }else if (line.indexOf("staticTokenVisitValue") > -1) {
+                    line = line.replace("staticTokenVisitValue", staticTokenVisit+"");
+                }else if (line.indexOf("staticTokenValue") > -1) {
+                    line = line.replace("staticTokenValue", "'"+Context.getConfig().getStaticToken()+"'");
                 }
                 stringBuilder.append(line + "\n");
             }

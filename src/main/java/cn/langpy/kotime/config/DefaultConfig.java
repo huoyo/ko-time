@@ -31,8 +31,17 @@ public class DefaultConfig {
     private Boolean authEnable;
     private String userName;
     private String password;
+    private String staticToken;
 
     private Long authExpire;
+
+    public String getStaticToken() {
+        return staticToken;
+    }
+
+    public void setStaticToken(String staticToken) {
+        this.staticToken = staticToken;
+    }
 
     public Boolean getVersionNotice() {
         return versionNotice;

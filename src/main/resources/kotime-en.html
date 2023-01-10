@@ -18,9 +18,22 @@
         var d = 180;
         var globalThreshold = globalThresholdValue;
         var globalNeedLogin = globalNeedLoginValue;
+        var staticTokenVisit = staticTokenVisitValue;
+        var staticToken = staticTokenValue;
+        var globalToken = staticTokenVisit?staticToken:sessionStorage.getItem("kotimeToken");
         var globalToken = sessionStorage.getItem("kotimeToken");
         let globalIsLogin = false;
-
+        
+        function concatToken(url) {
+            if (globalNeedLogin) {
+                if (url.indexOf('?')>-1) {
+                    url += '&kotoken='+globalToken;
+                }else {
+                    url += '?kotoken='+globalToken;
+                }
+            }
+            return url
+        }
 
         let methodParamMap  = new Map();
         function paramGraph(e) {
@@ -33,7 +46,7 @@
                 graph.removeNode(clickNodeId+"ana")
                 methodParamMap.delete(clickNodeId+"ana")
             }else {
-                $.get('contextPath/koTime/getParamGraph?token='+globalToken+"&methodId="+clickNodeId.replace('node',''), function (data) {
+                $.get(concatToken('contextPath/koTime/getParamGraph'+"?methodId="+clickNodeId.replace('node','')), function (data) {
                     let datas = []
                     for(let key in data) {
                         datas.push( {"name":key+"：avg "+data[key]['avgRunTime']+" ms"})
@@ -105,7 +118,7 @@
             UIkit.notification.closeAll();
             UIkit.modal(document.getElementById("modal-method")).show();
 
-            $.get('contextPath/koTime/getTree?methodName=' + name+'&token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getTree?methodName=' + name), function (data) {
                 let rootX = 100;
                 let rootY = $(window).get(0).innerHeight / 2-50;
                 data['x'] = rootX;
@@ -117,7 +130,7 @@
         };
 
         function showExceptions(id,message) {
-            $.get('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id+'&message='+message+'&token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id+'&message='+message), function (data) {
                 let html = '';
                 for (let i = 0; i < data.length; i++) {
                     html +=
@@ -170,7 +183,7 @@
         }
         function searchTip(e){
             let question =  $('#searchText').val()
-            $.get('contextPath/koTime/getApiTips?question='+question+'&token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getApiTips?question='+question), function (data) {
                 $("#condidates").html("")
                 for (let i = 0; i < data.length; i++) {
                     let name = data[i];
@@ -182,7 +195,7 @@
         function searchApis(e) {
             if (e.keyCode == 13) {
                 let question =  $('#searchText').val()
-                $.get('contextPath/koTime/getApis?question='+question+'&token='+globalToken, function (data) {
+                $.get(concatToken('contextPath/koTime/getApis?question='+question), function (data) {
                     let element = document.getElementById('apiList');
                     html = '';
                     for (let i = 0; i < data.length; i++) {
@@ -223,7 +236,7 @@
             formData.append('className', className );
 
             $.ajax({
-                url: 'contextPath/koTime/updateClass?token='+globalToken,
+                url: concatToken('contextPath/koTime/updateClass'),
                 type: 'POST',
                 cache: false,
                 data: formData,
@@ -267,7 +280,7 @@
             })
         }
         function loadCpuInfo() {
-            $.get('contextPath/koTime/getCpuInfo?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getCpuInfo'), function (data) {
                 let systemLoad = data['systemLoad']*100;
                 let userRate = data['userRate']*100;
                 let sysRate = data['sysRate']*100;
@@ -289,7 +302,7 @@
             });
         }
         function loadHeapMemoryInfo() {
-            $.get('contextPath/koTime/getHeapMemoryInfo?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getHeapMemoryInfo'), function (data) {
                 let initValue = data['initValue']/1024/1024;
                 let maxValue = data['maxValue']/1024/1024;
                 let usedValue = data['usedValue']/1024/1024;
@@ -307,7 +320,7 @@
             });
         }
         function loadPhysicalMemoryInfo() {
-            $.get('contextPath/koTime/getPhysicalMemoryInfo?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getPhysicalMemoryInfo'), function (data) {
                 let initValue = data['initValue']/1024/1024;
                 let thisUsedValue = data['thisUsedValue']/1024/1024;
                 let usedValue = data['usedValue']/1024/1024;
@@ -326,7 +339,7 @@
         }
 
         function loadConfig() {
-            $.get('contextPath/koTime/getConfig?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getConfig'), function (data) {
                 let versionNoticeEnable = data['versionNotice'];
                 if (versionNoticeEnable) {
                     loadLatestVersion();
@@ -361,40 +374,40 @@
         function addConfigEvent() {
 
             document.getElementById('kotimeEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({enable:document.getElementById('kotimeEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById('exceptionEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({exceptionEnable:document.getElementById('exceptionEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById('logEnable').onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({logEnable:document.getElementById('logEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById('languageSwitch').onchange = function(){
                 let selectedObj = document.getElementById('languageSwitch');
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
 
 
             document.getElementById("timeThresholdYes").onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/updateConfig?token='+globalToken,data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({threshold:document.getElementById('timeThreshold').value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
 
             document.getElementById("clearDataYes").onclick = function(){
-                $.ajax({type:'POST',url:'contextPath/koTime/clearData?token='+globalToken,dataType:'json', headers: {'Content-Type': 'application/json' }});
+                $.ajax({type:'POST',url:'contextPath/koTime/clearData?kotoken='+globalToken,dataType:'json', headers: {'Content-Type': 'application/json' }});
                 UIkit.notification("<font color='green'>OK</font>",{});
             };
         }
 
         function loadStatistic() {
-            $.get('contextPath/koTime/getStatistic?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getStatistic'), function (data) {
                 let totalNum = data['totalNum'];
                 let systemTotalNum = document.getElementById("systemTotalNum");
                 systemTotalNum.innerHTML=totalNum;
@@ -439,7 +452,7 @@
 
         function loadApis() {
             let searchText = $("#searchText").val();
-            $.get('contextPath/koTime/getApis?question='+searchText+'&token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getApis?question='+searchText), function (data) {
                 let element = document.getElementById('apiList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
@@ -463,7 +476,7 @@
         }
 
         function loadExceptions() {
-            $.get('contextPath/koTime/getExceptions?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/getExceptions'), function (data) {
                 let element = document.getElementById('exceptionList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
@@ -478,7 +491,7 @@
         }
 
         function refreshData() {
-            $.get('contextPath/koTime/isLogin?token='+globalToken, function (data) {
+            $.get(concatToken('contextPath/koTime/isLogin'), function (data) {
                 globalIsLogin  = data['isLogin']==1?true:false;
                 if (globalNeedLogin==true && globalIsLogin == false) {
                     UIkit.modal(document.getElementById("modal-login")).show();

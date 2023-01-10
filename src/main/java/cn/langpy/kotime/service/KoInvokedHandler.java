@@ -17,7 +17,7 @@ public final class KoInvokedHandler implements InvokedHandler {
 
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
-        if (current!=null && current.getValue()==0.0) {
+        if (current == null || (current != null && current.getValue() == 0.0)) {
             return;
         }
         GraphService graphService = GraphService.getInstance();
@@ -42,7 +42,7 @@ public final class KoInvokedHandler implements InvokedHandler {
     }
 
     private MethodNode filter(MethodNode currentNode) {
-        if (currentNode==null) {
+        if (currentNode == null) {
             return null;
         }
         if (BloomFilter.exists(currentNode.getId())) {

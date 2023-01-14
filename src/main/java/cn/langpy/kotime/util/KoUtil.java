@@ -75,8 +75,8 @@ public class KoUtil {
      * this method will throw an exception named RecordException,and RunTimeHandler will receive it so that it can be record by ko-time
      */
     public static void throwException(Exception e) {
-        RecordException recordException = new RecordException(e);
-        throw recordException;
+        ThrowException throwException = new ThrowException(e);
+        throw throwException;
     }
 
     /**

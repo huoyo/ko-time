@@ -1,10 +1,10 @@
 package cn.langpy.kotime.util;
 
-public class RecordException extends RuntimeException {
+public class ThrowException extends RuntimeException {
 
     private Exception originalException;
 
-    public RecordException(Exception originalException) {
+    public ThrowException(Exception originalException) {
         this.originalException = originalException;
     }
 

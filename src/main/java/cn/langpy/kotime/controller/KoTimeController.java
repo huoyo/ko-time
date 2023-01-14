@@ -127,7 +127,7 @@ public class KoTimeController {
                 }else if (line.indexOf("staticTokenVisitValue") > -1) {
                     line = line.replace("staticTokenVisitValue", staticTokenVisit+"");
                 }else if (line.indexOf("staticTokenValue") > -1) {
-                    line = line.replace("staticTokenValue", "'"+Context.getConfig().getStaticToken()+"'");
+                    line = line.replace("staticTokenValue", "'"+kotoken+"'");
                 }
                 stringBuilder.append(line + "\n");
             }

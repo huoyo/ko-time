@@ -198,6 +198,16 @@ public class Common {
         return value == null || "".equals(value) || ((value instanceof String) && ((String) value).trim().length() == 0);
     }
 
+    public static InvokedInfo getInvokedInfo(MethodInvocation invocation, MethodNode parent, double runTime) {
+        MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, runTime);
+        InvokedInfo invokedInfo = new InvokedInfo();
+        invokedInfo.setCurrent(current);
+        invokedInfo.setParent(parent);
+        invokedInfo.setNames(invocation.getMethod().getParameters());
+        invokedInfo.setValues(invocation.getArguments());
+        return invokedInfo;
+    }
+
     public static InvokedInfo getInvokedInfoWithException(MethodInvocation invocation, MethodNode parent, Exception e, double runTime) {
         ExceptionNode exception = new ExceptionNode();
         exception.setName(e.getClass().getSimpleName());

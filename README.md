@@ -1,6 +1,8 @@
 
 > 感谢那些默默Star和提建议的支持者们，有你们才有KoTime的逐步完善
 
+[支持作者和技术服务](https://afdian.net/a/huoyo)
+
 
 <div align="center">
     <h1 >KoTime</h1> 

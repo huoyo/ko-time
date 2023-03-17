@@ -7,6 +7,7 @@ import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.ClassService;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.SysUsageService;
+import cn.langpy.kotime.service.ThreadUsageService;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.InvalidAuthInfoException;
 import cn.langpy.kotime.util.KoUtil;
@@ -357,5 +358,14 @@ public class KoTimeController {
         GraphService graphService = GraphService.getInstance();
         graphService.clearAll();
         return true;
+    }
+
+    @GetMapping("/getThreadsInfo")
+    @ResponseBody
+    @Auth
+    public List getThreadsInfo() {
+        ThreadUsageService usageService = ThreadUsageService.newInstance();
+        List<ThreadInfo> threads = usageService.getThreads();
+        return threads;
     }
 }

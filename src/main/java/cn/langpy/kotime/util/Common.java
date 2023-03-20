@@ -200,6 +200,7 @@ public class Common {
 
     public static InvokedInfo getInvokedInfo(MethodInvocation invocation, MethodNode parent, double runTime) {
         MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, runTime);
+        parent = checkControllerParent(parent,current);
         InvokedInfo invokedInfo = new InvokedInfo();
         invokedInfo.setCurrent(current);
         invokedInfo.setParent(parent);
@@ -220,6 +221,7 @@ public class Common {
             if (stackTraceElement.getClassName().equals(current.getClassName())) {
                 exception.setValue(stackTraceElement.getLineNumber());
                 invokedInfo.setCurrent(current);
+                parent = checkControllerParent(parent,current);
                 invokedInfo.setParent(parent);
                 invokedInfo.setException(exception);
                 invokedInfo.setNames(invocation.getMethod().getParameters());
@@ -228,6 +230,18 @@ public class Common {
             }
         }
         return invokedInfo;
+    }
+
+    private static MethodNode checkControllerParent(MethodNode parent, MethodNode current) {
+        if (current.getMethodType() == MethodType.Controller) {
+            parent = new MethodNode();
+            parent.setId("com.langpy.kotime.Controller.dispatch");
+            parent.setClassName("Controller");
+            parent.setMethodName("dispatch");
+            parent.setName("Controller.dispatch");
+            parent.setMethodType(MethodType.Dispatcher);
+        }
+        return parent;
     }
 
 }

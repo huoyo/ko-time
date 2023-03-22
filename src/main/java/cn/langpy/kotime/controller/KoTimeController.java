@@ -21,11 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * zhangchang
@@ -71,7 +69,7 @@ public class KoTimeController {
         if (StringUtils.hasText(kotoken)) {
             if (kotoken.equals(Context.getConfig().getStaticToken())) {
                 checkLogin = true;
-            }else {
+            } else {
                 checkLogin = KoUtil.isLogin(kotoken);
             }
         }
@@ -81,7 +79,7 @@ public class KoTimeController {
 
 
     @GetMapping
-    public void index(String kotoken,String test, HttpServletResponse response, HttpServletRequest request) {
+    public void index(String kotoken, String test, HttpServletResponse response, HttpServletRequest request) {
         if (!Context.getConfig().getEnable()) {
             return;
         }
@@ -121,14 +119,14 @@ public class KoTimeController {
                     line = line.replace("UIKitJs", uiKitJsText);
                 } else if (line.indexOf("MetricFlowJs") > -1) {
                     line = line.replace("MetricFlowJs", metricFlowJsText);
-                }else if (line.indexOf("jQueryJs") > -1) {
+                } else if (line.indexOf("jQueryJs") > -1) {
                     line = line.replace("jQueryJs", jQueryJsText);
-                }else if (line.indexOf("uiKitIconsJs") > -1) {
+                } else if (line.indexOf("uiKitIconsJs") > -1) {
                     line = line.replace("uiKitIconsJs", uiKitIconsJs);
-                }else if (line.indexOf("staticTokenVisitValue") > -1) {
-                    line = line.replace("staticTokenVisitValue", staticTokenVisit+"");
-                }else if (line.indexOf("staticTokenValue") > -1) {
-                    line = line.replace("staticTokenValue", "'"+kotoken+"'");
+                } else if (line.indexOf("staticTokenVisitValue") > -1) {
+                    line = line.replace("staticTokenVisitValue", staticTokenVisit + "");
+                } else if (line.indexOf("staticTokenValue") > -1) {
+                    line = line.replace("staticTokenValue", "'" + kotoken + "'");
                 }
                 stringBuilder.append(line + "\n");
             }
@@ -139,6 +137,7 @@ public class KoTimeController {
             e.printStackTrace();
         }
     }
+
     private String getResourceText(String fileName) {
         ClassPathResource classPathResource = new ClassPathResource(fileName);
         try (InputStream inputStream = classPathResource.getInputStream();
@@ -229,9 +228,9 @@ public class KoTimeController {
     @GetMapping("/getMethodsByExceptionId")
     @ResponseBody
     @Auth
-    public List<ExceptionInfo> getMethodsByExceptionId(String exceptionId,String message) {
+    public List<ExceptionInfo> getMethodsByExceptionId(String exceptionId, String message) {
         GraphService graphService = GraphService.getInstance();
-        List<ExceptionInfo> exceptionInfos = graphService.getExceptionInfos(exceptionId,message);
+        List<ExceptionInfo> exceptionInfos = graphService.getExceptionInfos(exceptionId, message);
         return exceptionInfos;
     }
 
@@ -257,12 +256,13 @@ public class KoTimeController {
         }
         return true;
     }
+
     @PostMapping("/updateClass")
     @ResponseBody
     @Auth
-    public Map updateClass(@RequestParam("classFile") MultipartFile classFile,String className) {
+    public Map updateClass(@RequestParam("classFile") MultipartFile classFile, String className) {
         Map map = new HashMap();
-        if (classFile==null || classFile.isEmpty()) {
+        if (classFile == null || classFile.isEmpty()) {
             map.put("state", 0);
             map.put("message", "文件不能为空");
             return map;
@@ -288,7 +288,7 @@ public class KoTimeController {
                 map.put("message", "请确认类名是否正确");
                 return map;
             }
-            file = uploadFile(classFile.getBytes(),filename[0]);
+            file = uploadFile(classFile.getBytes(), filename[0]);
         } catch (IOException e) {
             log.severe("Error class file!");
             map.put("state", 0);
@@ -296,7 +296,7 @@ public class KoTimeController {
             return map;
         }
         final ClassService classService = ClassService.getInstance();
-        classService.updateClass(className,file.getAbsolutePath());
+        classService.updateClass(className, file.getAbsolutePath());
         file.deleteOnExit();
 
         map.put("state", 1);
@@ -305,19 +305,18 @@ public class KoTimeController {
     }
 
 
-
-    private static File uploadFile(byte[] file,String fileName) throws IOException {
+    private static File uploadFile(byte[] file, String fileName) throws IOException {
         FileOutputStream out = null;
         try {
-            File targetFile = File.createTempFile(fileName,  ".class", new File(System.getProperty("java.io.tmpdir")));
+            File targetFile = File.createTempFile(fileName, ".class", new File(System.getProperty("java.io.tmpdir")));
             out = new FileOutputStream(targetFile.getAbsolutePath());
             out.write(file);
             out.flush();
             return targetFile;
         } catch (Exception e) {
             log.severe("" + e);
-        }finally {
-            if(out !=null){
+        } finally {
+            if (out != null) {
                 out.flush();
                 out.close();
             }
@@ -342,6 +341,7 @@ public class KoTimeController {
         HeapMemoryInfo heapMemoryInfo = usageService.getHeapMemoryInfo();
         return heapMemoryInfo;
     }
+
     @GetMapping("/getPhysicalMemoryInfo")
     @ResponseBody
     @Auth
@@ -363,9 +363,20 @@ public class KoTimeController {
     @GetMapping("/getThreadsInfo")
     @ResponseBody
     @Auth
-    public List getThreadsInfo() {
+    public Map getThreadsInfo(String state) {
         ThreadUsageService usageService = ThreadUsageService.newInstance();
         List<ThreadInfo> threads = usageService.getThreads();
-        return threads;
+        threads = threads.stream().sorted(Comparator.comparing(ThreadInfo::getState)).collect(Collectors.toList());
+
+        Map<String, Long> stateCounting = threads.stream().collect(Collectors.groupingBy(ThreadInfo::getState, Collectors.counting()));
+        stateCounting.put("all",(long)threads.size());
+
+        Map map = new HashMap();
+        map.put("statistics", stateCounting);
+        if (StringUtils.hasText(state)) {
+            threads = threads.stream().filter(a -> a.getState().equals(state)).collect(Collectors.toList());
+        }
+        map.put("threads", threads);
+        return map;
     }
 }

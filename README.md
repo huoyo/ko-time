@@ -9,7 +9,7 @@
 </div>
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.7-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.9-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>
@@ -22,6 +22,7 @@
 - ✅ Find exceptions occurred in methods
 - ✅ Email you after finding an overtime method
 - ✅ Hot update online:you needn't restart it
+- ✅ Thread manage:show threads information
 - ✅ Easy to use:you needn't additional learning costs
 - ✅ Enough to add a pom dependency:you needn't additional deployment costs
 
@@ -35,6 +36,7 @@
 - ✅ 追踪系统异常，精确定位到方法
 - ✅ 接口超时邮件通知，无需实时查看
 - ✅ 线上热更新：无需重启更新代码
+- ✅ 线程管理：线程实时统计与状态查看
 - ✅ 使用简单，无技术学习成本
 - ✅ pom依赖即可，无代码侵入，无多余部署成本
 
@@ -86,6 +88,13 @@
 v2.2.5开始加入了邮件通知功能，当方法耗时超过阈值之后，可以选择进行邮件通知
 
 ![输入图片说明](docs/v200/image.png)
+
+5.线程管理
+
+v2.3.9开始加入了线程管理功能，可以统计线程状态和查看线程堆栈信息
+
+![输入图片说明](docs/v220/xcgl.png)
+![输入图片说明](docs/v220/xcgl2.png)
 
 ## 重要版本说明
 

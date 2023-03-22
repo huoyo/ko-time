@@ -37,4 +37,9 @@ public class ThreadUsageService {
         }
         return list;
     }
+
+    public List<ThreadInfo> getThreads(String state) {
+        List<ThreadInfo> threads = getThreads();
+        return threads.stream().filter(a -> a.getState().equals(state)).collect(Collectors.toList());
+    }
 }

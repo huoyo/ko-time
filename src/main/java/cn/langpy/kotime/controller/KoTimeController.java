@@ -79,7 +79,7 @@ public class KoTimeController {
 
 
     @GetMapping
-    public void index(String kotoken, String test,String charset, HttpServletResponse response, HttpServletRequest request) {
+    public void index(String kotoken, String test,String charset, String language,HttpServletResponse response, HttpServletRequest request) {
         if (!Context.getConfig().getEnable()) {
             return;
         }
@@ -94,7 +94,7 @@ public class KoTimeController {
             charset = "utf-8";
         }
         response.setContentType("text/html;charset="+charset);
-        ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName());
+        ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName(language));
         try (
                 InputStream inputStream = classPathResource.getInputStream();
                 InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");

@@ -1,6 +1,7 @@
 package cn.langpy.kotime.constant;
 
 import cn.langpy.kotime.util.Context;
+import org.springframework.util.StringUtils;
 
 public class KoConstant {
     public final static String comMethodRange = "@annotation(cn.langpy.kotime.annotation.ComputeTime)";
@@ -14,8 +15,11 @@ public class KoConstant {
     public final static String kotimeViewerEn = "kotime-en.html";
     public final static String loginName = "kotimeUserName";
 
-    public static String getViewName() {
-        if ("chinese".equals(Context.getConfig().getLanguage())) {
+    public static String getViewName(String language) {
+        if (!StringUtils.hasText(language)) {
+            language = Context.getConfig().getLanguage();
+        }
+        if ("chinese".equals(language)) {
             return kotimeViewer;
         }else {
             return kotimeViewerEn;

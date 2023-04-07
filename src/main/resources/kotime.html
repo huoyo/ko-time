@@ -154,6 +154,11 @@
                 UIkit.notification("<font color='green'>设置成功</font>",{});
             };
 
+            document.getElementById('mailEnable').onclick = function(){
+                $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({mailEnable:document.getElementById('mailEnable').checked}),dataType:'json', headers: {'Content-Type': 'application/json' }});
+                UIkit.notification("<font color='green'>设置成功</font>",{});
+            };
+
             document.getElementById('languageSwitch').onchange = function(){
                 let selectedObj = document.getElementById('languageSwitch');
                 $.ajax({type:'POST',url:concatToken('contextPath/koTime/updateConfig'),data:JSON.stringify({language:selectedObj.options[selectedObj.selectedIndex].value}),dataType:'json', headers: {'Content-Type': 'application/json' }});
@@ -197,6 +202,10 @@
                 let logEnable = data['logEnable'];
                 let logEnableDom = document.getElementById('logEnable');
                 logEnableDom.checked = logEnable;
+
+                let mailEnable = data['mailEnable'];
+                let mailEnableDom = document.getElementById('mailEnable');
+                mailEnableDom.checked = mailEnable;
 
                 let language = data['language'];
                 $("#languageSwitch").val(language)
@@ -768,6 +777,8 @@
             <label >开启异常监测：</label> <input id='exceptionEnable' type="checkbox">
             <br>
             <label >开启控制台日志：</label> <input id='logEnable' type="checkbox">
+            <br>
+            <label >开启邮件通知：</label> <input id='mailEnable' type="checkbox">
             <br>
             <label>语言选择：</label>
             <select id="languageSwitch" >

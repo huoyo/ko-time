@@ -35,6 +35,97 @@ public class DefaultConfig {
 
     private Long authExpire;
 
+    private Boolean mailEnable;
+    private String mailHost;
+    private Integer mailPort;
+    private String mailProtocol;
+    private String mailEncoding;
+    private String mailUser;
+    private String mailCode;
+    private String mailReceivers;
+    private Integer mailThreshold;
+    private String mailScope;
+
+    public Boolean getMailEnable() {
+        return mailEnable;
+    }
+
+    public void setMailEnable(Boolean mailEnable) {
+        this.mailEnable = mailEnable;
+    }
+
+    public String getMailHost() {
+        return mailHost;
+    }
+
+    public void setMailHost(String mailHost) {
+        this.mailHost = mailHost;
+    }
+
+    public Integer getMailPort() {
+        return mailPort;
+    }
+
+    public void setMailPort(Integer mailPort) {
+        this.mailPort = mailPort;
+    }
+
+    public String getMailProtocol() {
+        return mailProtocol;
+    }
+
+    public void setMailProtocol(String mailProtocol) {
+        this.mailProtocol = mailProtocol;
+    }
+
+    public String getMailEncoding() {
+        return mailEncoding;
+    }
+
+    public void setMailEncoding(String mailEncoding) {
+        this.mailEncoding = mailEncoding;
+    }
+
+    public String getMailUser() {
+        return mailUser;
+    }
+
+    public void setMailUser(String mailUser) {
+        this.mailUser = mailUser;
+    }
+
+    public String getMailCode() {
+        return mailCode;
+    }
+
+    public void setMailCode(String mailCode) {
+        this.mailCode = mailCode;
+    }
+
+    public String getMailReceivers() {
+        return mailReceivers;
+    }
+
+    public void setMailReceivers(String mailReceivers) {
+        this.mailReceivers = mailReceivers;
+    }
+
+    public Integer getMailThreshold() {
+        return mailThreshold;
+    }
+
+    public void setMailThreshold(Integer mailThreshold) {
+        this.mailThreshold = mailThreshold;
+    }
+
+    public String getMailScope() {
+        return mailScope;
+    }
+
+    public void setMailScope(String mailScope) {
+        this.mailScope = mailScope;
+    }
+
     public String getStaticToken() {
         return staticToken;
     }

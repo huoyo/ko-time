@@ -17,16 +17,17 @@ public class EmailHandler implements InvokedHandler {
     private static Logger log = Logger.getLogger(EmailHandler.class.toString());
     @Value("${ko-time.mail-scope:Controller}")
     private String mailScope;
-    @Autowired
-    private EmailSendService emailSendService;
 
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
+        if (!Context.getConfig().getMailEnable()) {
+            return;
+        }
         if (current == null || current.getValue() < Context.getConfig().getThreshold()) {
             return;
         }
         if (mailScope.equals("All") || current.getMethodType().name().equals(mailScope)) {
-            emailSendService.sendNoticeAsync(current);
+            EmailSendService.sendNoticeAsync(current);
         }
     }
 }

@@ -79,7 +79,7 @@ public class KoTimeController {
 
 
     @GetMapping
-    public void index(String kotoken, String test, HttpServletResponse response, HttpServletRequest request) {
+    public void index(String kotoken, String test,String charset, HttpServletResponse response, HttpServletRequest request) {
         if (!Context.getConfig().getEnable()) {
             return;
         }
@@ -90,7 +90,10 @@ public class KoTimeController {
         if (StringUtils.hasText(kotoken)) {
             staticTokenVisit = true;
         }
-        response.setContentType("text/html;charset=utf-8");
+        if (!StringUtils.hasText(charset)) {
+            charset = "utf-8";
+        }
+        response.setContentType("text/html;charset="+charset);
         ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName());
         try (
                 InputStream inputStream = classPathResource.getInputStream();
@@ -247,6 +250,9 @@ public class KoTimeController {
         }
         if (config.getLogEnable() != null) {
             koTimeConfig.setLogEnable(config.getLogEnable());
+        }
+        if (config.getMailEnable() != null) {
+            koTimeConfig.setMailEnable(config.getMailEnable());
         }
         if (config.getThreshold() != null) {
             koTimeConfig.setThreshold(config.getThreshold());

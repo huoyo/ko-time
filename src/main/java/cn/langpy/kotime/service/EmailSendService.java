@@ -2,7 +2,7 @@ package cn.langpy.kotime.service;
 
 import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.util.Context;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StringUtils;
@@ -18,50 +18,61 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
-public class EmailSendService extends JavaMailSenderImpl {
+public class EmailSendService{
     private static Logger log = Logger.getLogger(EmailSendService.class.toString());
+    private volatile static JavaMailSenderImpl javaMailSender;
 
     private static ConcurrentMap<String, Integer> redMethods = new ConcurrentHashMap<>();
     private final static ExecutorService emailExecutors = Executors.newFixedThreadPool(5);
 
-    @Value("${ko-time.mail-receivers:}")
-    private String receivers;
-    @Value("${ko-time.mail-threshold:4}")
-    private Integer threshold;
-    @Value("${ko-time.data-prefix:}")
-    private String dataPrefix;
-    @Value("${ko-time.mail-user:}")
-    private String user;
+    public static JavaMailSender getMailSender() {
+        if (javaMailSender == null) {
+            synchronized (EmailSendService.class) {
+                if (javaMailSender == null) {
+                    javaMailSender = new JavaMailSenderImpl();
+                    javaMailSender.setHost(Context.getConfig().getMailHost());
+                    javaMailSender.setPort(Context.getConfig().getMailPort());
+                    javaMailSender.setUsername(Context.getConfig().getMailUser());
+                    javaMailSender.setPassword(Context.getConfig().getMailCode());
+                    javaMailSender.setProtocol(Context.getConfig().getMailProtocol());
+                    javaMailSender.setDefaultEncoding(Context.getConfig().getMailEncoding());
+                }
+            }
+        }
+        return javaMailSender;
+    }
 
-    public void sendNoticeAsync(MethodNode current) {
+    public static void sendNoticeAsync(MethodNode current) {
         emailExecutors.submit(() -> sendNotice(current));
     }
 
-    public void sendNotice(MethodNode current) {
-        if (!StringUtils.hasText(receivers)) {
+
+    public static void sendNotice(MethodNode current) {
+        if (!StringUtils.hasText(Context.getConfig().getMailReceivers())) {
             return;
         }
+        JavaMailSender mailSender = getMailSender();
         if (redMethods.containsKey(current.getId())) {
             int n = redMethods.get(current.getId());
             n += 1;
-            if (n >= threshold) {
-                this.send(createMessage(current));
+            if (n >= Context.getConfig().getMailThreshold()) {
+                mailSender.send(createMessage(mailSender,current));
                 redMethods.put(current.getId(), -2000);
             } else {
                 redMethods.put(current.getId(), n);
             }
         } else {
             redMethods.put(current.getId(), 1);
-            if (threshold == 1) {
-                this.send(createMessage(current));
+            if (Context.getConfig().getMailThreshold() == 1) {
+                mailSender.send(createMessage(mailSender,current));
             }
         }
     }
 
-    private MimeMessage createMessage(MethodNode current) {
+    private static MimeMessage createMessage(JavaMailSender mailSender, MethodNode current) {
         MimeMessage mimeMessage = null;
         try {
-            mimeMessage = this.createMimeMessage();
+            mimeMessage = mailSender.createMimeMessage();
             configMessage(current, mimeMessage);
         } catch (MessagingException e) {
             log.severe("Error email message!");
@@ -69,20 +80,20 @@ public class EmailSendService extends JavaMailSenderImpl {
         return mimeMessage;
     }
 
-    private void configMessage(MethodNode current, MimeMessage mimeMessage) throws MessagingException {
-        String[] receiversArray = receivers.split(",");
+    private static void configMessage(MethodNode current, MimeMessage mimeMessage) throws MessagingException {
+        String[] receiversArray = Context.getConfig().getMailReceivers().split(",");
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-        messageHelper.setSubject("KoTime耗时预警-" + dataPrefix + "-" + current.getName());
-        messageHelper.setFrom(user);
+        messageHelper.setSubject("KoTime耗时预警-" + Context.getConfig().getDataPrefix() + "-" + current.getName());
+        messageHelper.setFrom(Context.getConfig().getMailUser());
         messageHelper.setTo(receiversArray);
         messageHelper.setSentDate(new Date());
         messageHelper.setText(createNoticeTemplate(current), true);
     }
 
-    private String createNoticeTemplate(MethodNode current) {
-        return "<h4>您有一个方法耗时有" + threshold + "次超过了阈值（" + Context.getConfig().getThreshold() + "），详情如下：</h4>\n" +
+    private static String createNoticeTemplate(MethodNode current) {
+        return "<h4>您有一个方法耗时有" + Context.getConfig().getMailThreshold() + "次超过了阈值（" + Context.getConfig().getThreshold() + "ms），详情如下：</h4>\n" +
                 "<div style=\"background-color: #fafdfd;border-radius: 5px;width: 600px;padding: 10px;box-shadow: #75f1bf 2px 2px 2px 2px\">\n" +
-                "    <div>项目：" + dataPrefix + "</div>\n" +
+                "    <div>项目：" + Context.getConfig().getDataPrefix() + "</div>\n" +
                 "    <div>类名：" + current.getClassName() + "</div>\n" +
                 "    <div>方法：" + current.getMethodName() + "</div>\n" +
                 "    <div>最近耗时：" + current.getValue() + " ms</div>\n" +

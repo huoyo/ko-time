@@ -56,18 +56,7 @@ public class LoadConfig {
     @Value("${server.servlet.context-path:}")
     private String serverContext;
 
-    @Value("${ko-time.mail-host:smtp.qq.com}")
-    private String host;
-    @Value("${ko-time.mail-port:587}")
-    private Integer port;
-    @Value("${ko-time.mail-protocol:smtp}")
-    private String protocol;
-    @Value("${ko-time.mail-encoding:UTF-8}")
-    private String encoding;
-    @Value("${ko-time.mail-user:}")
-    private String user;
-    @Value("${ko-time.mail-code:}")
-    private String mailCode;
+
     @Value("${ko-time.mail-enable:false}")
     private Boolean mailEnable;
 
@@ -97,6 +86,18 @@ public class LoadConfig {
         config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
         config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
         config.setStaticToken(defaultConfig.getStaticToken());
+
+        config.setMailEnable(defaultConfig.getMailEnable());
+        config.setMailProtocol(defaultConfig.getMailProtocol() == null ? "smtp" : defaultConfig.getMailProtocol());
+        config.setMailHost(defaultConfig.getMailHost() == null ? "smtp.qq.com" : defaultConfig.getMailHost());
+        config.setMailPort(defaultConfig.getMailPort() == null ? 587 : defaultConfig.getMailPort());
+        config.setMailEncoding(defaultConfig.getMailEncoding() == null ? "UTF-8" : defaultConfig.getMailEncoding());
+        config.setMailThreshold(defaultConfig.getMailThreshold() == null ? 4: defaultConfig.getMailThreshold());
+        config.setMailScope(defaultConfig.getMailScope() == null ? "Controller": defaultConfig.getMailScope());
+        config.setMailUser(defaultConfig.getMailUser());
+        config.setMailCode(defaultConfig.getMailCode());
+        config.setMailReceivers(defaultConfig.getMailReceivers());
+
         configDataSource(config);
         configRedisTemplate(config);
         Context.setConfig(config);
@@ -124,18 +125,7 @@ public class LoadConfig {
         initMethodHandlers();
     }
 
-    @Bean
-    @Lazy
-    public EmailSendService emailSendService() {
-        EmailSendService sender = new EmailSendService();
-        sender.setHost(host);
-        sender.setPort(port);
-        sender.setUsername(user);
-        sender.setPassword(mailCode);
-        sender.setProtocol(protocol);
-        sender.setDefaultEncoding(encoding);
-        return sender;
-    }
+
 
     public void configDataSource(DefaultConfig config) {
         if (!"database".equals(config.getSaver())) {

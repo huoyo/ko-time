@@ -4,20 +4,21 @@
 
 
 <div align="center">
-    <img src='https://shields.io/badge/version-2.3.6-green.svg'>
+    <img src='https://shields.io/badge/version-2.3.9-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>
 
 <h4>A lightweight springboot tool for tracing call graph ,which can help you find method's performances easily.</h4>
 
-- [x] Tracking the Java methods and calculating their execution times
-- [x] Show the paths of methods
-- [x] Find exceptions occurred in methods
-- [x] Email you after finding an overtime method
-- [x] Hot update online:you needn't restart it
-- [x] Easy to use:you needn't additional learning costs
-- [x] Enough to add a pom dependency:you needn't additional deployment costs
+- ✅ Tracking the Java methods and calculating their execution times
+- ✅ Show the paths of methods
+- ✅ Find exceptions occurred in methods
+- ✅ Email you after finding an overtime method
+- ✅ Hot update online:you needn't restart it
+- ✅ Thread manage:show threads information
+- ✅ Easy to use:you needn't additional learning costs
+- ✅ Enough to add a pom dependency:you needn't additional deployment costs
 
 
 ![222](docs/kotime.gif)

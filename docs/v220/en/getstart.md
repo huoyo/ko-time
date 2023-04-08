@@ -7,7 +7,7 @@ add a dependency in pom.xml.
  <dependency>
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>2.3.6</version>
+    <version>2.3.9</version>
   </dependency>
 ```
 

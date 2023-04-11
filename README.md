@@ -5,12 +5,12 @@
 
 
 <div align="center">
-    <h1 >KoTime</h1> 
+    <h1 >KoTime<img src='https://shields.io/badge/forSpringboot-r.svg'></h1> 
 </div>
 
 <div align="center">
     <img src='https://gitee.com/huoyo/ko-time/badge/star.svg'>
-    <img src='https://shields.io/badge/version-2.3.9-green.svg'>
+    <img src='https://shields.io/badge/version-2.4.0-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>

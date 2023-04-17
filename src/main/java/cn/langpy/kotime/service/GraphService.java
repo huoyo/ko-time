@@ -9,6 +9,9 @@ import java.util.Map;
 
 /**
  * zhangchang
+ * Note:数据的存储目前是没有考虑线程安全的，实际意义上来说，我们并不需要完整记录每一次调用的结果，因为同一个方法来说，高频调用情况下，每次的耗时差距并不大，
+ * 除此之外项目还增加了ko-time.discard-rate参数允许你去丢弃一部分数据，从而提高IO
+ * We did not care about thread-safety of all data savers,because it is unnecessary for your actual application
  */
 public interface GraphService {
 

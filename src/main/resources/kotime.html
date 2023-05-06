@@ -50,6 +50,7 @@
                     loadHeapMemoryInfo();
                     loadPhysicalMemoryInfo();
                     loadThreadsInfo();
+                    loadDynamicProperties();
                 }
             });
 
@@ -438,6 +439,39 @@
             })
         }
 
+        function updateDynamicProperties(){
+            let propertiesDom = document.querySelector("#dynamicText");
+            let propertiesText = propertiesDom.value;
+            if (propertiesText && propertiesText.indexOf("=")>0) {
+                $.ajax({
+                    type:'POST',
+                    url:concatToken('contextPath/koTime/updateDynamicProperties'),
+                    data:JSON.stringify({
+                        text:propertiesText
+                    }),
+                    dataType:'json',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    success:function (re) {
+                        UIkit.notification.closeAll();
+                        UIkit.notification("<font color='green'>更新成功</font>",{});
+                    }
+                });
+            }else {
+                UIkit.notification.closeAll();
+                UIkit.notification("<font color='red'>更新失败，请正确编写配置！</font>",{});
+            }
+
+        }
+
+        function loadDynamicProperties() {
+            $.get(concatToken('contextPath/koTime/getDynamicProperties'), function (data) {
+                let text = data['data'];
+                document.querySelector("#dynamicText").value = text;
+            });
+        }
+
         function loadLatestVersion(){
             $.ajax({
                 url: 'http://www.kotime.cn/common/latestVersion?version=2.3.8',
@@ -771,31 +805,50 @@
         </div>
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">
-        <div class="layui-tab-item">
-            <label >开启koTime：</label> <input id='kotimeEnable' type="checkbox" checked>
-            <br>
-            <label >开启异常监测：</label> <input id='exceptionEnable' type="checkbox">
-            <br>
-            <label >开启控制台日志：</label> <input id='logEnable' type="checkbox">
-            <br>
-            <label >开启邮件通知：</label> <input id='mailEnable' type="checkbox">
-            <br>
-            <label>语言选择：</label>
-            <select id="languageSwitch" >
-                <option  value="chinese">中文</option>
-                <option value="english">英文</option>
-            </select>
-            <br>
-            <label >方法运行时间阈值：</label> <input id='timeThreshold' type="input"><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="timeThresholdYes">确认</button>
-            <br>
-            <label >清空链路数据：</label><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="clearDataYes">确认</button>
-            <br>
-            <br>
-            <div class="uk-alert-success" uk-alert>
-                <a class="uk-alert-close" uk-close></a>
-                <p>变更配置以后请重新刷新页面</p>
-            </div>
-        </div>
+        <ul class="uk-flex-left" uk-tab>
+            <li class="uk-active"><a href="#" style="text-transform: unset">KoTime配置</a></li>
+            <li class=""><a href="#"  style="text-transform: unset">dynamic.properties配置</a></li>
+        </ul>
+        <ul class="uk-switcher uk-margin">
+            <li>
+                <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-left uk-card uk-card-default uk-card-body"  style="border-radius: 5px" uk-grid>
+                    <div class="layui-tab-item">
+                        <label >开启koTime：</label> <input id='kotimeEnable' type="checkbox" checked>
+                        <br>
+                        <label >开启异常监测：</label> <input id='exceptionEnable' type="checkbox">
+                        <br>
+                        <label >开启控制台日志：</label> <input id='logEnable' type="checkbox">
+                        <br>
+                        <label >开启邮件通知：</label> <input id='mailEnable' type="checkbox">
+                        <br>
+                        <label>语言选择：</label>
+                        <select id="languageSwitch" >
+                            <option  value="chinese">中文</option>
+                            <option value="english">英文</option>
+                        </select>
+                        <br>
+                        <label >方法运行时间阈值：</label> <input id='timeThreshold' type="input"><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="timeThresholdYes">确认</button>
+                        <br>
+                        <label >清空链路数据：</label><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="clearDataYes">确认</button>
+                        <br>
+                        <br>
+                        <div class="uk-alert-success" uk-alert>
+                            <a class="uk-alert-close" uk-close></a>
+                            <p>变更配置以后请重新刷新页面</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="uk-card uk-card-default uk-card-body" style="border-radius: 5px">
+                    <textarea id="dynamicText" class="uk-textarea" placeholder="" style="overflow-y: auto;height: 65%;resize: none"></textarea>
+                    <br>
+                    <br>
+                    <button type="button"  onclick="updateDynamicProperties();" style="width: 100%;background-color: #19985d;border-radius: 5px"  class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">更新</button>
+                </div>
+            </li>
+        </ul>
+
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">
         <script src='https://gitee.com/huoyo/ko-time/widget_preview' async defer></script>

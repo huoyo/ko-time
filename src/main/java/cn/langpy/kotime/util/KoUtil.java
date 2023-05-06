@@ -10,13 +10,14 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class KoUtil {
     private final static String koTimeSecret = UUID.randomUUID().toString().replace("-", "");
 
     private final static List<Integer> choices = randomSecretIndexs();
 
-    private static Map<String,Object> caches = new HashMap<>();
+    private static Map<String, Object> caches = new HashMap<>();
 
     /**
      * nothing to introduce for this, that everyone knows!
@@ -50,11 +51,11 @@ public class KoUtil {
      * note: this Datasource will not affect project's datasource
      */
     public static void setDataSource(DataSource dataSource) {
-        caches.put("dataSource",dataSource);
+        caches.put("dataSource", dataSource);
     }
 
     public static DataSource getDataSource() {
-        return (DataSource)caches.get("dataSource");
+        return (DataSource) caches.get("dataSource");
     }
 
     /**
@@ -62,11 +63,11 @@ public class KoUtil {
      * note: you can choose one between setRedisTemplate and setJedisPool to save data
      */
     public static void setStringRedisTemplate(RedisTemplate redisTemplate) {
-        caches.put("redisTemplate",redisTemplate);
+        caches.put("redisTemplate", redisTemplate);
     }
 
     public static StringRedisTemplate getStringRedisTemplate() {
-        return (StringRedisTemplate)caches.get("redisTemplate");
+        return (StringRedisTemplate) caches.get("redisTemplate");
     }
 
 
@@ -86,9 +87,9 @@ public class KoUtil {
         ExceptionNode exception = new ExceptionNode();
         exception.setName(e.getClass().getSimpleName());
         exception.setClassName(e.getClass().getName());
-        exception.setMessage(e.getMessage()+"");
-        exception.setId(exception.getClassName() +"."+ exception.getName());
-        MethodNode current =  getCurrentMethodInfo();
+        exception.setMessage(e.getMessage() + "");
+        exception.setId(exception.getClassName() + "." + exception.getName());
+        MethodNode current = getCurrentMethodInfo();
         for (StackTraceElement stackTraceElement : e.getStackTrace()) {
             if (stackTraceElement.getClassName().equals(current.getClassName())) {
                 exception.setValue(stackTraceElement.getLineNumber());
@@ -104,6 +105,7 @@ public class KoUtil {
 
     /**
      * get the current method
+     *
      * @return
      */
     public static MethodNode getCurrentMethodInfo() {
@@ -171,5 +173,47 @@ public class KoUtil {
         }
         return decodeStr;
     }
+
+    public static void setProperty(String propertyName, String propertyValue) {
+        Context.getDynamicProperties().put(propertyName, propertyValue);
+    }
+
+    public static String getProperty(String propertyName) {
+        String value = Context.getDynamicProperties().get(propertyName);
+        return value;
+    }
+
+    public static int getPropertyAsInteger(String propertyName) {
+        String value = getProperty(propertyName);
+        return Integer.valueOf(value);
+    }
+
+    public static double getPropertyAsDouble(String propertyName) {
+        String value = getProperty(propertyName);
+        return Double.valueOf(value);
+    }
+
+    public static double getPropertyAsFloat(String propertyName) {
+        String value = getProperty(propertyName);
+        return Float.valueOf(value);
+    }
+
+    public static boolean getPropertyAsBoolean(String propertyName) {
+        String value = getProperty(propertyName);
+        if ("true".equals(value) || "false".equals(value)) {
+            return Boolean.valueOf(value);
+        }
+        throw new RuntimeException("can not convert null value to boolean value.");
+    }
+
+    public static List<String> getPropertyAsList(String propertyName, String split) {
+        String value = getProperty(propertyName);
+        if (value == null) {
+            throw new RuntimeException("can not convert null value to list values.");
+        }
+        String[] split1 = value.split(split);
+        return Arrays.stream(split1).collect(Collectors.toList());
+    }
+
 
 }

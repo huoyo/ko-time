@@ -385,4 +385,47 @@ public class KoTimeController {
         map.put("threads", threads);
         return map;
     }
+
+    @PostMapping("/updateDynamicProperties")
+    @ResponseBody
+    @Auth
+    public boolean updateDynamicProperties(@RequestBody TextParam textParam) {
+        if (!StringUtils.hasText(textParam.getText())) {
+            return false;
+        }
+        String[] textSplit = textParam.getText().trim().split("\n");
+        Map<String, String> dynamicProperties = Context.getDynamicProperties();
+        for (String line : textSplit) {
+            line = line.trim();
+            int i = line.indexOf("=");
+            if (i<1) {
+                continue;
+            }
+            String propertyStr = line.substring(0, i).trim();
+            String valueStr = line.substring(i+1).trim();
+            log.info("updated property: "+propertyStr+"=("+dynamicProperties.get(propertyStr)+"->"+valueStr+")");
+            dynamicProperties.put(propertyStr,valueStr);
+        }
+
+        return true;
+    }
+
+    @GetMapping("/getDynamicProperties")
+    @ResponseBody
+    @Auth
+    public Map getDynamicProperties() {
+        Map map = new HashMap();
+        map.put("state", 0);
+        map.put("message", "文件不能为空");
+        Map<String, String> dynamicProperties = Context.getDynamicProperties();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String key : dynamicProperties.keySet()) {
+            String value = dynamicProperties.get(key);
+            if (value!=null) {
+                stringBuilder.append(key+"="+value+"\n");
+            }
+        }
+        map.put("data", stringBuilder.toString());
+        return map;
+    }
 }

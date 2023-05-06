@@ -260,6 +260,40 @@
                 complete: function () {}
             })
         }
+
+        function updateDynamicProperties(){
+            let propertiesDom = document.querySelector("#dynamicText");
+            let propertiesText = propertiesDom.value;
+            if (propertiesText && propertiesText.indexOf("=")>0) {
+                $.ajax({
+                    type:'POST',
+                    url:concatToken('contextPath/koTime/updateDynamicProperties'),
+                    data:JSON.stringify({
+                        text:propertiesText
+                    }),
+                    dataType:'json',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    success:function (re) {
+                        UIkit.notification.closeAll();
+                        UIkit.notification("<font color='green'>更新成功</font>",{});
+                    }
+                });
+            }else {
+                UIkit.notification.closeAll();
+                UIkit.notification("<font color='red'>更新失败，请正确编写配置！</font>",{});
+            }
+
+        }
+
+        function loadDynamicProperties() {
+            $.get(concatToken('contextPath/koTime/getDynamicProperties'), function (data) {
+                let text = data['data'];
+                document.querySelector("#dynamicText").value = text;
+            });
+        }
+
         function loadLatestVersion(){
             /*get the latest version so that you can update kotime immediately*/
             $.ajax({
@@ -515,6 +549,7 @@
                     loadHeapMemoryInfo();
                     loadPhysicalMemoryInfo();
                     loadThreadsInfo();
+                    loadDynamicProperties();
                 }
             });
         }
@@ -778,32 +813,51 @@
         </div>
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">
-        <div class="layui-tab-item">
-            <label >KoTime switch：</label> <input id='kotimeEnable' type="checkbox" checked>
-            <br>
-            <label >exception switch：</label> <input id='exceptionEnable' type="checkbox">
-            <br>
-            <label >console log switch：</label> <input id='logEnable' type="checkbox">
-            <br>
-            <label >email switch：</label> <input id='mailEnable' type="checkbox">
-            <br>
-            <label>language switch：</label>
-            <select id="languageSwitch" >
-                <option  value="chinese">Chinese</option>
-                <option value="english">English</option>
-             </select>
-            <br>
-            <label >time threshold：</label> <input id='timeThreshold' type="input"><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="timeThresholdYes">OK</button>
-            <br>
-            <label >clear data：</label><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="clearDataYes">OK</button>
-            <br>
-            <br>
-            <br>
-            <div class="uk-alert-success" uk-alert>
-                <a class="uk-alert-close" uk-close></a>
-                <p>Please refresh this page after updating configurations</p>
-            </div>
-        </div>
+        <ul class="uk-flex-left" uk-tab>
+            <li class="uk-active"><a href="#" style="text-transform: unset">KoTime Configuration</a></li>
+            <li class=""><a href="#"  style="text-transform: unset">dynamic.properties Configuration</a></li>
+        </ul>
+        <ul class="uk-switcher uk-margin">
+            <li>
+                <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-left uk-card uk-card-default uk-card-body"  style="border-radius: 5px" uk-grid>
+                    <div class="layui-tab-item">
+                        <label >KoTime switch：</label> <input id='kotimeEnable' type="checkbox" checked>
+                        <br>
+                        <label >exception switch：</label> <input id='exceptionEnable' type="checkbox">
+                        <br>
+                        <label >console log switch：</label> <input id='logEnable' type="checkbox">
+                        <br>
+                        <label >email switch：</label> <input id='mailEnable' type="checkbox">
+                        <br>
+                        <label>language switch：</label>
+                        <select id="languageSwitch" >
+                            <option  value="chinese">Chinese</option>
+                            <option value="english">English</option>
+                        </select>
+                        <br>
+                        <label >time threshold：</label> <input id='timeThreshold' type="input"><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="timeThresholdYes">OK</button>
+                        <br>
+                        <label >clear data：</label><button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white" id="clearDataYes">OK</button>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="uk-alert-success" uk-alert>
+                            <a class="uk-alert-close" uk-close></a>
+                            <p>Please refresh this page after updating configurations</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="uk-card uk-card-default uk-card-body" style="border-radius: 5px">
+                    <textarea id="dynamicText" class="uk-textarea" placeholder="" style="overflow-y: auto;height: 65%;resize: none"></textarea>
+                    <br>
+                    <br>
+                    <button type="button"  onclick="updateDynamicProperties();" style="width: 100%;background-color: #19985d;border-radius: 5px"  class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">OK</button>
+                </div>
+            </li>
+        </ul>
+
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">
         <script src='https://gitee.com/huoyo/ko-time/widget_preview' async defer></script>

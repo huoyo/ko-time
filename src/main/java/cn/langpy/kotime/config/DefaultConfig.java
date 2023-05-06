@@ -45,6 +45,15 @@ public class DefaultConfig {
     private String mailReceivers;
     private Integer mailThreshold;
     private String mailScope;
+    private String propertyFile;
+
+    public String getPropertyFile() {
+        return propertyFile;
+    }
+
+    public void setPropertyFile(String propertyFile) {
+        this.propertyFile = propertyFile;
+    }
 
     public Boolean getMailEnable() {
         return mailEnable;

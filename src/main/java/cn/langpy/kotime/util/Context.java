@@ -9,6 +9,8 @@ import javax.sql.DataSource;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * zhangchang
@@ -20,6 +22,7 @@ public class Context {
     private static DataSource dataSource;
     private static StringRedisTemplate stringRedisTemplate;
     private static GraphService saver;
+    private static Map<String,String> dynamicProperties;
 
     static {
         config = new DefaultConfig();
@@ -27,6 +30,7 @@ public class Context {
         config.setEnable(true);
         config.setLogLanguage("chinese");
         invokedHandlers = new ArrayList<>();
+        dynamicProperties = new ConcurrentHashMap<>();
     }
 
 
@@ -76,5 +80,13 @@ public class Context {
 
     public static void setSaver(GraphService saver) {
         Context.saver = saver;
+    }
+
+    public static Map<String, String> getDynamicProperties() {
+        return dynamicProperties;
+    }
+
+    public static void setDynamicProperties(Map<String, String> dynamicProperties) {
+        Context.dynamicProperties = dynamicProperties;
     }
 }

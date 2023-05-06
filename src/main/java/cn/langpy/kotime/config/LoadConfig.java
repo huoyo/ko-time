@@ -3,7 +3,6 @@ package cn.langpy.kotime.config;
 import cn.langpy.kotime.annotation.KoListener;
 import cn.langpy.kotime.handler.RunTimeHandler;
 import cn.langpy.kotime.handler.InvokedHandler;
-import cn.langpy.kotime.service.EmailSendService;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.util.Common;
@@ -17,7 +16,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,6 +24,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import java.io.*;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -68,35 +68,7 @@ public class LoadConfig {
 
     @PostConstruct
     public void initConfig() {
-        DefaultConfig config = new DefaultConfig();
-        config.setLogEnable(defaultConfig.getLogEnable() == null ? logEnable : defaultConfig.getLogEnable());
-        config.setLogLanguage(defaultConfig.getLogLanguage() == null ? logLanguage : defaultConfig.getLogLanguage());
-        config.setThreshold(defaultConfig.getThreshold() == null ? timeThreshold : defaultConfig.getThreshold());
-        config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
-        config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
-        config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
-        config.setDataPrefix(defaultConfig.getDataPrefix() == null ? (StringUtils.hasText(serverContext)?serverContext.substring(1):"KOTIME") : defaultConfig.getDataPrefix());
-        config.setContextPath(defaultConfig.getContextPath());
-        config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());
-        config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
-        config.setDiscardRate(defaultConfig.getDiscardRate() == null ? 0.3 : defaultConfig.getDiscardRate());
-        config.setAuthExpire(defaultConfig.getAuthExpire() == null ? (12*60*60l) : defaultConfig.getAuthExpire());
-        config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
-        config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
-        config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
-        config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
-        config.setStaticToken(defaultConfig.getStaticToken());
-
-        config.setMailEnable(defaultConfig.getMailEnable());
-        config.setMailProtocol(defaultConfig.getMailProtocol() == null ? "smtp" : defaultConfig.getMailProtocol());
-        config.setMailHost(defaultConfig.getMailHost() == null ? "smtp.qq.com" : defaultConfig.getMailHost());
-        config.setMailPort(defaultConfig.getMailPort() == null ? 587 : defaultConfig.getMailPort());
-        config.setMailEncoding(defaultConfig.getMailEncoding() == null ? "UTF-8" : defaultConfig.getMailEncoding());
-        config.setMailThreshold(defaultConfig.getMailThreshold() == null ? 4: defaultConfig.getMailThreshold());
-        config.setMailScope(defaultConfig.getMailScope() == null ? "Controller": defaultConfig.getMailScope());
-        config.setMailUser(defaultConfig.getMailUser());
-        config.setMailCode(defaultConfig.getMailCode());
-        config.setMailReceivers(defaultConfig.getMailReceivers());
+        DefaultConfig config = improveConfig();
 
         configDataSource(config);
         configRedisTemplate(config);
@@ -123,8 +95,71 @@ public class LoadConfig {
             log.info("kotime=>view:http://localhost:" + serverPort + serverContext + "/koTime");
         }
         initMethodHandlers();
+
+        loadPropertyFile();
     }
 
+    public DefaultConfig improveConfig() {
+        DefaultConfig config = new DefaultConfig();
+        config.setLogEnable(defaultConfig.getLogEnable() == null ? logEnable : defaultConfig.getLogEnable());
+        config.setLogLanguage(defaultConfig.getLogLanguage() == null ? logLanguage : defaultConfig.getLogLanguage());
+        config.setThreshold(defaultConfig.getThreshold() == null ? timeThreshold : defaultConfig.getThreshold());
+        config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
+        config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
+        config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
+        config.setDataPrefix(defaultConfig.getDataPrefix() == null ? (StringUtils.hasText(serverContext) ? serverContext.substring(1) : "KOTIME") : defaultConfig.getDataPrefix());
+        config.setContextPath(defaultConfig.getContextPath());
+        config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());
+        config.setThreadNum(defaultConfig.getThreadNum() == null ? 2 : defaultConfig.getThreadNum());
+        config.setDiscardRate(defaultConfig.getDiscardRate() == null ? 0.3 : defaultConfig.getDiscardRate());
+        config.setAuthExpire(defaultConfig.getAuthExpire() == null ? (12 * 60 * 60l) : defaultConfig.getAuthExpire());
+        config.setAuthEnable(defaultConfig.getAuthEnable() == null ? false : defaultConfig.getAuthEnable());
+        config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
+        config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
+        config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
+        config.setStaticToken(defaultConfig.getStaticToken());
+
+        config.setMailEnable(defaultConfig.getMailEnable());
+        config.setMailProtocol(defaultConfig.getMailProtocol() == null ? "smtp" : defaultConfig.getMailProtocol());
+        config.setMailHost(defaultConfig.getMailHost() == null ? "smtp.qq.com" : defaultConfig.getMailHost());
+        config.setMailPort(defaultConfig.getMailPort() == null ? 587 : defaultConfig.getMailPort());
+        config.setMailEncoding(defaultConfig.getMailEncoding() == null ? "UTF-8" : defaultConfig.getMailEncoding());
+        config.setMailThreshold(defaultConfig.getMailThreshold() == null ? 4 : defaultConfig.getMailThreshold());
+        config.setMailScope(defaultConfig.getMailScope() == null ? "Controller" : defaultConfig.getMailScope());
+        config.setMailUser(defaultConfig.getMailUser());
+        config.setMailCode(defaultConfig.getMailCode());
+        config.setMailReceivers(defaultConfig.getMailReceivers());
+        config.setPropertyFile(defaultConfig.getPropertyFile() == null ? "dynamic.properties" : defaultConfig.getPropertyFile());
+        return config;
+    }
+
+    public void loadPropertyFile() {
+        ClassPathResource classPathResource = new ClassPathResource(Context.getConfig().getPropertyFile());
+        try (
+                InputStream inputStream = classPathResource.getInputStream();
+                InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
+                BufferedReader reader = new BufferedReader(streamReader)) {
+            String line = "";
+            Map<String, String> dynamicProperties = Context.getDynamicProperties();
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                int i = line.indexOf("=");
+                if (i<1) {
+                    continue;
+                }
+                String propertyStr = line.substring(0, i).trim();
+                String valueStr = line.substring(i+1).trim();
+                dynamicProperties.put(propertyStr,valueStr);
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.severe("kotime=>dynamic.properties requires utf-8");
+            e.printStackTrace();
+        } catch (FileNotFoundException e){
+            log.warning("kotime=>No dynamic.properties found so that you can not use dynamic properties to set.");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void configDataSource(DefaultConfig config) {

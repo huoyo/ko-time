@@ -2,6 +2,7 @@ package cn.langpy.kotime.util;
 
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.handler.InvokedHandler;
+import cn.langpy.kotime.model.OrderlyProperties;
 import cn.langpy.kotime.service.GraphService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -9,8 +10,7 @@ import javax.sql.DataSource;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Properties;
 
 /**
  * zhangchang
@@ -22,7 +22,7 @@ public class Context {
     private static DataSource dataSource;
     private static StringRedisTemplate stringRedisTemplate;
     private static GraphService saver;
-    private static Map<String,String> dynamicProperties;
+    private static Properties dynamicProperties;
 
     static {
         config = new DefaultConfig();
@@ -30,7 +30,7 @@ public class Context {
         config.setEnable(true);
         config.setLogLanguage("chinese");
         invokedHandlers = new ArrayList<>();
-        dynamicProperties = new ConcurrentHashMap<>();
+        dynamicProperties = new OrderlyProperties();
     }
 
 
@@ -82,11 +82,11 @@ public class Context {
         Context.saver = saver;
     }
 
-    public static Map<String, String> getDynamicProperties() {
+    public static Properties getDynamicProperties() {
         return dynamicProperties;
     }
 
-    public static void setDynamicProperties(Map<String, String> dynamicProperties) {
+    public static void setDynamicProperties(Properties dynamicProperties) {
         Context.dynamicProperties = dynamicProperties;
     }
 }

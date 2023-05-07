@@ -175,11 +175,11 @@ public class KoUtil {
     }
 
     public static void setProperty(String propertyName, String propertyValue) {
-        Context.getDynamicProperties().put(propertyName, propertyValue);
+        Context.getDynamicProperties().setProperty(propertyName, propertyValue);
     }
 
     public static String getProperty(String propertyName) {
-        String value = Context.getDynamicProperties().get(propertyName);
+        String value = Context.getDynamicProperties().getProperty(propertyName);
         return value;
     }
 

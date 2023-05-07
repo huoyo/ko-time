@@ -394,7 +394,7 @@ public class KoTimeController {
             return false;
         }
         String[] textSplit = textParam.getText().trim().split("\n");
-        Map<String, String> dynamicProperties = Context.getDynamicProperties();
+        Properties dynamicProperties = Context.getDynamicProperties();
         for (String line : textSplit) {
             line = line.trim();
             if (line.length()==0 || line.startsWith("#") || line.startsWith("//")) {
@@ -407,7 +407,7 @@ public class KoTimeController {
             String propertyStr = line.substring(0, i).trim();
             String valueStr = line.substring(i+1).trim();
             log.info("updated property: "+propertyStr+"=("+dynamicProperties.get(propertyStr)+"->"+valueStr+")");
-            dynamicProperties.put(propertyStr,valueStr);
+            dynamicProperties.setProperty(propertyStr,valueStr);
         }
 
         return true;
@@ -420,10 +420,10 @@ public class KoTimeController {
         Map map = new HashMap();
         map.put("state", 0);
         map.put("message", "文件不能为空");
-        Map<String, String> dynamicProperties = Context.getDynamicProperties();
+        Properties dynamicProperties = Context.getDynamicProperties();
         StringBuilder stringBuilder = new StringBuilder();
-        for (String key : dynamicProperties.keySet()) {
-            String value = dynamicProperties.get(key);
+        for (String key : dynamicProperties.stringPropertyNames()) {
+            String value = dynamicProperties.getProperty(key);
             if (value!=null) {
                 stringBuilder.append(key+"="+value+"\n");
             }

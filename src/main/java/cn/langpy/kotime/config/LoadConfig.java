@@ -136,24 +136,9 @@ public class LoadConfig {
     public void loadPropertyFile() {
         ClassPathResource classPathResource = new ClassPathResource(Context.getConfig().getPropertyFile());
         try (
-                InputStream inputStream = classPathResource.getInputStream();
-                InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
-                BufferedReader reader = new BufferedReader(streamReader)) {
-            String line = "";
-            Map<String, String> dynamicProperties = Context.getDynamicProperties();
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.length()==0 || line.startsWith("#") || line.startsWith("//")) {
-                    continue;
-                }
-                int i = line.indexOf("=");
-                if (i<1) {
-                    continue;
-                }
-                String propertyStr = line.substring(0, i).trim();
-                String valueStr = line.substring(i+1).trim();
-                dynamicProperties.put(propertyStr,valueStr);
-            }
+                InputStream inputStream = classPathResource.getInputStream()
+               ) {
+            Context.getDynamicProperties().load(inputStream);
         } catch (UnsupportedEncodingException e) {
             log.severe("kotime=>dynamic.properties requires utf-8");
             e.printStackTrace();

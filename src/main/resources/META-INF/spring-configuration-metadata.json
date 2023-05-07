@@ -223,6 +223,12 @@
       "type": "java.lang.Boolean",
       "defaultValue": false,
       "description": "to enable email"
+    },
+    {
+      "name": "ko-time.property-file",
+      "type": "java.lang.String",
+      "defaultValue": "dynamic.properties",
+      "description": "dynamic properties"
     }
   ],
   "hints": []

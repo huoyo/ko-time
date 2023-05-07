@@ -397,6 +397,9 @@ public class KoTimeController {
         Map<String, String> dynamicProperties = Context.getDynamicProperties();
         for (String line : textSplit) {
             line = line.trim();
+            if (line.length()==0 || line.startsWith("#") || line.startsWith("//")) {
+                continue;
+            }
             int i = line.indexOf("=");
             if (i<1) {
                 continue;

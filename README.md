@@ -9,6 +9,10 @@
 </div>
 
 <div align="center">
+    <h2>简单、好用、无学习成本的监控</h2> 
+</div>
+
+<div align="center">
     <img src='https://gitee.com/huoyo/ko-time/badge/star.svg'>
     <img src='https://img.shields.io/github/stars/huoyo/ko-time.svg?&label=Stars&logo=github'>
     <img src='https://shields.io/badge/version-2.4.0-green.svg'>

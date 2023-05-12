@@ -2,6 +2,9 @@
     <h1 >KoTime<img src='https://shields.io/badge/forSpringboot-r.svg'></h1> 
 </div>
 
+<div align="center">
+    <h2>Friendlier monitoring</h2> 
+</div>
 
 <div align="center">
     <img src='https://gitee.com/huoyo/ko-time/badge/star.svg'>

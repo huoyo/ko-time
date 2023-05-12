@@ -140,7 +140,7 @@ public class LoadConfig {
                ) {
             Context.getDynamicProperties().load(inputStream);
         } catch (UnsupportedEncodingException e) {
-            log.severe("kotime=>dynamic.properties requires utf-8");
+            log.severe("kotime=>dynamic.properties requires utf-8.");
             e.printStackTrace();
         } catch (FileNotFoundException e){
             log.warning("kotime=>No dynamic.properties found so that you can not use dynamic properties to set.");

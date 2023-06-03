@@ -50,6 +50,7 @@
 
 > 无学习成本直接使用，让软件工程师的卓越思维和宝贵时间用于创造
 
+[在线ppt介绍](http://www.texspire.cn/view/dd6aa2529e664825a5acd416ddb07c76?fullscreen=true)
 
 ![222](docs/kotime.gif)
 

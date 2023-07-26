@@ -36,6 +36,7 @@ public class JvmAttachClassService implements ClassService{
             log.severe("Fail to update class:" + className);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            log.severe("Fail to update class:" + className);
         }
     }
 

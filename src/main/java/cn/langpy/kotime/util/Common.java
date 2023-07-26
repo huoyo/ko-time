@@ -8,10 +8,12 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -25,7 +27,8 @@ import java.util.logging.Logger;
 public class Common {
     private static Logger log = Logger.getLogger(Common.class.toString());
 
-    private final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, String.class, Boolean.class, MultipartFile.class, List.class);
+    private final static List<Class<?>> baseTypes = Arrays.asList(Integer.class, Double.class, Float.class, Long.class, String.class, Boolean.class, MultipartFile.class, List.class, Map.class);
+    private final static List<Class<?>> excludedTypes = Arrays.asList(HttpServletRequest.class, HttpServletResponse.class,Model.class);
 
     public static String getRoute(MethodInvocation pjp) {
         Class<?> targetClass = pjp.getThis().getClass();
@@ -155,17 +158,8 @@ public class Common {
             Class<?> type = names[i].getType();
             if (baseTypes.contains(type)) {
                 params.add(names[i].getName());
-            } else if (valuesI instanceof Map) {
-                Map<?, ?> map = (Map<?, ?>) valuesI;
-                Set<?> keys = map.keySet();
-                for (Object key : keys) {
-                    Object v = map.get(key);
-                    if (!isEmpty(v)) {
-                        params.add(key + "");
-                    }
-                }
             } else {
-                if (type == HttpServletRequest.class) {
+                if (excludedTypes.contains(type)) {
                     continue;
                 }
                 Field[] declaredFields = valuesI.getClass().getDeclaredFields();
@@ -200,7 +194,7 @@ public class Common {
 
     public static InvokedInfo getInvokedInfo(MethodInvocation invocation, MethodNode parent, double runTime) {
         MethodNode current = MethodNodeService.getCurrentMethodNode(invocation, runTime);
-        parent = checkControllerParent(parent,current);
+        parent = checkControllerParent(parent, current);
         InvokedInfo invokedInfo = new InvokedInfo();
         invokedInfo.setCurrent(current);
         invokedInfo.setParent(parent);
@@ -221,7 +215,7 @@ public class Common {
             if (stackTraceElement.getClassName().equals(current.getClassName())) {
                 exception.setValue(stackTraceElement.getLineNumber());
                 invokedInfo.setCurrent(current);
-                parent = checkControllerParent(parent,current);
+                parent = checkControllerParent(parent, current);
                 invokedInfo.setParent(parent);
                 invokedInfo.setException(exception);
                 invokedInfo.setNames(invocation.getMethod().getParameters());

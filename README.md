@@ -3,6 +3,8 @@
 
 [别拦我，我要支持作者](https://afdian.net/a/huoyo)
 
+[在线ppt介绍](http://www.texspire.cn/view/dd6aa2529e664825a5acd416ddb07c76?fullscreen=true)
+
 
 <div align="center">
     <h1 >KoTime<img src='https://shields.io/badge/forSpringboot-r.svg'></h1> 
@@ -50,7 +52,6 @@
 
 > 无学习成本直接使用，让软件工程师的卓越思维和宝贵时间用于创造
 
-[在线ppt介绍](http://www.texspire.cn/view/dd6aa2529e664825a5acd416ddb07c76?fullscreen=true)
 
 ![222](docs/kotime.gif)
 

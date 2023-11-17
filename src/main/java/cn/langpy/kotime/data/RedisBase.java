@@ -219,12 +219,12 @@ public class RedisBase implements GraphService {
         List<MethodInfo> methodInfos = new ArrayList<>();
         List<MethodNode> smethodNodes = searchList(methodPre, MethodNode.class);
 
+        List<MethodRelation> methodRelations = searchList(methodRelationPre, MethodRelation.class);
+        Map<String, MethodRelation> methodRelationMap = methodRelations.stream().collect(Collectors.toMap(k -> k.getTargetId(), v -> v, (p1, p2) -> p1));
         for (MethodNode methodNode : smethodNodes) {
             if (MethodType.Controller == methodNode.getMethodType()) {
                 String id = methodNode.getId();
-                List<MethodRelation> smethodRelations = searchList(methodRelationPre, MethodRelation.class);
-
-                Optional<MethodRelation> relations = smethodRelations.stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
+                Optional<MethodRelation> relations = Optional.ofNullable(methodRelationMap.get(id));
                 MethodRelation relation = null;
                 if (relations.isPresent()) {
                     relation = relations.get();
@@ -266,10 +266,11 @@ public class RedisBase implements GraphService {
         List<MethodInfo> methodInfos = new ArrayList<>();
         List<MethodNode> smethodNodes = searchList(methodPre, MethodNode.class);
         List<MethodRelation> methodRelationList = searchList(methodRelationPre, MethodRelation.class);
+        Map<String, MethodRelation> methodRelationMap = methodRelationList.stream().collect(Collectors.toMap(k -> k.getTargetId(), v -> v, (p1, p2) -> p1));
         for (MethodNode methodNode : smethodNodes) {
             if (methodNode.getName().toLowerCase().contains(question.toLowerCase())) {
                 String id = methodNode.getId();
-                Optional<MethodRelation> relations = methodRelationList.stream().filter(methodRelation -> methodRelation.getTargetId().equals(id)).findFirst();
+                Optional<MethodRelation> relations = Optional.ofNullable(methodRelationMap.get(id));
                 MethodRelation relation = null;
                 if (relations.isPresent()) {
                     relation = relations.get();

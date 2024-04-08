@@ -25,6 +25,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static cn.langpy.kotime.model.ThreadInfo.COMPARATOR;
+
 /**
  * zhangchang
  */
@@ -372,7 +374,7 @@ public class KoTimeController {
     public Map getThreadsInfo(String state) {
         ThreadUsageService usageService = ThreadUsageService.newInstance();
         List<ThreadInfo> threads = usageService.getThreads();
-        threads = threads.stream().sorted(Comparator.comparing(ThreadInfo::getState)).collect(Collectors.toList());
+        threads = threads.stream().sorted(COMPARATOR).collect(Collectors.toList());
 
         Map<String, Long> stateCounting = threads.stream().collect(Collectors.groupingBy(ThreadInfo::getState, Collectors.counting()));
         stateCounting.put("all",(long)threads.size());

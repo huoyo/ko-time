@@ -546,6 +546,21 @@
             });
         }
 
+        const cpuUsageColorMap = {
+            'RED': '#cc0c0c',
+            'YELLOW': '#f0ad4e',
+            'LIGHT_BLUE': '#5bc0de'
+        };
+        function getCpuUsageColor(usage) {
+            if (usage > 50) {
+                return cpuUsageColorMap['RED'];
+            } else if (usage >= 20 && usage <= 50) {
+                return cpuUsageColorMap['YELLOW'];
+            } else {
+                return cpuUsageColorMap['LIGHT_BLUE'];
+            }
+        }
+
         let threadMap = new Map();
         function loadThreadsInfo(queryState) {
             queryState = queryState || '';
@@ -579,8 +594,10 @@
                     let classType = thread['classType'];
                     let state = thread['state'];
                     let stacks = thread['stacks'];
+                    let cpuUsage = thread['cpuUsage'];
+                    let cpuUsageColor = getCpuUsageColor(cpuUsage);
                     threadMap[id+''] = stacks;
-                    html+=`<li onclick="showThreadInfo('${id}')" style='color: #333;font-weight: 400;font-size: 14px;'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
+                    html+=`<li onclick="showThreadInfo('${id}')" style='color: #333;font-weight: 400;font-size: 14px;'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">CPU使用率:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
                 }
                 element.innerHTML = html;
             });

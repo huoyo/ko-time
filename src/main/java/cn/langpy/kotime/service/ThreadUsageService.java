@@ -33,8 +33,13 @@ public class ThreadUsageService {
             Thread thread = threads[i];
             ThreadInfo threadInfo = new ThreadInfo();
             threadInfo.setId(thread.getId());
-            threadInfo.setCpuUsage(BigDecimal.valueOf(threadMXBean.getThreadCpuTime(thread.getId()))
-                    .divide(BigDecimal.valueOf(threadMXBean.getThreadUserTime(thread.getId())), 2, BigDecimal.ROUND_HALF_UP));
+            BigDecimal threadCpuTime = BigDecimal.valueOf(threadMXBean.getThreadCpuTime(thread.getId()));
+            BigDecimal threadUserTime = BigDecimal.valueOf(threadMXBean.getThreadUserTime(thread.getId()));
+            if (threadUserTime.doubleValue() > 0) {
+                threadInfo.setCpuUsage(threadCpuTime.divide(threadUserTime, 2, BigDecimal.ROUND_HALF_UP));
+            }else {
+                threadInfo.setCpuUsage(BigDecimal.ZERO);
+            }
             threadInfo.setName(thread.getName());
             threadInfo.setClassType(thread.getClass().getSimpleName());
             threadInfo.setState(thread.getState().name());

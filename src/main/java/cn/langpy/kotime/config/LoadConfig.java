@@ -1,30 +1,27 @@
 package cn.langpy.kotime.config;
 
 import cn.langpy.kotime.annotation.KoListener;
-import cn.langpy.kotime.handler.RunTimeHandler;
 import cn.langpy.kotime.handler.InvokedHandler;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.util.Common;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.DataBaseException;
-import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -32,8 +29,7 @@ import java.util.stream.Collectors;
 /**
  * zhangchang
  */
-@ComponentScan("cn.langpy.kotime")
-@Configuration
+@Component
 public class LoadConfig {
     private static Logger log = Logger.getLogger(LoadConfig.class.toString());
 
@@ -56,7 +52,6 @@ public class LoadConfig {
     @Value("${server.servlet.context-path:}")
     private String serverContext;
 
-
     @Value("${ko-time.mail-enable:false}")
     private Boolean mailEnable;
 
@@ -65,8 +60,6 @@ public class LoadConfig {
     @Resource
     private ApplicationContext applicationContext;
 
-
-    @PostConstruct
     public void initConfig() {
         DefaultConfig config = improveConfig();
 
@@ -215,15 +208,4 @@ public class LoadConfig {
         }
     }
 
-
-    @Bean
-    public AspectJExpressionPointcutAdvisor configurabledvisor() {
-        log.info("kotime=>loading method listener");
-        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
-        String cutRange = defaultConfig.getPointcut() == null ? pointcut : defaultConfig.getPointcut();
-        cutRange = cutRange + " && !@annotation(cn.langpy.kotime.annotation.KoListener)";
-        advisor.setExpression(cutRange);
-        advisor.setAdvice(new RunTimeHandler());
-        return advisor;
-    }
 }

@@ -2,6 +2,7 @@ package cn.langpy.kotime.config;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,43 +10,177 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "ko-time")
+@Lazy(value = false)
 public class DefaultConfig {
-    private Boolean enable;
-    private String language;
+    /**
+     * to enable kotime
+     */
+    private Boolean enable = true;
+
+
+    /**
+     * to select language for viewer, chinese
+     */
+    private String language = "chinese";
     @Deprecated
     private String logLanguage;
-    private Boolean logEnable;
-    private Boolean versionNotice;
-    private Double threshold;
-    private Double discardRate;
-    private String pointcut;
-    private Boolean exceptionEnable;
-    private Boolean paramAnalyse;
-    private String saver;
+
+    /**
+     * false
+     * to print log in console
+     */
+    private Boolean logEnable = false;
+
+    /**
+     * "defaultValue": true,
+     * "description": "to enable version-notice",
+     */
+    private Boolean versionNotice = true;
+
+    /**
+     * red will appear if avgRunTime>threshold
+     */
+    private Double threshold = 800.0;
+
+
+    /**
+     * data will be discard if Math.random()<discard-rate
+     */
+    private Double discardRate = 0.3;
+
+    /**
+     * pointcut for aop
+     * execution(* com.example..*.*(..))
+     */
+    private String pointcut = "execution(* com.example..*.*(..))";
+
+    /**
+     * to enable exception listener
+     * "defaultValue": false,
+     */
+    private Boolean exceptionEnable = false;
+
+    /**
+     * the charger of analysing params
+     */
+    private Boolean paramAnalyse = true;
+
+    /**
+     * a place to store data
+     * memory
+     */
+    private String saver = "memory";
+
+    /**
+     * datasource
+     */
     private String dataSource;
+
+    /**
+     * StringRedisTemplate‘s bean
+     */
     private String redisTemplate;
-    private Integer threadNum;
-    private String contextPath;
+
+    /**
+     * number of thread to store data
+     */
+    private Integer threadNum = 2;
+
+    /**
+     * server url for static resources
+     * http://localhost:8080
+     */
+    private String contextPath = "";
+
+    /**
+     * dataPrefix
+     */
     private String dataPrefix;
-    private Boolean dataReset;
-    private Boolean authEnable;
+
+    /**
+     * to delete all data
+     */
+    private Boolean dataReset = false;
+
+    /**
+     * to enable authentication
+     */
+    private Boolean authEnable = false;
+
+    /**
+     * userName for authentication
+     */
     private String userName;
+
+    /**
+     * password for authentication
+     */
     private String password;
+
+    /**
+     * static token of html
+     */
     private String staticToken;
 
-    private Long authExpire;
+    /**
+     * expire within 43200 s
+     */
+    private Long authExpire = 43200L;
 
-    private Boolean mailEnable;
-    private String mailHost;
-    private Integer mailPort;
-    private String mailProtocol;
-    private String mailEncoding;
+    /**
+     * to enable email
+     */
+    private Boolean mailEnable = false;
+
+    /**
+     * host of email
+     */
+    private String mailHost = "smtp.qq.com";
+
+    /**
+     * port of email
+     */
+    private Integer mailPort = 587;
+
+    /**
+     * protocol of email
+     */
+    private String mailProtocol = "smtp";
+
+    /**
+     * encoding of email
+     */
+    private String mailEncoding = "UTF-8";
+
+    /**
+     * sender of email
+     */
     private String mailUser;
+
+    /**
+     * code of email
+     */
     private String mailCode;
+
+    /**
+     * receivers of email
+     */
     private String mailReceivers;
-    private Integer mailThreshold;
-    private String mailScope;
-    private String propertyFile;
+
+    /**
+     * trigger thresold of email
+     */
+    private Integer mailThreshold = 4;
+
+    /**
+     * trigger scope of email
+     */
+    private String mailScope = "Controller";
+
+    /**
+     * dynamic.properties
+     */
+    private String propertyFile = "dynamic.properties";
 
     public String getPropertyFile() {
         return propertyFile;

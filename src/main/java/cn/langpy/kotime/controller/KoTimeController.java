@@ -11,6 +11,8 @@ import cn.langpy.kotime.service.ThreadUsageService;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.InvalidAuthInfoException;
 import cn.langpy.kotime.util.KoUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -44,6 +44,7 @@ public class KoTimeController {
     private final String metricFlowJsText = getResourceText("kostatic/Metricflow.js");
     private final String jQueryJsText = getResourceText("kostatic/JQuery.min.js");
     private final String uiKitIconsJs = getResourceText("kostatic/uikit-icons.js");
+    private final String KoTimeUtil = getResourceText("kostatic/util.js");
 
     @PostMapping("/login")
     @ResponseBody
@@ -81,7 +82,7 @@ public class KoTimeController {
 
 
     @GetMapping
-    public void index(String kotoken, String test,String charset, String language,HttpServletResponse response, HttpServletRequest request) {
+    public void index(String kotoken, String test, String charset, String language, HttpServletResponse response, HttpServletRequest request) {
         if (!Context.getConfig().getEnable()) {
             return;
         }
@@ -95,7 +96,7 @@ public class KoTimeController {
         if (!StringUtils.hasText(charset)) {
             charset = "utf-8";
         }
-        response.setContentType("text/html;charset="+charset);
+        response.setContentType("text/html;charset=" + charset);
         ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName(language));
         try (
                 InputStream inputStream = classPathResource.getInputStream();
@@ -132,6 +133,8 @@ public class KoTimeController {
                     line = line.replace("staticTokenVisitValue", staticTokenVisit + "");
                 } else if (line.indexOf("staticTokenValue") > -1) {
                     line = line.replace("staticTokenValue", "'" + kotoken + "'");
+                } else if (line.indexOf("KoTimeUtil") > -1) {
+                    line = line.replace("KoTimeUtil", KoTimeUtil);
                 }
                 stringBuilder.append(line + "\n");
             }
@@ -377,7 +380,7 @@ public class KoTimeController {
         threads = threads.stream().sorted(COMPARATOR).collect(Collectors.toList());
 
         Map<String, Long> stateCounting = threads.stream().collect(Collectors.groupingBy(ThreadInfo::getState, Collectors.counting()));
-        stateCounting.put("all",(long)threads.size());
+        stateCounting.put("all", (long) threads.size());
 
         Map map = new HashMap();
         map.put("statistics", stateCounting);
@@ -399,17 +402,17 @@ public class KoTimeController {
         Properties dynamicProperties = Context.getDynamicProperties();
         for (String line : textSplit) {
             line = line.trim();
-            if (line.length()==0 || line.startsWith("#") || line.startsWith("//")) {
+            if (line.length() == 0 || line.startsWith("#") || line.startsWith("//")) {
                 continue;
             }
             int i = line.indexOf("=");
-            if (i<1) {
+            if (i < 1) {
                 continue;
             }
             String propertyStr = line.substring(0, i).trim();
-            String valueStr = line.substring(i+1).trim();
-            log.info("updated property: "+propertyStr+"=("+dynamicProperties.get(propertyStr)+"->"+valueStr+")");
-            dynamicProperties.setProperty(propertyStr,valueStr);
+            String valueStr = line.substring(i + 1).trim();
+            log.info("updated property: " + propertyStr + "=(" + dynamicProperties.get(propertyStr) + "->" + valueStr + ")");
+            dynamicProperties.setProperty(propertyStr, valueStr);
         }
 
         return true;
@@ -426,8 +429,8 @@ public class KoTimeController {
         StringBuilder stringBuilder = new StringBuilder();
         for (String key : dynamicProperties.stringPropertyNames()) {
             String value = dynamicProperties.getProperty(key);
-            if (value!=null) {
-                stringBuilder.append(key+"="+value+"\n");
+            if (value != null) {
+                stringBuilder.append(key + "=" + value + "\n");
             }
         }
         map.put("data", stringBuilder.toString());

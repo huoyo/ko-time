@@ -28,7 +28,6 @@ public class Context {
         config = new DefaultConfig();
         config.setLogEnable(false);
         config.setEnable(true);
-        config.setLogLanguage("chinese");
         invokedHandlers = new ArrayList<>();
         dynamicProperties = new OrderlyProperties();
     }

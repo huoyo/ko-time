@@ -28,25 +28,13 @@ import java.util.stream.Collectors;
 
 /**
  * zhangchang
+ * Note:
+ * I deleted the oldest configurations that start with koTime.xxx since v3.0.0,such as koTime.pointcut and koTime.log.*
  */
 @Component
 public class LoadConfig {
     private static Logger log = Logger.getLogger(LoadConfig.class.toString());
 
-    @Value("${koTime.enable:true}")
-    private Boolean kotimeEnable;
-    @Value("${koTime.log.language:chinese}")
-    private String logLanguage;
-    @Value("${koTime.log.enable:false}")
-    private Boolean logEnable;
-    @Value("${koTime.time.threshold:800.0}")
-    private Double timeThreshold;
-    @Value("${koTime.pointcut:execution(* cn.langpy.kotime.controller.KoTimeController.*(..))}")
-    private String pointcut;
-    @Value("${koTime.exception.enable:false}")
-    private Boolean exceptionEnable;
-    @Value("${koTime.saver:memory}")
-    private String saveSaver;
     @Value("${server.port:8080}")
     private Integer serverPort;
     @Value("${server.servlet.context-path:}")
@@ -94,12 +82,11 @@ public class LoadConfig {
 
     public DefaultConfig improveConfig() {
         DefaultConfig config = new DefaultConfig();
-        config.setLogEnable(defaultConfig.getLogEnable() == null ? logEnable : defaultConfig.getLogEnable());
-        config.setLogLanguage(defaultConfig.getLogLanguage() == null ? logLanguage : defaultConfig.getLogLanguage());
-        config.setThreshold(defaultConfig.getThreshold() == null ? timeThreshold : defaultConfig.getThreshold());
-        config.setExceptionEnable(defaultConfig.getExceptionEnable() == null ? exceptionEnable : defaultConfig.getExceptionEnable());
-        config.setSaver(defaultConfig.getSaver() == null ? saveSaver : defaultConfig.getSaver());
-        config.setEnable(defaultConfig.getEnable() == null ? kotimeEnable : defaultConfig.getEnable());
+        config.setLogEnable( defaultConfig.getLogEnable());
+        config.setThreshold(defaultConfig.getThreshold());
+        config.setExceptionEnable( defaultConfig.getExceptionEnable());
+        config.setSaver(defaultConfig.getSaver());
+        config.setEnable( defaultConfig.getEnable());
         config.setDataPrefix(defaultConfig.getDataPrefix() == null ? (StringUtils.hasText(serverContext) ? serverContext.substring(1) : "KOTIME") : defaultConfig.getDataPrefix());
         config.setContextPath(defaultConfig.getContextPath());
         config.setLanguage(defaultConfig.getLanguage() == null ? "chinese" : defaultConfig.getLanguage());

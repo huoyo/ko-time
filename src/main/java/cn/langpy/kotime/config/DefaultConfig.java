@@ -22,8 +22,6 @@ public class DefaultConfig {
      * to select language for viewer, chinese
      */
     private String language = "chinese";
-    @Deprecated
-    private String logLanguage;
 
     /**
      * false
@@ -350,13 +348,6 @@ public class DefaultConfig {
         this.enable = enable;
     }
 
-    public String getLogLanguage() {
-        return logLanguage;
-    }
-
-    public void setLogLanguage(String logLanguage) {
-        this.logLanguage = logLanguage;
-    }
 
     public Boolean getLogEnable() {
         return logEnable;

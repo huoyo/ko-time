@@ -12,6 +12,10 @@ import javax.sql.DataSource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * zangchang
+ * generic static tool for KoTime,and you can define many static methods in this file.
+ */
 public class KoUtil {
     private final static String koTimeSecret = UUID.randomUUID().toString().replace("-", "");
 

@@ -14,8 +14,8 @@ import java.util.logging.Logger;
  * @date 2024-7-5 03:16:56
  */
 @Configuration
-public class KoTimeConfig {
-    private static Logger log = Logger.getLogger(KoTimeConfig.class.toString());
+public class SectionConfig {
+    private static Logger log = Logger.getLogger(SectionConfig.class.toString());
 
     @Value("${koTime.pointcut:execution(* cn.langpy.kotime.controller.KoTimeController.*(..))}")
     private String pointcut;

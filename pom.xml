@@ -6,7 +6,7 @@
 
     <groupId>cn.langpy</groupId>
     <artifactId>ko-time</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0-PRE</version>
     <name>KoTime</name>
 
     <description>A springboot tool for tracking the paths of the methods,which can help you find method's performances easily.</description>
@@ -33,9 +33,9 @@
         <spring-context.version>6.0.11</spring-context.version>
         <spring-web.version>6.0.11</spring-web.version>
         <spring-webmvc.version>6.0.11</spring-webmvc.version>
-        <spring-boot.version>3.1.3</spring-boot.version>
-        <spring-redis.version>3.1.3</spring-redis.version>
-        <spring-mail.version>3.1.3</spring-mail.version>
+        <spring-boot.version>3.1.5</spring-boot.version>
+        <spring-redis.version>3.1.5</spring-redis.version>
+        <spring-mail.version>3.1.5</spring-mail.version>
         <fastjson.version>2.0.9</fastjson.version>
         <oshi-core.version>6.2.2</oshi-core.version>
         <byte-agent.version>1.12.13</byte-agent.version>
@@ -137,19 +137,19 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--                <version>3.2.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>jar</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.8.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>

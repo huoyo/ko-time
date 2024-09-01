@@ -9,12 +9,11 @@ public class KoConstant {
     public final static String exceptionTitleStyle = "exceptionTitleStyle";
     public final static String globalThreshold = "globalThresholdValue";
     public final static String globalNeedLogin = "globalNeedLoginValue";
-    public final static String globalIsLogin = "globalIsLoginValue";
     public final static String contextPath = "contextPath";
     public final static String kotimeViewer = "kotime.html";
     public final static String kotimeViewerEn = "kotime-en.html";
-    public final static String loginName = "kotimeUserName";
 
+    @Deprecated
     public static String getViewName(String language) {
         if (!StringUtils.hasText(language)) {
             language = Context.getConfig().getLanguage();

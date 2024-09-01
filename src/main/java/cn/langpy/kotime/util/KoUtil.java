@@ -5,11 +5,16 @@ import cn.langpy.kotime.model.InvokedInfo;
 import cn.langpy.kotime.model.MethodNode;
 import cn.langpy.kotime.service.InvokedQueue;
 import cn.langpy.kotime.service.MethodNodeService;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +22,8 @@ import java.util.stream.Collectors;
  * generic static tool for KoTime,and you can define many static methods in this file.
  */
 public class KoUtil {
+    private static Logger log = Logger.getLogger(KoUtil.class.toString());
+
     private final static String koTimeSecret = UUID.randomUUID().toString().replace("-", "");
 
     private final static List<Integer> choices = randomSecretIndexs();
@@ -218,6 +225,48 @@ public class KoUtil {
         String[] split1 = value.split(split);
         return Arrays.stream(split1).collect(Collectors.toList());
     }
+
+    public static Properties getLanguageDict(String language) {
+        Properties properties = new Properties();
+        if (!StringUtils.hasText(language)) {
+            language = Context.getConfig().getLanguage();
+        }
+        ClassPathResource classPathResource = new ClassPathResource("kostatic/dict/"+language+".properties");
+        try (
+                InputStream inputStream = classPathResource.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)
+        ) {
+            properties.load(inputStreamReader);
+        } catch (UnsupportedEncodingException e) {
+            log.severe("kotime=>"+Context.getConfig().getLanguage()+".properties requires utf-8.");
+            e.printStackTrace();
+        } catch (FileNotFoundException e){
+            log.warning("kotime=>No "+Context.getConfig().getLanguage()+".properties found so that you can not use language properties to set.");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
+    }
+
+    public static String getVerssion() {
+        Properties properties = new Properties();
+        ClassPathResource classPathResource = new ClassPathResource("koapp.properties");
+        try (
+                InputStream inputStream = classPathResource.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)
+        ) {
+            properties.load(inputStreamReader);
+        } catch (UnsupportedEncodingException e) {
+            log.severe("kotime=>koapp.properties requires utf-8.");
+            e.printStackTrace();
+        } catch (FileNotFoundException e){
+            log.warning("kotime=>No koapp.properties found.");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties.getProperty("ko-time.version");
+    }
+
 
 
 }

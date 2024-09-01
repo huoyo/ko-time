@@ -4,10 +4,6 @@
     <style>
         UIKitCss
     </style>
-    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/css/uikit.min.css"/>-->
-    <!-- UIkit JS -->
-    <!--    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/js/uikit.min.js"></script>-->
-    <!--    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.2/dist/js/uikit-icons.min.js"></script>-->
     <script>
         UIKitJs;
         uiKitIconsJs;
@@ -22,6 +18,7 @@
         var staticToken = staticTokenValue;
         var globalToken = staticTokenVisit ? staticToken : sessionStorage.getItem("kotimeToken");
         let globalIsLogin = false;
+        let koTimeVersion = koTimeVersionValue;
 
         function concatToken(url) {
             if (globalNeedLogin) {
@@ -35,10 +32,10 @@
         }
 
         function refreshData() {
-            $.get(concatToken('contextPath/koTime/isLogin'), function (data) {
+            get(concatToken('contextPath/koTime/isLogin'), function (data) {
                 globalIsLogin = data['isLogin'] == 1 ? true : false;
                 if (globalNeedLogin == true && globalIsLogin == false) {
-                    UIkit.modal(document.getElementById("modal-login")).show();
+                    UIkit.modal(getDom("modal-login")).show();
                     return;
                 } else {
                     loadStatistic();
@@ -53,12 +50,11 @@
                     loadDynamicProperties();
                 }
             });
-
         }
 
         function loadExceptions() {
-            $.get(concatToken('contextPath/koTime/getExceptions'), function (data) {
-                let element = document.getElementById('exceptionList');
+            get(concatToken('contextPath/koTime/getExceptions'), function (data) {
+                let element = getDom('exceptionList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
                     let id = data[i]['id'];
@@ -73,8 +69,8 @@
 
         function loadApis() {
             let searchText = $("#searchText").val();
-            $.get(concatToken('contextPath/koTime/getApis?question=' + searchText), function (data) {
-                let element = document.getElementById('apiList');
+            get(concatToken('contextPath/koTime/getApis?question=' + searchText), function (data) {
+                let element = getDom('apiList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
                     let className = data[i]['className'];
@@ -86,9 +82,9 @@
                     let apiId = className + "." + methodName;
                     let color = avgRunTime > globalThreshold ? 'danger' : 'success';
                     if (methodType == 'Controller' && routeName != null && routeName != '') {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">平均响应 " + avgRunTime + " ms</span></li>";
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
                     } else {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">平均响应 " + avgRunTime + " ms</span></li>";
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
                     }
                 }
                 ;
@@ -97,47 +93,47 @@
         }
 
         function loadStatistic() {
-            $.get(concatToken('contextPath/koTime/getStatistic'), function (data) {
+            get(concatToken('contextPath/koTime/getStatistic'), function (data) {
                 let totalNum = data['totalNum'];
-                let systemTotalNum = document.getElementById("systemTotalNum");
+                let systemTotalNum = getDom("systemTotalNum");
                 systemTotalNum.innerHTML = totalNum;
 
                 let normalNum = data['normalNum'];
-                let systemNormalNum = document.getElementById("systemNormalNum");
+                let systemNormalNum = getDom("systemNormalNum");
                 systemNormalNum.innerHTML = normalNum;
 
                 let delayNum = data['delayNum'];
-                let systemDelayNum = document.getElementById("systemDelayNum");
+                let systemDelayNum = getDom("systemDelayNum");
                 systemDelayNum.innerHTML = delayNum;
 
                 let avgRunTime = data['avgRunTime'];
-                let systemAvgRunTime = document.getElementById("systemAvgRunTime");
+                let systemAvgRunTime = getDom("systemAvgRunTime");
                 systemAvgRunTime.innerHTML = avgRunTime;
                 if (avgRunTime > globalThreshold) {
-                    document.getElementById("systemAvgRunTime").style.color = '#cc0c0c';
+                    getDom("systemAvgRunTime").style.color = '#cc0c0c';
                 } else {
-                    document.getElementById("systemAvgRunTime").style.color = '#29da93';
+                    getDom("systemAvgRunTime").style.color = '#29da93';
                 }
                 ;
 
                 let maxRunTime = data['maxRunTime'];
-                let systemMaxRunTime = document.getElementById("systemMaxRunTime");
+                let systemMaxRunTime = getDom("systemMaxRunTime");
                 systemMaxRunTime.innerHTML = maxRunTime;
                 if (maxRunTime > globalThreshold) {
-                    document.getElementById("systemMaxRunTime").style.color = '#cc0c0c';
+                    getDom("systemMaxRunTime").style.color = '#cc0c0c';
                 } else {
-                    document.getElementById("systemMaxRunTime").style.color = '#29da93';
+                    getDom("systemMaxRunTime").style.color = '#29da93';
                 }
                 ;
 
 
                 let minRunTime = data['minRunTime'];
-                let systemMinRunTime = document.getElementById("systemMinRunTime");
+                let systemMinRunTime = getDom("systemMinRunTime");
                 systemMinRunTime.innerHTML = minRunTime;
                 if (minRunTime > globalThreshold) {
-                    document.getElementById("systemMinRunTime").style.color = '#cc0c0c';
+                    getDom("systemMinRunTime").style.color = '#cc0c0c';
                 } else {
-                    document.getElementById("systemMinRunTime").style.color = '#29da93';
+                    getDom("systemMinRunTime").style.color = '#29da93';
                 }
                 ;
 
@@ -145,85 +141,67 @@
         }
 
         function addConfigEvent() {
-            document.getElementById('kotimeEnable').onclick = function () {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateConfig'),
-                    data: JSON.stringify({enable: document.getElementById('kotimeEnable').checked}),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>设置成功</font>", {});
+            getDom('kotimeEnable').onclick = function () {
+                post(concatToken('contextPath/koTime/updateConfig'),{enable: getDom('kotimeEnable').checked},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}');
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}');
+                })
             };
 
-            document.getElementById('exceptionEnable').onclick = function () {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateConfig'),
-                    data: JSON.stringify({exceptionEnable: document.getElementById('exceptionEnable').checked}),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>设置成功</font>", {});
+            getDom('exceptionEnable').onclick = function () {
+                post(concatToken('contextPath/koTime/updateConfig'),{exceptionEnable: getDom('exceptionEnable').checked},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
             };
 
-            document.getElementById('logEnable').onclick = function () {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateConfig'),
-                    data: JSON.stringify({logEnable: document.getElementById('logEnable').checked}),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>设置成功</font>", {});
+            getDom('logEnable').onclick = function () {
+                post(concatToken('contextPath/koTime/updateConfig'),{logEnable: getDom('logEnable').checked},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
             };
 
-            document.getElementById('mailEnable').onclick = function () {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateConfig'),
-                    data: JSON.stringify({mailEnable: document.getElementById('mailEnable').checked}),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>设置成功</font>", {});
+            getDom('mailEnable').onclick = function () {
+                post(concatToken('contextPath/koTime/updateConfig'),{mailEnable: getDom('mailEnable').checked},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
             };
 
-            document.getElementById('languageSwitch').onchange = function () {
-                let selectedObj = document.getElementById('languageSwitch');
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateConfig'),
-                    data: JSON.stringify({language: selectedObj.options[selectedObj.selectedIndex].value}),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>设置成功</font>", {});
+            getDom('languageSwitch').onclick = function () {
+                let selectedObj = getDom('languageSwitch');
+                post(concatToken('contextPath/koTime/updateConfig'),{language: selectedObj.options[selectedObj.selectedIndex].value},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
             };
 
-            document.getElementById("timeThresholdYes").onclick = function () {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateConfig'),
-                    data: JSON.stringify({threshold: document.getElementById('timeThreshold').value}),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>设置成功</font>", {});
+            getDom('timeThresholdYes').onclick = function () {
+                post(concatToken('contextPath/koTime/updateConfig'),{threshold: getDom('timeThreshold').value},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
             };
-            document.getElementById("clearDataYes").onclick = function () {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/clearData'),
-                    dataType: 'json',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                UIkit.notification("<font color='green'>清除成功</font>", {});
+
+            getDom('clearDataYes').onclick = function () {
+                post(concatToken('contextPath/koTime/clearData'),{},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
             };
+
         }
 
         function loadConfig() {
-            $.get(concatToken('contextPath/koTime/getConfig'), function (data) {
+            get(concatToken('contextPath/koTime/getConfig'), function (data) {
                 let versionNoticeEnable = data['versionNotice'];
                 if (versionNoticeEnable) {
                     loadLatestVersion();
@@ -231,27 +209,27 @@
 
                 let exceptionEnable = data['exceptionEnable'];
 
-                let exceptionEnableDom = document.getElementById('exceptionEnable');
+                let exceptionEnableDom = getDom('exceptionEnable');
                 exceptionEnableDom.checked = exceptionEnable;
 
                 let kotimeEnable = data['enable'];
-                let kotimeEnableDom = document.getElementById('kotimeEnable');
+                let kotimeEnableDom = getDom('kotimeEnable');
                 kotimeEnableDom.checked = kotimeEnable;
 
-                let apiTip = document.getElementById('apiTip');
-                apiTip.innerHTML = kotimeEnable == true ? "接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口" : "方法调用监测已关闭，数据将不会更新，需要开启请到配置面板";
+                let apiTip = getDom('apiTip');
+                apiTip.innerHTML = kotimeEnable == true ? "{{tab.summary.bottom-normal-tip}}" : "{{tab.summary.bottom-close-tip}}";
 
 
                 let threshold = data['threshold'];
-                let timeThresholdDom = document.getElementById('timeThreshold');
+                let timeThresholdDom = getDom('timeThreshold');
                 timeThresholdDom.value = threshold;
 
                 let logEnable = data['logEnable'];
-                let logEnableDom = document.getElementById('logEnable');
+                let logEnableDom = getDom('logEnable');
                 logEnableDom.checked = logEnable;
 
                 let mailEnable = data['mailEnable'];
-                let mailEnableDom = document.getElementById('mailEnable');
+                let mailEnableDom = getDom('mailEnable');
                 mailEnableDom.checked = mailEnable;
 
                 let language = data['language'];
@@ -272,16 +250,16 @@
                 graph.removeNode(clickNodeId + "ana")
                 methodParamMap.delete(clickNodeId + "ana")
             } else {
-                $.get(concatToken('contextPath/koTime/getParamGraph' + "?methodId=" + clickNodeId.replace('node', '')), function (data) {
+                get(concatToken('contextPath/koTime/getParamGraph' + "?methodId=" + clickNodeId.replace('node', '')), function (data) {
                     let datas = []
                     for (let key in data) {
-                        datas.push({"name": key + "：平均 " + data[key]['avgRunTime'] + " ms"})
+                        datas.push({"name": key + "：{{tab.interface.interface-list.show-metric.avg}} " + data[key]['avgRunTime'] + " ms"})
                     }
                     ;
                     let paramGraphData = {
                         "id": clickNodeId + "ana",
                         "from": clickNodeId,
-                        "title": {'name': "入参组合分析"},
+                        "title": {'name': "{{tab.interface.interface-list.show-metric.param-analyse}}"},
                         "data": datas,
                         'style': {
                             'title-color': '#427b72',
@@ -318,13 +296,13 @@
             ;
             data['title'] = {'name': data['name']};
             data['data'] = [
-                {'name': '<span style="color:gray">类型：</span>' + data['methodType']},
-                {'name': '<span style="color:gray">平均耗时：</span>' + data['avgRunTime'] + ' ms'},
-                {'name': '<span style="color:gray">最大耗时：</span>' + data['maxRunTime'] + ' ms'},
-                {'name': '<span style="color:gray">最小耗时：</span>' + data['minRunTime'] + ' ms'}
+                {'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.type}}：</span>' + data['methodType']},
+                {'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.avg}}：</span>' + data['avgRunTime'] + ' ms'},
+                {'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.max}}：</span>' + data['maxRunTime'] + ' ms'},
+                {'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.min}}：</span>' + data['minRunTime'] + ' ms'}
             ];
             if (data['exceptionNum'] != null && data['exceptionNum'] > 0) {
-                data['data'].push({'name': '<span style="color:gray">异常数目：</span>' + data['exceptionNum'] + ' 个'});
+                data['data'].push({'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.exception-num}}：</span>' + data['exceptionNum'] + ' {{tab.interface.interface-list.show-metric.exception-unit}}'});
             }
             data["dblclick"] = "paramGraph";
             return data;
@@ -332,7 +310,7 @@
 
 
         function showMethods(name) {
-            let exceptionDetailDom = document.getElementById('layerDemo');
+            let exceptionDetailDom = getDom('layerDemo');
             exceptionDetailDom.innerHTML = "";
             let options = {
                 'link-start-offsetx': 8,
@@ -344,9 +322,9 @@
             graph = new MetricFlow("layerDemo", options);
             graph.threshold = globalThreshold;
             UIkit.notification.closeAll();
-            UIkit.modal(document.getElementById("modal-method")).show();
+            UIkit.modal(getDom("modal-method")).show();
 
-            $.get(concatToken('contextPath/koTime/getTree?methodName=' + name), function (data) {
+            get(concatToken('contextPath/koTime/getTree?methodName=' + name), function (data) {
                 let rootX = 100;
                 let rootY = $(window).get(0).innerHeight / 2 - 50;
                 data['x'] = rootX;
@@ -358,15 +336,15 @@
         };
 
         function showExceptions(id, message) {
-            $.get(concatToken('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id + '&message=' + message), function (data) {
+            get(concatToken('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id + '&message=' + message), function (data) {
                 let html = '';
                 for (let i = 0; i < data.length; i++) {
                     html +=
                         "<ul class=\"uk-list uk-list-divider\">\n" +
-                        "\t<li id=\"exception-class\">异常类：" + data[i].occurClassName + "</li>\n" +
-                        "\t<li id=\"exception-method\">异常方法：" + data[i].methodName + "</li>\n" +
-                        "\t<li id=\"exception-line\">异常行：<span class=\"uk-label uk-label-success\">" + data[i].location + "</span></li>\n" +
-                        "\t<li id=\"exception-message\">异常消息：<span class=\"uk-label uk-label-danger\">" + data[i].message + "</span></li>\n" +
+                        "\t<li id=\"exception-class\">{{tab.exception.exception-list.show-metric.class}}：" + data[i].occurClassName + "</li>\n" +
+                        "\t<li id=\"exception-method\">{{tab.exception.exception-list.show-metric.method}}：" + data[i].methodName + "</li>\n" +
+                        "\t<li id=\"exception-line\">{{tab.exception.exception-list.show-metric.line}}：<span class=\"uk-label uk-label-success\">" + data[i].location + "</span></li>\n" +
+                        "\t<li id=\"exception-message\">{{tab.exception.exception-list.show-metric.message}}：<span class=\"uk-label uk-label-danger\">" + data[i].message + "</span></li>\n" +
                         "</ul>"
                     if (data.length - 1 > i) {
                         html += '<hr class="uk-divider-icon">'
@@ -374,10 +352,10 @@
                 }
                 ;
 
-                let exceptionDetailDom = document.getElementById('exception-detail');
+                let exceptionDetailDom = getDom('exception-detail');
                 exceptionDetailDom.innerHTML = html;
                 UIkit.notification.closeAll();
-                UIkit.modal(document.getElementById("modal-exception")).show();
+                UIkit.modal(getDom("modal-exception")).show();
             });
         };
 
@@ -385,35 +363,25 @@
             let userId = $("#userName").val()
             let password = $("#userPassword").val()
             if (userId == undefined || userId.length < 1 || password == undefined || password.length < 1) {
-                UIkit.notification.closeAll()
-                UIkit.notification("<font color='red'>请正确输入用户名和密码</font>", {});
+                noticeError('请正确输入用户名和密码')
                 return
             }
-            $.ajax({
-                type: 'POST',
-                url: "contextPath/koTime/login",
-                data: JSON.stringify({'userName': userId, 'password': password}),
-                dataType: 'json',
-                headers: {'Content-Type': 'application/json'},
-                success: function (re) {
-                    if (re['state'] == 1) {
-                        UIkit.notification("<font color='green'>登录成功</font>", {});
-                        UIkit.notification.closeAll()
-                        sessionStorage.setItem("kotimeToken", re["token"]);
-                        location.reload();
-                    } else {
-                        UIkit.notification("<font color='red'>用户名或密码错误</font>", {});
-                    }
-                },
-                error: function (re) {
-                    console.log(re)
+            post("contextPath/koTime/login",{'userName': userId, 'password': password},function (re) {
+                if (re['state'] == 1) {
+                    noticeSuccess('登录成功')
+                    sessionStorage.setItem("kotimeToken", re["token"]);
+                    location.reload();
+                } else {
+                    noticeError('用户名或密码错误')
                 }
-            });
+            },function (re) {
+                console.error(re)
+            })
         }
 
         function searchTip(e) {
             let question = $('#searchText').val()
-            $.get(concatToken('contextPath/koTime/getApiTips?question=' + question), function (data) {
+            get(concatToken('contextPath/koTime/getApiTips?question=' + question), function (data) {
                 $("#condidates").html("")
                 for (let i = 0; i < data.length; i++) {
                     let name = data[i];
@@ -426,8 +394,8 @@
         function searchApis(e) {
             if (e.keyCode == 13) {
                 let question = $('#searchText').val()
-                $.get(concatToken('contextPath/koTime/getApis?question=' + question), function (data) {
-                    let element = document.getElementById('apiList');
+                get(concatToken('contextPath/koTime/getApis?question=' + question), function (data) {
+                    let element = getDom('apiList');
                     html = '';
                     for (let i = 0; i < data.length; i++) {
                         let className = data[i]['className'];
@@ -439,9 +407,9 @@
                         let color = avgRunTime > globalThreshold ? 'danger' : 'success';
 
                         if (methodType == 'Controller' && routeName != null && routeName != '') {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">平均响应 " + avgRunTime + " ms</span></li>";
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
                         } else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">平均响应 " + avgRunTime + " ms</span></li>";
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
                         }
                     }
                     ;
@@ -456,98 +424,64 @@
             var formData = new FormData();
             var file = document.querySelector('#classFile').files[0];
             if (file == null || file == undefined) {
-                UIkit.notification("<font color='red'>文件不能为空</font>", {});
+                noticeError('{{tab.hotupdate.class-file-null-tip}}')
                 return;
             }
             var className = document.querySelector("#className").value
             if (className == null || className == undefined || className.length < 2) {
-                UIkit.notification("<font color='red'>类名不能为空</font>", {});
+                noticeError('{{tab.hotupdate.class-name-null-tip}}')
                 return;
             }
             formData.append('classFile', file);
             formData.append('className', className);
-
-            $.ajax({
-                url: concatToken('contextPath/koTime/updateClass'),
-                type: 'POST',
-                cache: false,
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: "json",
-                success: function (res) {
+            postFormData(concatToken('contextPath/koTime/updateClass'),formData,function (res) {
                     if (res['state'] == 1) {
-                        UIkit.notification.closeAll();
-                        UIkit.notification("<font color='green'>更新成功</font>", {});
+                        noticeSuccess('{{tab.hotupdate.change-ok-tip}}')
                     } else {
-                        UIkit.notification.closeAll();
-                        UIkit.notification("<font color='red'>" + res['message'] + "</font>", {});
+                        noticeError(res['message'])
                     }
-                },
-                error: function (XmlHttpRequest, textStatus, errorThrown) {
-                    UIkit.notification.closeAll();
-                    UIkit.notification("<font color='red'>更新失败</font>", {});
+                }, function (XmlHttpRequest, textStatus, errorThrown) {
+                    noticeError('{{tab.hotupdate.change-fail-tip}}')
                     location.reload();
-                },
-                complete: function () {
                 }
-            })
+            )
+
         }
 
         function updateDynamicProperties() {
             let propertiesDom = document.querySelector("#dynamicText");
             let propertiesText = propertiesDom.value;
             if (propertiesText && propertiesText.indexOf("=") > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: concatToken('contextPath/koTime/updateDynamicProperties'),
-                    data: JSON.stringify({
-                        text: propertiesText
-                    }),
-                    dataType: 'json',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    success: function (re) {
-                        UIkit.notification.closeAll();
-                        UIkit.notification("<font color='green'>更新成功</font>", {});
-                    }
-                });
+                post(concatToken('contextPath/koTime/updateDynamicProperties'),{text: propertiesText},function (re) {
+                    noticeSuccess('{{tab.configuration.dynamic-config.change-ok-tip}}')
+                },function (re) {
+                    noticeError('{{tab.configuration.dynamic-config.change-fail-tip}}')
+                })
             } else {
-                UIkit.notification.closeAll();
-                UIkit.notification("<font color='red'>更新失败，请正确编写配置！</font>", {});
+                noticeError('{{tab.configuration.dynamic-config.change-fail-tip}}')
             }
 
         }
 
         function loadDynamicProperties() {
-            $.get(concatToken('contextPath/koTime/getDynamicProperties'), function (data) {
+            get(concatToken('contextPath/koTime/getDynamicProperties'), function (data) {
                 let text = data['data'];
                 document.querySelector("#dynamicText").value = text;
             });
         }
 
+
         function loadLatestVersion() {
-            $.ajax({
-                url: 'http://www.kotime.cn/common/latestVersion?version=2.3.8',
-                type: 'GET',
-                cache: false,
-                dataType: "json",
-                async: true,
-                success: function (res) {
-                    if (res['state'] == 1) {
-                        document.querySelector("#version-notice").innerHTML = res['content']['versionNo']
-                    }
-                },
-                error: function (XmlHttpRequest, textStatus, errorThrown) {
-                },
-                complete: function () {
+            get('http://www.kotime.cn/common/latestVersion?version='+koTimeVersion,function (res) {
+                if (res['state'] == 1) {
+                    document.querySelector("#version-notice").innerHTML = res['content']['versionNo']
                 }
-            });
+            },function (XmlHttpRequest, textStatus, errorThrown) {
+            })
         }
 
         function loadCpuInfo() {
-            $.get(concatToken('contextPath/koTime/getCpuInfo'), function (data) {
+            get(concatToken('contextPath/koTime/getCpuInfo'), function (data) {
                 let systemLoad = data['systemLoad'] * 100;
                 let userRate = data['userRate'] * 100;
                 let sysRate = data['sysRate'] * 100;
@@ -563,13 +497,13 @@
                 systemLoadDom.innerHTML = `${systemLoad.toFixed(2)}%`;
                 document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
                 document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
-                document.querySelector("#cpuLogicalAmount").innerHTML = `CPU使用率（${logicalNum}）：`;
+                document.querySelector("#cpuLogicalAmount").innerHTML = `{{tab.summary.sysusage-metric.cpu-usage}}（${logicalNum}）：`;
                 document.querySelector("#cpuWaitRate").innerHTML = `${waitRate.toFixed(2)}%`;
             });
         }
 
         function loadHeapMemoryInfo() {
-            $.get(concatToken('contextPath/koTime/getHeapMemoryInfo'), function (data) {
+            get(concatToken('contextPath/koTime/getHeapMemoryInfo'), function (data) {
                 // let initValue = data['initValue'] / 1024 / 1024;
                 // let maxValue = data['maxValue'] / 1024 / 1024;
                 // let usedValue = data['usedValue'] / 1024 / 1024;
@@ -592,7 +526,7 @@
         }
 
         function loadPhysicalMemoryInfo() {
-            $.get(concatToken('contextPath/koTime/getPhysicalMemoryInfo'), function (data) {
+            get(concatToken('contextPath/koTime/getPhysicalMemoryInfo'), function (data) {
                 // let initValue = data['initValue'] / 1024 / 1024;
                 // let thisUsedValue = data['thisUsedValue'] / 1024 / 1024;
                 // let usedValue = data['usedValue'] / 1024 / 1024;
@@ -636,7 +570,7 @@
 
         function loadThreadsInfo(queryState) {
             queryState = queryState || '';
-            $.get(concatToken('contextPath/koTime/getThreadsInfo?state=' + queryState), function (data) {
+            get(concatToken('contextPath/koTime/getThreadsInfo?state=' + queryState), function (data) {
                 let statistics = data['statistics'];
                 let all = statistics['all'];
                 let RUNNABLE = statistics['RUNNABLE'] || 0;
@@ -650,7 +584,7 @@
                 document.querySelector("#waitingNum").innerHTML = WAITING;
                 document.querySelector("#timedWaitingNum").innerHTML = TIMED_WAITING;
 
-                let element = document.getElementById('threadList');
+                let element = getDom('threadList');
                 let html = '';
                 let threads = data['threads'];
                 let colors = {
@@ -669,7 +603,7 @@
                     let cpuUsage = thread['cpuUsage'];
                     let cpuUsageColor = getCpuUsageColor(cpuUsage);
                     threadMap[id + ''] = stacks;
-                    html += `<li onclick="showThreadInfo('${id}')" style='color: #333;font-weight: 400;font-size: 14px;'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">CPU使用率:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
+                    html += `<li onclick="showThreadInfo('${id}')" style='color: #333;font-weight: 400;font-size: 14px;'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">{{tab.thread.thread-list.cpu-usage}}:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
                 }
                 element.innerHTML = html;
             });
@@ -687,10 +621,10 @@
                 html += `<li style='color: #333;font-weight: 400;font-size: 14px;'>${className}.${methodName}&nbsp; &nbsp;<span style='font-size: 10px;background-color: darkslategray;text-transform: unset' class="uk-label uk-label-success">${fileName}：${lineNumber}</span></li>`;
 
             }
-            let threadDetailDom = document.getElementById('thread-detail');
+            let threadDetailDom = getDom('thread-detail');
             threadDetailDom.innerHTML = html;
             UIkit.notification.closeAll();
-            UIkit.modal(document.getElementById("modal-thread")).show();
+            UIkit.modal(getDom("modal-thread")).show();
         }
 
         $(document).ready(function () {
@@ -707,22 +641,22 @@
 <nav class="uk-navbar-container" style="background-color: #404b67;height: 85px" uk-navbar>
     <div class="uk-navbar-center">
         <div class="uk-grid-small" uk-grid>
-            <div title="刷新数据" style="margin-top: 20px;font-size: 24px;color: white;cursor: pointer"
-                 class="uk-width-expand" onclick="refreshData()">KoTime调用链路追踪
+            <div title="{{kotime-refresh}}" style="margin-top: 20px;font-size: 24px;color: white;cursor: pointer"
+                 class="uk-width-expand" onclick="refreshData()">{{kotime-title}}
             </div>
         </div>
     </div>
 </nav>
 
 <ul class="uk-flex-center" uk-tab style="background-color: #404b67;margin-top: 0px;">
-    <li id="zl" class="uk-active"><a href="#" style="color: #edeef1;font-size: 14px">总览</a></li>
-    <li id="jklb"><a href="#" style="color: #edeef1;font-size: 14px">接口列表</a></li>
-    <li><a href="#" style="color: #edeef1;font-size: 14px">异常列表</a></li>
-    <li><a href="#" style="color: #edeef1;font-size: 14px">线程列表</a></li>
-    <li><a href="#" style="color: #edeef1;font-size: 14px">热更新</a></li>
-    <li><a href="#" style="color: #edeef1;font-size: 14px">配置</a></li>
-    <li><a href="#" style="color: #edeef1;font-size: 14px">技术支持</a><span title="点击查看版本发布信息"
-                                                                             style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset"
+    <li id="zl" class="uk-active"><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.summary}}</a></li>
+    <li id="jklb"><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.interface}}</a></li>
+    <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.exception}}</a></li>
+    <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.thread}}</a></li>
+    <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.hotupdate}}</a></li>
+    <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.configuration}}</a></li>
+    <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.support}}</a>
+        <span title="{{tab.support.version-tip}}" style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset"
                                                                              class="uk-label" id="version-notice"
                                                                              onclick="window.location.href='http://www.kotime.cn/docs/kaiyuan#/v220/introduce'"></span>
     </li>
@@ -731,20 +665,20 @@
 <ul class="uk-switcher uk-margin">
     <li style="margin-left: 30%;margin-right: 30%;">
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#">接口统计</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.interface-metric}}</a></li>
         </ul>
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
                 <div id="systemTotalNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">接口数</span><br>
+                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.interface-metric.total-num}}</span><br>
                     <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemTotalNum">0</span>
                 </div>
             </div>
             <div>
                 <div id="systemDelayNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">延迟响应数</span>
+                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.interface-metric.delay-num}}</span>
                     <br>
                     <span style="font-size: 30px;color: #cc0c0c;font-weight: bold" id="systemDelayNum">0</span>
                 </div>
@@ -752,56 +686,56 @@
             <div>
                 <div id="systemNormalNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">正常响应数</span>
+                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.interface-metric.normal-num}}</span>
                     <br>
                     <span style="font-size: 30px;color: #29da93;font-weight: bold" id="systemNormalNum">0</span></div>
             </div>
         </div>
 
         <ul style="margin-top: 10px;" class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#">响应统计</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.response-metric}}</a></li>
         </ul>
         <div style="margin-top: 10px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
                 <div id="systemAvgRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">平均响应（ms）</span>
+                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.response-metric.avg-num}}</span>
                     <br>
                     <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemAvgRunTime">0</span></div>
             </div>
             <div>
                 <div id="systemMaxRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">最大响应（ms）</span>
+                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.response-metric.max-num}}</span>
                     <br>
                     <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMaxRunTime">0</span></div>
             </div>
             <div>
                 <div id="systemMinRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">最小响应（ms）</span>
+                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.response-metric.min-num}}</span>
                     <br>
                     <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMinRunTime">0</span></div>
             </div>
         </div>
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#">系统使用情况</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.sysusage-metric}}</a></li>
         </ul>
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
                 <div id="cpuInfo-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;" id="cpuLogicalAmount">CPU使用率：</span><span
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;" id="cpuLogicalAmount">{{tab.summary.sysusage-metric.cpu-usage}}：</span><span
                         style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad">0</span>
                     <hr style="margin-top: 7px">
                     <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
                         <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">用户使用率：</span><span
+                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.user-usage}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="cpuUserRate">0</span></li>
                         <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">系统使用率：</span><span
+                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.sys-usage}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="cpuSysRate">0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">IO&nbsp;&nbsp;&nbsp;等待率：</span><span
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.io-waiting}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="cpuWaitRate">0</span></li>
                     </ul>
                 </div>
@@ -809,15 +743,15 @@
             <div>
                 <div id="heapMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">堆内存：</span><span
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">{{tab.summary.sysusage-metric.heap-memory}}：</span><span
                         style="font-size: 15px;color: #020718;font-weight: bold" id="heapUsedRate">0</span>
                     <hr style="margin-top: 7px">
                     <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">初始值：</span><span
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="heapInit">0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">最大值：</span><span
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.max}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="heapMax">0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">已使用：</span><span
+                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="heapUsed">0</span></li>
                     </ul>
                 </div>
@@ -825,19 +759,19 @@
             <div>
                 <div id="physicalMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">物理内存：</span><span
+                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">{{tab.summary.sysusage-metric.physical-memory}}：</span><span
                         style="font-size: 15px;color: #020718;font-weight: bold" id="physicalUsedRate">0</span>
                     <hr style="margin-top: 7px">
                     <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
                         <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">总物理内存：</span><span
+                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.total}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="physicalAmount">0</span>
                         </li>
                         <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">已使用内存：</span><span
+                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.used}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="physicalUsed">0</span></li>
                         <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">此程序占用：</span><span
+                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.current-used}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="thisUsed">0</span></li>
                     </ul>
                 </div>
@@ -846,7 +780,7 @@
 
         <div class="uk-alert-success" uk-alert>
             <a class="uk-alert-close" uk-close></a>
-            <p id="apiTip">接口根据调用情况统计，未调用的接口无法被统计到，请先调用接口</p>
+            <p id="apiTip">{{tab.summary.bottom-normal-tip}}</p>
         </div>
     </li>
     <li style="margin-left: 20%;margin-right: 20%;">
@@ -854,7 +788,7 @@
             <span uk-search-icon></span>
             <input list="condidates" id="searchText"
                    style="border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121"
-                   class="uk-search-input" type="search" placeholder="搜索方法名或者类文件..."
+                   class="uk-search-input" type="search" placeholder="{{tab.interface.search-tip}}"
                    oninput="searchTip(event);" onkeydown="searchApis(event);">
             <datalist id="condidates" onkeydown="searchApis(event);">
             </datalist>
@@ -873,7 +807,7 @@
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#">线程统计</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.thread.thread-metric}}</a></li>
         </ul>
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
@@ -919,7 +853,7 @@
             </div>
         </div>
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#">线程列表</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.thread.thread-list}}</a></li>
         </ul>
         <ul id="threadList"
             style="background-color: rgba(245,242,242,0.96);padding: 10px;overflow-y: auto;max-height: 65%"
@@ -933,60 +867,60 @@
                 <div uk-form-custom="target: true" class="uk-form-controls">
                     <input id="classFile" name="classFile" type="file">
                     <input id="form-file" style="width: 500px;border-radius: 5px" class="uk-input" type="text"
-                           placeholder="更新的类文件：编译过的.class文件">
+                           placeholder="{{tab.hotupdate.class-file-input-tip}}">
                 </div>
                 <br>
                 <br>
                 <input id="className" name="className" style="width: 500px;border-radius: 5px" class="uk-input"
-                       type="text" placeholder="更新的类全名：com.xx.xx.TestService">
+                       type="text" placeholder="{{tab.hotupdate.class-name-input-tip}}">
                 <br>
                 <br>
                 <button type="button" onclick="updateClass();"
                         style="width: 500px;background-color: #19985d;border-radius: 5px"
-                        class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">确定
+                        class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">{{kotime-confirm}}
                 </button>
             </div>
         </div>
     </li>
     <li style="margin-left: 30%;margin-right: 30%;">
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a href="#" style="text-transform: unset">KoTime配置</a></li>
-            <li class=""><a href="#" style="text-transform: unset">dynamic.properties配置</a></li>
+            <li class="uk-active"><a href="#" style="text-transform: unset">{{tab.configuration.kotime-config}}</a></li>
+            <li class=""><a href="#" style="text-transform: unset">{{tab.configuration.dynamic-config}}</a></li>
         </ul>
         <ul class="uk-switcher uk-margin">
             <li>
                 <div style="margin-top: 20px;"
-                     class="uk-grid-small uk-child-width-expand@s uk-text-left uk-card uk-card-default uk-card-body"
-                     style="border-radius: 5px" uk-grid>
-                    <div class="layui-tab-item">
-                        <label>开启koTime：</label> <input id='kotimeEnable' type="checkbox" checked>
+                     class="uk-child-width-expand@s uk-text-left uk-card uk-card-default uk-card-body"
+                     style="border-radius: 5px">
+                    <div>
+                        <label>{{tab.configuration.kotime-config.enable-kotime-tip}}：</label> <input id='kotimeEnable' type="checkbox" checked>
                         <br>
-                        <label>开启异常监测：</label> <input id='exceptionEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-exception-tip}}：</label> <input id='exceptionEnable' type="checkbox">
                         <br>
-                        <label>开启控制台日志：</label> <input id='logEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-console-tip}}：</label> <input id='logEnable' type="checkbox">
                         <br>
-                        <label>开启邮件通知：</label> <input id='mailEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-email-tip}}：</label> <input id='mailEnable' type="checkbox">
                         <br>
-                        <label>语言选择：</label>
+                        <label>{{tab.configuration.kotime-config.select-language-tip}}：</label>
                         <select id="languageSwitch">
-                            <option value="chinese">中文</option>
-                            <option value="english">英文</option>
+                            <option value="chinese">{{tab.configuration.kotime-config.select-language-chinese}}</option>
+                            <option value="english">{{tab.configuration.kotime-config.select-language-english}}</option>
                         </select>
                         <br>
-                        <label>方法运行时间阈值：</label> <input id='timeThreshold' type="input">
+                        <label>{{tab.configuration.kotime-config.threshold-tip}}：</label> <input id='timeThreshold' type="input">
                         <button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white"
-                                id="timeThresholdYes">确认
+                                id="timeThresholdYes">{{tab.configuration.kotime-config.threshold-confirm}}
                         </button>
                         <br>
-                        <label>清空链路数据：</label>
+                        <label>{{tab.configuration.kotime-config.clear-data-tip}}：</label>
                         <button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white"
-                                id="clearDataYes">确认
+                                id="clearDataYes">{{tab.configuration.kotime-config.clear-data-confirm}}
                         </button>
                         <br>
                         <br>
                         <div class="uk-alert-success" uk-alert>
                             <a class="uk-alert-close" uk-close></a>
-                            <p>变更配置以后请重新刷新页面</p>
+                            <p>{{tab.configuration.bottom-tip}}</p>
                         </div>
                     </div>
                 </div>
@@ -998,8 +932,8 @@
                     <br>
                     <br>
                     <button type="button" onclick="updateDynamicProperties();"
-                            style="width: 100%;background-color: #19985d;border-radius: 5px"
-                            class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">更新
+                            style="width: 100%;background-color: #19985d;border-radius: 5px;text-transform: unset"
+                            class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">{{tab.configuration.dynamic-config.confirm-name}}
                     </button>
                 </div>
             </li>
@@ -1037,9 +971,9 @@
         <br>
         <div class="uk-alert-success" uk-alert>
             <a class="uk-alert-close" uk-close></a>
-            <a href="http://www.kotime.cn/#doc?version=v2.3.7">技术支持</a><br>
-            <a href="http://www.kotime.cn/#products?version=v2.3.7">升级专业版</a><br>
-            <a href="http://www.kotime.cn/person?version=v2.3.7">本地化插件</a>
+            <a href="http://www.kotime.cn/#doc">{{tab.support.support-tip}}</a><br>
+            <a href="http://www.kotime.cn/#products">{{tab.support.pro-tip}}</a><br>
+            <a href="http://www.kotime.cn/person">{{tab.support.plugin-tip}}</a>
         </div>
     </li>
 </ul>
@@ -1054,7 +988,7 @@
             </ul>
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-primary  uk-modal-close" type="button">朕知道了</button>
+            <button class="uk-button uk-button-primary  uk-modal-close" type="button">{{kotime-confirm}}</button>
         </div>
 
     </div>
@@ -1067,7 +1001,7 @@
 
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-primary  uk-modal-close" type="button">朕知道了</button>
+            <button class="uk-button uk-button-primary  uk-modal-close" type="button">{{kotime-confirm}}</button>
         </div>
 
     </div>
@@ -1098,7 +1032,7 @@
                         <form class="uk-card uk-card-default uk-card-body" style="border-radius: 5px">
                             <div class="uk-margin">
                                 <div class="uk-inline">
-                                    <div style="font-size: 35px;" class="uk-width-expand">KoTime调用链路追踪</div>
+                                    <div style="font-size: 35px;" class="uk-width-expand">{{kotime-title}}</div>
                                 </div>
                             </div>
                             <br>
@@ -1117,7 +1051,7 @@
                             <div class="uk-margin">
                                 <div class="uk-inline">
                                     <a class="uk-button uk-button-default uk-label-success" style="border-radius: 5px"
-                                       onclick="login();">确定</a>
+                                       onclick="login();">{{kotime-confirm}}</a>
                                 </div>
                             </div>
                         </form>

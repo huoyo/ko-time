@@ -2,24 +2,17 @@ package cn.langpy.kotime.controller;
 
 import cn.langpy.kotime.annotation.Auth;
 import cn.langpy.kotime.config.DefaultConfig;
-import cn.langpy.kotime.constant.KoConstant;
 import cn.langpy.kotime.model.*;
 import cn.langpy.kotime.service.ClassService;
 import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.service.SysUsageService;
 import cn.langpy.kotime.service.ThreadUsageService;
 import cn.langpy.kotime.util.Context;
-import cn.langpy.kotime.util.InvalidAuthInfoException;
-import cn.langpy.kotime.util.KoUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -33,132 +26,7 @@ import static cn.langpy.kotime.model.ThreadInfo.COMPARATOR;
 @Controller
 @RequestMapping("/koTime")
 public class KoTimeController {
-    @Value("${ko-time.user-name:}")
-    private String userName;
-    @Value("${ko-time.password:}")
-    private String password;
-
     private static Logger log = Logger.getLogger(KoTimeController.class.toString());
-    private final String uiKitCssText = getResourceText("kostatic/uikit.min.css");
-    private final String uiKitJsText = getResourceText("kostatic/uikit.min.js");
-    private final String metricFlowJsText = getResourceText("kostatic/Metricflow.js");
-    private final String jQueryJsText = getResourceText("kostatic/JQuery.min.js");
-    private final String uiKitIconsJs = getResourceText("kostatic/uikit-icons.js");
-
-    @PostMapping("/login")
-    @ResponseBody
-    public Map login(@RequestBody UserInfo userInfo) {
-        if (null == userInfo || !StringUtils.hasText(userInfo.getUserName()) || !StringUtils.hasText(userInfo.getPassword())) {
-            throw new InvalidAuthInfoException("failed to login for kotime,please fill userName and password!");
-        }
-        Map map = new HashMap();
-        if (userName.equals(userInfo.getUserName()) && password.equals(userInfo.getPassword())) {
-            String token = KoUtil.login(userInfo.getUserName());
-            map.put("state", 1);
-            map.put("token", token);
-            return map;
-        }
-        map.put("state", 0);
-        return map;
-    }
-
-    @GetMapping("/isLogin")
-    @ResponseBody
-    public Map isLogin(String kotoken) {
-        Map map = new HashMap();
-        map.put("state", 1);
-        boolean checkLogin = false;
-        if (StringUtils.hasText(kotoken)) {
-            if (kotoken.equals(Context.getConfig().getStaticToken())) {
-                checkLogin = true;
-            } else {
-                checkLogin = KoUtil.isLogin(kotoken);
-            }
-        }
-        map.put("isLogin", checkLogin ? 1 : 0);
-        return map;
-    }
-
-
-    @GetMapping
-    public void index(String kotoken, String test,String charset, String language,HttpServletResponse response, HttpServletRequest request) {
-        if (!Context.getConfig().getEnable()) {
-            return;
-        }
-        if (null != test) {
-            return;
-        }
-        boolean staticTokenVisit = false;
-        if (StringUtils.hasText(kotoken)) {
-            staticTokenVisit = true;
-        }
-        if (!StringUtils.hasText(charset)) {
-            charset = "utf-8";
-        }
-        response.setContentType("text/html;charset="+charset);
-        ClassPathResource classPathResource = new ClassPathResource(KoConstant.getViewName(language));
-        try (
-                InputStream inputStream = classPathResource.getInputStream();
-                InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
-                BufferedReader reader = new BufferedReader(streamReader);
-                PrintWriter out = response.getWriter()) {
-
-            String context = request.getContextPath();
-            if (StringUtils.hasText(Context.getConfig().getContextPath())) {
-                context = Context.getConfig().getContextPath();
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                if (line.indexOf(KoConstant.globalThreshold) > -1) {
-                    line = line.replace(KoConstant.globalThreshold, Context.getConfig().getThreshold() + "");
-                } else if (line.indexOf(KoConstant.globalNeedLogin) > -1) {
-                    line = line.replace(KoConstant.globalNeedLogin, Context.getConfig().getAuthEnable() + "");
-                } else if (line.indexOf(KoConstant.contextPath) > -1) {
-                    line = line.replace(KoConstant.contextPath, context);
-                } else if (line.indexOf(KoConstant.exceptionTitleStyle) > -1) {
-                    line = line.replace(KoConstant.exceptionTitleStyle, Context.getConfig().getExceptionEnable() == true ? "" : "display:none;");
-                } else if (line.indexOf("UIKitCss") > -1) {
-                    line = line.replace("UIKitCss", uiKitCssText);
-                } else if (line.indexOf("UIKitJs") > -1) {
-                    line = line.replace("UIKitJs", uiKitJsText);
-                } else if (line.indexOf("MetricFlowJs") > -1) {
-                    line = line.replace("MetricFlowJs", metricFlowJsText);
-                } else if (line.indexOf("jQueryJs") > -1) {
-                    line = line.replace("jQueryJs", jQueryJsText);
-                } else if (line.indexOf("uiKitIconsJs") > -1) {
-                    line = line.replace("uiKitIconsJs", uiKitIconsJs);
-                } else if (line.indexOf("staticTokenVisitValue") > -1) {
-                    line = line.replace("staticTokenVisitValue", staticTokenVisit + "");
-                } else if (line.indexOf("staticTokenValue") > -1) {
-                    line = line.replace("staticTokenValue", "'" + kotoken + "'");
-                }
-                stringBuilder.append(line + "\n");
-            }
-            line = stringBuilder.toString();
-            out.write(line);
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getResourceText(String fileName) {
-        ClassPathResource classPathResource = new ClassPathResource(fileName);
-        try (InputStream inputStream = classPathResource.getInputStream();
-             InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
-             BufferedReader reader = new BufferedReader(streamReader)) {
-            String line = "";
-            StringBuilder stringBuilder = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line + "\n");
-            }
-            return stringBuilder.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
 
 
     @GetMapping("/getConfig")

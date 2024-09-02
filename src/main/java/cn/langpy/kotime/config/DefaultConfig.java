@@ -46,6 +46,7 @@ public class DefaultConfig {
     private Integer mailThreshold;
     private String mailScope;
     private String propertyFile;
+    private Boolean abbreviationEnable;
 
     public String getPropertyFile() {
         return propertyFile;
@@ -312,4 +313,11 @@ public class DefaultConfig {
         this.paramAnalyse = paramAnalyse;
     }
 
+    public Boolean getAbbreviationEnable() {
+        return abbreviationEnable;
+    }
+
+    public void setAbbreviationEnable(Boolean abbreviationEnable) {
+        this.abbreviationEnable = abbreviationEnable;
+    }
 }

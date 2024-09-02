@@ -144,6 +144,8 @@ public class KoInitController {
             line = line.replace("KoTimeUtil", KoTimeUtil);
         } else if (line.indexOf("koTimeVersionValue") > -1) {
             line = line.replace("koTimeVersionValue", "'" + KoUtil.getVerssion()+ "'");
+        }else if (line.indexOf("abbreviationEnableValue") > -1) {
+            line = line.replace("abbreviationEnableValue", Context.getConfig().getAbbreviationEnable()+"");
         }
         return line;
     }

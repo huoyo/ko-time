@@ -124,6 +124,9 @@ public class KoTimeController {
         if (config.getMailEnable() != null) {
             koTimeConfig.setMailEnable(config.getMailEnable());
         }
+        if (config.getAbbreviationEnable() != null) {
+            koTimeConfig.setAbbreviationEnable(config.getAbbreviationEnable());
+        }
         if (config.getThreshold() != null) {
             koTimeConfig.setThreshold(config.getThreshold());
         }

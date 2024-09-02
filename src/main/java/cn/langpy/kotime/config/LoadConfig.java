@@ -117,6 +117,7 @@ public class LoadConfig {
         config.setParamAnalyse(defaultConfig.getParamAnalyse() == null ? true : defaultConfig.getParamAnalyse());
         config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
         config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
+        config.setAbbreviationEnable(defaultConfig.getAbbreviationEnable() == null ? true : defaultConfig.getAbbreviationEnable());
         config.setStaticToken(defaultConfig.getStaticToken());
 
         config.setMailEnable(defaultConfig.getMailEnable());

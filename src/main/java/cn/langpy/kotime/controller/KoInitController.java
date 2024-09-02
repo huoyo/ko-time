@@ -33,7 +33,7 @@ public class KoInitController {
     @Value("${ko-time.password:}")
     private String password;
     private final Pattern pattern = Pattern.compile("\\{\\{[a-zA-Z0-9\\.-]+\\}\\}");
-
+    private final ClassPathResource kotimeViewerResource = new ClassPathResource(KoConstant.kotimeViewer);
     private final String uiKitCssText = getResourceText("kostatic/uikit.min.css");
     private final String uiKitJsText = getResourceText("kostatic/uikit.min.js");
     private final String metricFlowJsText = getResourceText("kostatic/Metricflow.js");
@@ -87,9 +87,8 @@ public class KoInitController {
             charset = "utf-8";
         }
         response.setContentType("text/html;charset=" + charset);
-        ClassPathResource classPathResource = new ClassPathResource(KoConstant.kotimeViewer);
         try (
-                InputStream inputStream = classPathResource.getInputStream();
+                InputStream inputStream = kotimeViewerResource.getInputStream();
                 InputStreamReader streamReader = new InputStreamReader(inputStream, "utf-8");
                 BufferedReader reader = new BufferedReader(streamReader);
                 PrintWriter out = response.getWriter()) {
@@ -102,11 +101,13 @@ public class KoInitController {
             String line = "";
             while ((line = reader.readLine()) != null) {
                 line = formatStaticResource(line,context,kotoken);
-                line = formatLanguageDesc(line, languageDict);
+                if (line.indexOf("{{")>-1) {
+                    line = formatLanguageDesc(line, languageDict);
+                }
                 stringBuilder.append(line + "\n");
             }
             line = stringBuilder.toString();
-            out.write(line);
+            out.print(line);
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();

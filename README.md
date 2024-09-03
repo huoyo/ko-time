@@ -1,7 +1,7 @@
 
 > 感谢那些默默Star和提建议的支持者们，有你们才有KoTime的逐步完善
 
-[别拦我，我要支持作者，让他加班升级维护](https://afdian.net/a/huoyo)
+[别拦我，我要支持作者，让他加班升级维护](https://afdian.com/a/huoyo)
 
 [在线ppt介绍](http://www.texspire.cn/view/dd6aa2529e664825a5acd416ddb07c76?fullscreen=true)
 

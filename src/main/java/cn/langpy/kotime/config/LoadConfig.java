@@ -98,6 +98,7 @@ public class LoadConfig {
         config.setDataReset(defaultConfig.getDataReset() == null ? false : defaultConfig.getDataReset());
         config.setVersionNotice(defaultConfig.getVersionNotice() == null ? true : defaultConfig.getVersionNotice());
         config.setStaticToken(defaultConfig.getStaticToken());
+        config.setAbbreviationEnable(defaultConfig.getAbbreviationEnable() == null ? true : defaultConfig.getAbbreviationEnable());
 
         config.setMailEnable(defaultConfig.getMailEnable());
         config.setMailProtocol(defaultConfig.getMailProtocol() == null ? "smtp" : defaultConfig.getMailProtocol());

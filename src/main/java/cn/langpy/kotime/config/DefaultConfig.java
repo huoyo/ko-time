@@ -21,7 +21,7 @@ public class DefaultConfig {
     /**
      * to select language for viewer, chinese
      */
-    private String language = "chinese";
+    private String language;
 
     /**
      * false
@@ -179,6 +179,10 @@ public class DefaultConfig {
      * dynamic.properties
      */
     private String propertyFile = "dynamic.properties";
+    /**
+     * to enable interface abbreviation
+     */
+    private Boolean abbreviationEnable;
 
     public String getPropertyFile() {
         return propertyFile;
@@ -438,4 +442,11 @@ public class DefaultConfig {
         this.paramAnalyse = paramAnalyse;
     }
 
+    public Boolean getAbbreviationEnable() {
+        return abbreviationEnable;
+    }
+
+    public void setAbbreviationEnable(Boolean abbreviationEnable) {
+        this.abbreviationEnable = abbreviationEnable;
+    }
 }

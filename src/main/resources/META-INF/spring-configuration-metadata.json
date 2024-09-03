@@ -36,6 +36,13 @@
       "sourceType": "cn.langpy.kotime.config.DefaultConfig"
     },
     {
+      "name": "ko-time.abbreviation-enable",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "to abbreviate the interface name",
+      "sourceType": "cn.langpy.kotime.config.DefaultConfig"
+    },
+    {
       "name": "ko-time.language",
       "defaultValue": "chinese",
       "type": "java.lang.String",

@@ -19,6 +19,7 @@
         var globalToken = staticTokenVisit ? staticToken : sessionStorage.getItem("kotimeToken");
         let globalIsLogin = false;
         let koTimeVersion = koTimeVersionValue;
+        let abbreviationEnable = abbreviationEnableValue;
 
         function concatToken(url) {
             if (globalNeedLogin) {
@@ -73,6 +74,7 @@
                 let element = getDom('apiList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
+                    let simName = data[i]['name'].replace('.','#');
                     let className = data[i]['className'];
                     let methodName = data[i]['methodName'];
                     let avgRunTime = data[i]['avgRunTime'];
@@ -82,9 +84,17 @@
                     let apiId = className + "." + methodName;
                     let color = avgRunTime > globalThreshold ? 'danger' : 'success';
                     if (methodType == 'Controller' && routeName != null && routeName != '') {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                        if (abbreviationEnable) {
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                        }else {
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                        }
                     } else {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                        if (abbreviationEnable) {
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                        }else {
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                        }
                     }
                 }
                 ;
@@ -173,6 +183,14 @@
                 })
             };
 
+            getDom('abbreviationEnable').onclick = function () {
+                post(concatToken('contextPath/koTime/updateConfig'),{abbreviationEnable: getDom('abbreviationEnable').checked},function (res) {
+                    noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
+                },function () {
+                    noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
+                })
+            };
+
             getDom('languageSwitch').onclick = function () {
                 let selectedObj = getDom('languageSwitch');
                 post(concatToken('contextPath/koTime/updateConfig'),{language: selectedObj.options[selectedObj.selectedIndex].value},function (res) {
@@ -217,7 +235,8 @@
                 kotimeEnableDom.checked = kotimeEnable;
 
                 let apiTip = getDom('apiTip');
-                apiTip.innerHTML = kotimeEnable == true ? "{{tab.summary.bottom-normal-tip}}" : "{{tab.summary.bottom-close-tip}}";
+                apiTip.innerHTML = kotimeEnable == true ? "{{tab.summary.bottom-normal-tip}}" :
+                    "{{tab.summary.bottom-close-tip}}";
 
 
                 let threshold = data['threshold'];
@@ -231,6 +250,10 @@
                 let mailEnable = data['mailEnable'];
                 let mailEnableDom = getDom('mailEnable');
                 mailEnableDom.checked = mailEnable;
+
+                let abbreviationEnable = data['abbreviationEnable'];
+                let abbreviationEnableDom = getDom('abbreviationEnable');
+                abbreviationEnableDom.checked = abbreviationEnable;
 
                 let language = data['language'];
                 $("#languageSwitch").val(language)
@@ -302,7 +325,8 @@
                 {'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.min}}：</span>' + data['minRunTime'] + ' ms'}
             ];
             if (data['exceptionNum'] != null && data['exceptionNum'] > 0) {
-                data['data'].push({'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.exception-num}}：</span>' + data['exceptionNum'] + ' {{tab.interface.interface-list.show-metric.exception-unit}}'});
+                data['data'].push({'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.exception-num}}：</span>' + data['exceptionNum'] +
+                        ' {{tab.interface.interface-list.show-metric.exception-unit}}'});
             }
             data["dblclick"] = "paramGraph";
             return data;
@@ -398,6 +422,7 @@
                     let element = getDom('apiList');
                     html = '';
                     for (let i = 0; i < data.length; i++) {
+                        let simName = data[i]['name'].replace('.','#');
                         let className = data[i]['className'];
                         let methodName = data[i]['methodName'];
                         let avgRunTime = data[i]['avgRunTime'];
@@ -407,9 +432,17 @@
                         let color = avgRunTime > globalThreshold ? 'danger' : 'success';
 
                         if (methodType == 'Controller' && routeName != null && routeName != '') {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            if (abbreviationEnable) {
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            }else {
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            }
                         } else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            if (abbreviationEnable) {
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            }else {
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            }
                         }
                     }
                     ;
@@ -657,8 +690,8 @@
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.configuration}}</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.support}}</a>
         <span title="{{tab.support.version-tip}}" style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset"
-                                                                             class="uk-label" id="version-notice"
-                                                                             onclick="window.location.href='http://www.kotime.cn/docs/kaiyuan#/v220/introduce'"></span>
+              class="uk-label" id="version-notice"
+              onclick="window.location.href='http://www.kotime.cn/docs/kaiyuan#/v220/introduce'"></span>
     </li>
 </ul>
 
@@ -900,6 +933,8 @@
                         <label>{{tab.configuration.kotime-config.enable-console-tip}}：</label> <input id='logEnable' type="checkbox">
                         <br>
                         <label>{{tab.configuration.kotime-config.enable-email-tip}}：</label> <input id='mailEnable' type="checkbox">
+                        <br>
+                        <label>{{tab.configuration.kotime-config.enable-abbreviation-tip}}：</label> <input id='abbreviationEnable' type="checkbox">
                         <br>
                         <label>{{tab.configuration.kotime-config.select-language-tip}}：</label>
                         <select id="languageSwitch">

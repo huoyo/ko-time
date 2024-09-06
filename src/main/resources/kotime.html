@@ -3,6 +3,7 @@
     <title>KoTime</title>
     <style>
         UIKitCss
+        commonCss
     </style>
     <script>
         UIKitJs;
@@ -80,20 +81,25 @@
                     let avgRunTime = data[i]['avgRunTime'];
                     let methodType = data[i]['methodType'];
                     let routeName = data[i]['routeName'];
+                    let callNum = data[i]['callNum'];
 
                     let apiId = className + "." + methodName;
                     let color = avgRunTime > globalThreshold ? 'danger' : 'success';
                     if (methodType == 'Controller' && routeName != null && routeName != '') {
                         if (abbreviationEnable) {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                         }else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                         }
                     } else {
                         if (abbreviationEnable) {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                         }else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>" +
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                         }
                     }
                 }
@@ -428,20 +434,25 @@
                         let avgRunTime = data[i]['avgRunTime'];
                         let methodType = data[i]['methodType'];
                         let routeName = data[i]['routeName'];
+                        let callNum = data[i]['callNum'];
                         let apiId = className + "." + methodName;
                         let color = avgRunTime > globalThreshold ? 'danger' : 'success';
 
                         if (methodType == 'Controller' && routeName != null && routeName != '') {
                             if (abbreviationEnable) {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                             }else {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp(<span style='font-size: 14px;font-weight: 430;color:#032b11'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                             }
                         } else {
                             if (abbreviationEnable) {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\"><span style='font-size: 16px;font-weight: 500;'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>" +
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
                             }else {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" style='color: #333;font-weight: 400;font-size: 14px;' id=\"" + apiId + "-list\">" + className + "#<span style='font-size: 16px;font-weight: 500;'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>" +
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
                             }
                         }
                     }
@@ -636,7 +647,7 @@
                     let cpuUsage = thread['cpuUsage'];
                     let cpuUsageColor = getCpuUsageColor(cpuUsage);
                     threadMap[id + ''] = stacks;
-                    html += `<li onclick="showThreadInfo('${id}')" style='color: #333;font-weight: 400;font-size: 14px;'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">{{tab.thread.thread-list.cpu-usage}}:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
+                    html += `<li onclick="showThreadInfo('${id}')" class='common-li'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">{{tab.thread.thread-list.cpu-usage}}:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
                 }
                 element.innerHTML = html;
             });
@@ -651,7 +662,7 @@
                 let methodName = stack['methodName']
                 let fileName = stack['fileName']
                 let lineNumber = stack['lineNumber']
-                html += `<li style='color: #333;font-weight: 400;font-size: 14px;'>${className}.${methodName}&nbsp; &nbsp;<span style='font-size: 10px;background-color: darkslategray;text-transform: unset' class="uk-label uk-label-success">${fileName}：${lineNumber}</span></li>`;
+                html += `<li class='common-li'>${className}.${methodName}&nbsp; &nbsp;<span style='font-size: 10px;background-color: darkslategray;text-transform: unset' class="uk-label uk-label-success">${fileName}：${lineNumber}</span></li>`;
 
             }
             let threadDetailDom = getDom('thread-detail');

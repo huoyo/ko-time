@@ -7,6 +7,7 @@ public class MethodRelation {
     private Double avgRunTime = 0.0;
     private Double maxRunTime = 0.0;
     private Double minRunTime = 10000.0;
+    private Integer callNum = 0;
 
     public String getId() {
         return id;
@@ -56,5 +57,11 @@ public class MethodRelation {
         this.minRunTime = minRunTime;
     }
 
+    public Integer getCallNum() {
+        return callNum;
+    }
 
+    public void setCallNum(Integer callNum) {
+        this.callNum = callNum;
+    }
 }

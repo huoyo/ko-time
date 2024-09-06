@@ -117,11 +117,13 @@ public class MemoryBase implements GraphService {
         methodRelation.setAvgRunTime(targetMethodNode.getValue());
         methodRelation.setMaxRunTime(targetMethodNode.getValue());
         methodRelation.setMinRunTime(targetMethodNode.getValue());
+        methodRelation.setCallNum(1);
         MethodRelation old = methodRelations.get(methodRelation.getId());
         if (null == old) {
             methodRelations.put(methodRelation.getId(), methodRelation);
             return methodRelation;
         } else {
+            old.setCallNum(old.getCallNum()+1);
             if (Math.random()<Context.getConfig().getDiscardRate()) {
                 return null;
             }
@@ -249,6 +251,7 @@ public class MemoryBase implements GraphService {
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
                 methodInfo.setMinRunTime(relation.getMinRunTime());
+                methodInfo.setCallNum(relation.getCallNum());
                 if (!methodInfos.contains(methodInfo)) {
                     methodInfos.add(methodInfo);
                 }
@@ -287,6 +290,7 @@ public class MemoryBase implements GraphService {
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
                 methodInfo.setMinRunTime(relation.getMinRunTime());
+                methodInfo.setCallNum(relation.getCallNum());
                 if (!methodInfos.contains(methodInfo)) {
                     methodInfos.add(methodInfo);
                 }
@@ -331,6 +335,7 @@ public class MemoryBase implements GraphService {
                 methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
                 methodInfo.setMaxRunTime(methodRelation.getMaxRunTime());
                 methodInfo.setMinRunTime(methodRelation.getMinRunTime());
+                methodInfo.setCallNum(methodRelation.getCallNum());
 
                 List<ExceptionInfo> exceptionInfos = getExceptions(methodNode.getId());
                 methodInfo.setExceptionNum(exceptionInfos.size());
@@ -381,6 +386,7 @@ public class MemoryBase implements GraphService {
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());
         rootInfo.setMinRunTime(methodRelation.getMinRunTime());
+        rootInfo.setCallNum(methodRelation.getCallNum());
         List<ExceptionInfo> exceptionInfos = getExceptions(methodId);
         rootInfo.setExceptionNum(exceptionInfos.size());
         rootInfo.setExceptions(exceptionInfos);

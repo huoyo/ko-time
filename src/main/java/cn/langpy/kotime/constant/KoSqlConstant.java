@@ -12,11 +12,11 @@ public class KoSqlConstant {
             "join ko_exception_relation r on e.id = r.target_id";
     public final static String queryException = "SELECT id, name, class_name FROM ko_exception_node  WHERE id=?";
     public final static String queryExceptionExist = "SELECT id FROM ko_exception_node  WHERE id=?";
-    public final static String addMethodRe = "INSERT INTO ko_method_relation(id, source_id, target_id, avg_run_time, max_run_time, min_run_time) VALUES (?, ?, ?, ?, ?, ?)";
-    public final static String queryMethodRe = "SELECT id, source_id, target_id, avg_run_time, max_run_time, min_run_time FROM ko_method_relation WHERE id=?";
-    public final static String queryMethodReBySource = "SELECT id, source_id, target_id, avg_run_time, max_run_time, min_run_time FROM ko_method_relation WHERE source_id=?";
-    public final static String queryMethodReByTarget = "SELECT id, source_id, target_id, avg_run_time, max_run_time, min_run_time FROM ko_method_relation WHERE target_id=?";
-    public final static String updateMethodRe = "UPDATE ko_method_relation SET source_id=?, target_id=?, avg_run_time=?, max_run_time=?, min_run_time=? WHERE id=?";
+    public final static String addMethodRe = "INSERT INTO ko_method_relation(id, source_id, target_id, avg_run_time, max_run_time, min_run_time, call_num) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public final static String queryMethodRe = "SELECT id, source_id, target_id, avg_run_time, max_run_time, min_run_time,call_num FROM ko_method_relation WHERE id=?";
+    public final static String queryMethodReBySource = "SELECT id, source_id, target_id, avg_run_time, max_run_time, min_run_time,call_num FROM ko_method_relation WHERE source_id=?";
+    public final static String queryMethodReByTarget = "SELECT id, source_id, target_id, avg_run_time, max_run_time, min_run_time,call_num FROM ko_method_relation WHERE target_id=?";
+    public final static String updateMethodRe = "UPDATE ko_method_relation SET source_id=?, target_id=?, avg_run_time=?, max_run_time=?, min_run_time=?, call_num=? WHERE id=?";
     public final static String addExceptionRe = "INSERT INTO ko_exception_relation(id, source_id, target_id, location,message) VALUES (?, ?, ?, ?, ?)";
     public final static String queryExceptionRe = "SELECT id, source_id, target_id, location, message FROM ko_exception_relation WHERE id=?";
     public final static String queryExceptionReExist = "SELECT id FROM ko_exception_relation WHERE id=?";
@@ -28,17 +28,17 @@ public class KoSqlConstant {
     public final static String updateParamsAna = "UPDATE ko_param_ana SET avg_run_time=?, max_run_time=?, min_run_time=?  WHERE source_id=? and params=?";
 
 
-    public final static String queryControllers = "select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time " +
+    public final static String queryControllers = "select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time,r.call_num " +
             "from ko_method_node m " +
             "join ko_method_relation r on m.id = r.target_id " +
             "where m.method_type='Controller'";
 
-    public final static String searchMethodsByName = "select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time " +
+    public final static String searchMethodsByName = "select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time,r.call_num " +
             "from ko_method_node m " +
             "join ko_method_relation r on m.id = r.target_id " +
             "where m.name like ?";
 
-    public final static String queryChildrenByParent ="select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time " +
+    public final static String queryChildrenByParent ="select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time,call_num " +
             "from ko_method_node m " +
             "join ko_method_relation r on m.id = r.target_id " +
             "where r.source_id=?";

@@ -17,6 +17,7 @@ public class   MethodInfo implements Comparable<MethodInfo> {
     private Double avgRunTime = 0.0;
     private Double maxRunTime = 0.0;
     private Double minRunTime = 0.0;
+    private Integer callNum = 0;
     private MethodType methodType;
     private Integer exceptionNum = 0;
     private List<MethodInfo> children = new ArrayList<>();
@@ -142,6 +143,14 @@ public class   MethodInfo implements Comparable<MethodInfo> {
 
     public void setChildren(List<MethodInfo> children) {
         this.children = children;
+    }
+
+    public Integer getCallNum() {
+        return callNum;
+    }
+
+    public void setCallNum(Integer callNum) {
+        this.callNum = callNum;
     }
 
     @Override

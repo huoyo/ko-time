@@ -40,6 +40,7 @@ public class KoInitController {
     private final String jQueryJsText = getResourceText("kostatic/JQuery.min.js");
     private final String uiKitIconsJs = getResourceText("kostatic/uikit-icons.js");
     private final String KoTimeUtil = getResourceText("kostatic/util.js");
+    private final String commonCss = getResourceText("kostatic/common.css");
 
     @PostMapping("/login")
     @ResponseBody
@@ -147,6 +148,8 @@ public class KoInitController {
             line = line.replace("koTimeVersionValue", "'" + KoUtil.getVerssion()+ "'");
         }else if (line.indexOf("abbreviationEnableValue") > -1) {
             line = line.replace("abbreviationEnableValue", Context.getConfig().getAbbreviationEnable()+"");
+        }else if (line.indexOf("commonCss") > -1) {
+            line = line.replace("commonCss", commonCss);
         }
         return line;
     }

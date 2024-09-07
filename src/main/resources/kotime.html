@@ -75,7 +75,7 @@
                 let element = getDom('apiList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
-                    let simName = data[i]['name'].replace('.','#');
+                    let simName = data[i]['name'].replace('.', '#');
                     let className = data[i]['className'];
                     let methodName = data[i]['methodName'];
                     let avgRunTime = data[i]['avgRunTime'];
@@ -88,18 +88,18 @@
                     if (methodType == 'Controller' && routeName != null && routeName != '') {
                         if (abbreviationEnable) {
                             html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                        }else {
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                        } else {
                             html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                         }
                     } else {
                         if (abbreviationEnable) {
                             html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                        }else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                        } else {
+                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                         }
                     }
                 }
@@ -158,66 +158,66 @@
 
         function addConfigEvent() {
             getDom('kotimeEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{enable: getDom('kotimeEnable').checked},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {enable: getDom('kotimeEnable').checked}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}');
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}');
                 })
             };
 
             getDom('exceptionEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{exceptionEnable: getDom('exceptionEnable').checked},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {exceptionEnable: getDom('exceptionEnable').checked}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
 
             getDom('logEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{logEnable: getDom('logEnable').checked},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {logEnable: getDom('logEnable').checked}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
 
             getDom('mailEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{mailEnable: getDom('mailEnable').checked},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {mailEnable: getDom('mailEnable').checked}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
 
             getDom('abbreviationEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{abbreviationEnable: getDom('abbreviationEnable').checked},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {abbreviationEnable: getDom('abbreviationEnable').checked}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
 
             getDom('languageSwitch').onclick = function () {
                 let selectedObj = getDom('languageSwitch');
-                post(concatToken('contextPath/koTime/updateConfig'),{language: selectedObj.options[selectedObj.selectedIndex].value},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {language: selectedObj.options[selectedObj.selectedIndex].value}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
 
             getDom('timeThresholdYes').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{threshold: getDom('timeThreshold').value},function (res) {
+                post(concatToken('contextPath/koTime/updateConfig'), {threshold: getDom('timeThreshold').value}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
 
             getDom('clearDataYes').onclick = function () {
-                post(concatToken('contextPath/koTime/clearData'),{},function (res) {
+                post(concatToken('contextPath/koTime/clearData'), {}, function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
-                },function () {
+                }, function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
                 })
             };
@@ -331,8 +331,10 @@
                 {'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.min}}：</span>' + data['minRunTime'] + ' ms'}
             ];
             if (data['exceptionNum'] != null && data['exceptionNum'] > 0) {
-                data['data'].push({'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.exception-num}}：</span>' + data['exceptionNum'] +
-                        ' {{tab.interface.interface-list.show-metric.exception-unit}}'});
+                data['data'].push({
+                    'name': '<span style="color:gray">{{tab.interface.interface-list.show-metric.exception-num}}：</span>' + data['exceptionNum'] +
+                        ' {{tab.interface.interface-list.show-metric.exception-unit}}'
+                });
             }
             data["dblclick"] = "paramGraph";
             return data;
@@ -396,7 +398,7 @@
                 noticeError('请正确输入用户名和密码')
                 return
             }
-            post("contextPath/koTime/login",{'userName': userId, 'password': password},function (re) {
+            post("contextPath/koTime/login", {'userName': userId, 'password': password}, function (re) {
                 if (re['state'] == 1) {
                     noticeSuccess('登录成功')
                     sessionStorage.setItem("kotimeToken", re["token"]);
@@ -404,7 +406,7 @@
                 } else {
                     noticeError('用户名或密码错误')
                 }
-            },function (re) {
+            }, function (re) {
                 console.error(re)
             })
         }
@@ -428,7 +430,7 @@
                     let element = getDom('apiList');
                     html = '';
                     for (let i = 0; i < data.length; i++) {
-                        let simName = data[i]['name'].replace('.','#');
+                        let simName = data[i]['name'].replace('.', '#');
                         let className = data[i]['className'];
                         let methodName = data[i]['methodName'];
                         let avgRunTime = data[i]['avgRunTime'];
@@ -441,18 +443,18 @@
                         if (methodType == 'Controller' && routeName != null && routeName != '') {
                             if (abbreviationEnable) {
                                 html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                            }else {
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                            } else {
                                 html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#0000FF' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                             }
                         } else {
                             if (abbreviationEnable) {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
-                            }else {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span></li>";
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                            } else {
+                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                             }
                         }
                     }
@@ -478,7 +480,7 @@
             }
             formData.append('classFile', file);
             formData.append('className', className);
-            postFormData(concatToken('contextPath/koTime/updateClass'),formData,function (res) {
+            postFormData(concatToken('contextPath/koTime/updateClass'), formData, function (res) {
                     if (res['state'] == 1) {
                         noticeSuccess('{{tab.hotupdate.change-ok-tip}}')
                     } else {
@@ -496,9 +498,9 @@
             let propertiesDom = document.querySelector("#dynamicText");
             let propertiesText = propertiesDom.value;
             if (propertiesText && propertiesText.indexOf("=") > 0) {
-                post(concatToken('contextPath/koTime/updateDynamicProperties'),{text: propertiesText},function (re) {
+                post(concatToken('contextPath/koTime/updateDynamicProperties'), {text: propertiesText}, function (re) {
                     noticeSuccess('{{tab.configuration.dynamic-config.change-ok-tip}}')
-                },function (re) {
+                }, function (re) {
                     noticeError('{{tab.configuration.dynamic-config.change-fail-tip}}')
                 })
             } else {
@@ -516,11 +518,11 @@
 
 
         function loadLatestVersion() {
-            get('http://www.kotime.cn/common/latestVersion?version='+koTimeVersion,function (res) {
+            get('http://www.kotime.cn/common/latestVersion?version=' + koTimeVersion, function (res) {
                 if (res['state'] == 1) {
                     document.querySelector("#version-notice").innerHTML = res['content']['versionNo']
                 }
-            },function (XmlHttpRequest, textStatus, errorThrown) {
+            }, function (XmlHttpRequest, textStatus, errorThrown) {
             })
         }
 
@@ -693,14 +695,16 @@
 </nav>
 
 <ul class="uk-flex-center" uk-tab style="background-color: #404b67;margin-top: 0px;">
-    <li id="zl" class="uk-active"><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.summary}}</a></li>
+    <li id="zl" class="uk-active"><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.summary}}</a>
+    </li>
     <li id="jklb"><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.interface}}</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.exception}}</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.thread}}</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.hotupdate}}</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.configuration}}</a></li>
     <li><a href="#" style="color: #edeef1;font-size: 14px;text-transform: unset">{{tab.support}}</a>
-        <span title="{{tab.support.version-tip}}" style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset"
+        <span title="{{tab.support.version-tip}}"
+              style="position: absolute;top:-10px;left: 90%;border-radius: 5px;text-transform: unset"
               class="uk-label" id="version-notice"
               onclick="window.location.href='http://www.kotime.cn/docs/kaiyuan#/v220/introduce'"></span>
     </li>
@@ -767,12 +771,14 @@
         </ul>
         <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
-                <div id="cpuInfo-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
+                <div id="cpuInfo-div"
+                     style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
                     <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;" id="cpuLogicalAmount">{{tab.summary.sysusage-metric.cpu-usage}}：</span><span
                         style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad">0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
+                    <ul class="uk-list-bullet"
+                        style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
                         <li style="margin-top: -2px;"><span
                                 style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.user-usage}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="cpuUserRate">0</span></li>
@@ -785,12 +791,14 @@
                 </div>
             </div>
             <div>
-                <div id="heapMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
+                <div id="heapMemory-div"
+                     style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
                     <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">{{tab.summary.sysusage-metric.heap-memory}}：</span><span
                         style="font-size: 15px;color: #020718;font-weight: bold" id="heapUsedRate">0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
+                    <ul class="uk-list-bullet"
+                        style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="heapInit">0</span></li>
                         <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.max}}：</span><span
@@ -801,12 +809,14 @@
                 </div>
             </div>
             <div>
-                <div id="physicalMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
+                <div id="physicalMemory-div"
+                     style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
                      class="uk-card uk-card-default uk-card-body uk-label-success">
                     <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">{{tab.summary.sysusage-metric.physical-memory}}：</span><span
                         style="font-size: 15px;color: #020718;font-weight: bold" id="physicalUsedRate">0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
+                    <ul class="uk-list-bullet"
+                        style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
                         <li style="margin-top: -2px;"><span
                                 style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.total}}：</span><span
                                 style="font-size: 12px;color: #020718;font-weight: bold" id="physicalAmount">0</span>
@@ -937,15 +947,21 @@
                      class="uk-child-width-expand@s uk-text-left uk-card uk-card-default uk-card-body"
                      style="border-radius: 5px">
                     <div>
-                        <label>{{tab.configuration.kotime-config.enable-kotime-tip}}：</label> <input id='kotimeEnable' type="checkbox" checked>
+                        <label>{{tab.configuration.kotime-config.enable-kotime-tip}}：</label> <input id='kotimeEnable'
+                                                                                                     type="checkbox"
+                                                                                                     checked>
                         <br>
-                        <label>{{tab.configuration.kotime-config.enable-exception-tip}}：</label> <input id='exceptionEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-exception-tip}}：</label> <input
+                            id='exceptionEnable' type="checkbox">
                         <br>
-                        <label>{{tab.configuration.kotime-config.enable-console-tip}}：</label> <input id='logEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-console-tip}}：</label> <input id='logEnable'
+                                                                                                      type="checkbox">
                         <br>
-                        <label>{{tab.configuration.kotime-config.enable-email-tip}}：</label> <input id='mailEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-email-tip}}：</label> <input id='mailEnable'
+                                                                                                    type="checkbox">
                         <br>
-                        <label>{{tab.configuration.kotime-config.enable-abbreviation-tip}}：</label> <input id='abbreviationEnable' type="checkbox">
+                        <label>{{tab.configuration.kotime-config.enable-abbreviation-tip}}：</label> <input
+                            id='abbreviationEnable' type="checkbox">
                         <br>
                         <label>{{tab.configuration.kotime-config.select-language-tip}}：</label>
                         <select id="languageSwitch">
@@ -953,7 +969,8 @@
                             <option value="english">{{tab.configuration.kotime-config.select-language-english}}</option>
                         </select>
                         <br>
-                        <label>{{tab.configuration.kotime-config.threshold-tip}}：</label> <input id='timeThreshold' type="input">
+                        <label>{{tab.configuration.kotime-config.threshold-tip}}：</label> <input id='timeThreshold'
+                                                                                                 type="input">
                         <button style="background-color: #177ce1;border: 1px solid #177ce1;cursor: pointer;color: white"
                                 id="timeThresholdYes">{{tab.configuration.kotime-config.threshold-confirm}}
                         </button>
@@ -979,7 +996,8 @@
                     <br>
                     <button type="button" onclick="updateDynamicProperties();"
                             style="width: 100%;background-color: #19985d;border-radius: 5px;text-transform: unset"
-                            class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">{{tab.configuration.dynamic-config.confirm-name}}
+                            class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">
+                        {{tab.configuration.dynamic-config.confirm-name}}
                     </button>
                 </div>
             </li>

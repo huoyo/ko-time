@@ -124,13 +124,16 @@ public class RedisBase implements GraphService {
         methodRelation.setAvgRunTime(targetMethodNode.getValue());
         methodRelation.setMaxRunTime(targetMethodNode.getValue());
         methodRelation.setMinRunTime(targetMethodNode.getValue());
+        methodRelation.setCallNum(1);
         String key = methodRelationPre + methodRelation.getId();
         MethodRelation old = query(key, MethodRelation.class);
         if (null == old) {
             insert(key, methodRelation);
             return methodRelation;
         } else {
+            old.setCallNum(old.getCallNum()+1);
             if (Math.random()<Context.getConfig().getDiscardRate()) {
+                insert(key, old);
                 return null;
             }
             BigDecimal bg = BigDecimal.valueOf((methodRelation.getAvgRunTime() + old.getAvgRunTime()) / 2.0);
@@ -242,6 +245,7 @@ public class RedisBase implements GraphService {
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
                 methodInfo.setMinRunTime(relation.getMinRunTime());
+                methodInfo.setCallNum(relation.getCallNum());
                 if (!methodInfos.contains(methodInfo)) {
                     methodInfos.add(methodInfo);
                 }
@@ -288,6 +292,7 @@ public class RedisBase implements GraphService {
                 methodInfo.setAvgRunTime(relation.getAvgRunTime());
                 methodInfo.setMaxRunTime(relation.getMaxRunTime());
                 methodInfo.setMinRunTime(relation.getMinRunTime());
+                methodInfo.setCallNum(relation.getCallNum());
                 if (!methodInfos.contains(methodInfo)) {
                     methodInfos.add(methodInfo);
                 }
@@ -366,7 +371,7 @@ public class RedisBase implements GraphService {
                 methodInfo.setAvgRunTime(methodRelation.getAvgRunTime());
                 methodInfo.setMaxRunTime(methodRelation.getMaxRunTime());
                 methodInfo.setMinRunTime(methodRelation.getMinRunTime());
-
+                methodInfo.setCallNum(methodRelation.getCallNum());
                 List<ExceptionInfo> exceptionInfos = getExceptions(methodNode.getId());
                 methodInfo.setExceptionNum(exceptionInfos.size());
                 methodInfo.setExceptions(exceptionInfos);
@@ -421,6 +426,7 @@ public class RedisBase implements GraphService {
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());
         rootInfo.setMinRunTime(methodRelation.getMinRunTime());
+        rootInfo.setCallNum(methodRelation.getCallNum());
         List<ExceptionInfo> exceptionInfos = getExceptions(methodId);
         rootInfo.setExceptionNum(exceptionInfos.size());
         rootInfo.setExceptions(exceptionInfos);

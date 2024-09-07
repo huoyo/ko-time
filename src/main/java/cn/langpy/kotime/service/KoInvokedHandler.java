@@ -17,7 +17,7 @@ public final class KoInvokedHandler implements InvokedHandler {
 
     @Override
     public void onInvoked(MethodNode current, MethodNode parent, Parameter[] names, Object[] values) {
-        if (current == null || (current != null && current.getValue() == 0.0)) {
+        if (current == null) {
             return;
         }
         GraphService graphService = GraphService.getInstance();

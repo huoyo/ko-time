@@ -127,13 +127,14 @@ public class DataBase implements GraphService {
         try {
             List<Map<String, Object>> query = DataBaseUtil.query(getWriteConnection(), KoSqlConstant.queryMethodRe, new Object[]{sourceMethodNode.getId() + targetMethodNode.getId()});
             if (query.size() > 0) {
-                if (Math.random() < Context.getConfig().getDiscardRate()) {
-                    return null;
-                }
+//                if (Math.random() < Context.getConfig().getDiscardRate()) {
+//                    return null;
+//                }
                 Map<String, Object> old = query.get(0);
                 double oldAvg = (double) old.get("avg_run_time");
                 double oldMax = (double) old.get("max_run_time");
                 double oldMin = (double) old.get("min_run_time");
+                int callNum = ((int) old.get("call_num"))+1;
                 BigDecimal bg = BigDecimal.valueOf((targetMethodNode.getValue() + oldAvg) / 2.0);
                 double avg = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 double max = targetMethodNode.getValue() > oldMax ? targetMethodNode.getValue() : oldMax;
@@ -144,6 +145,7 @@ public class DataBase implements GraphService {
                         avg,
                         max,
                         min,
+                        callNum,
                         sourceMethodNode.getId() + targetMethodNode.getId()
                 };
                 DataBaseUtil.update(getWriteConnection(), KoSqlConstant.updateMethodRe, params);
@@ -155,7 +157,8 @@ public class DataBase implements GraphService {
                         targetMethodNode.getId(),
                         targetMethodNode.getValue(),
                         targetMethodNode.getValue(),
-                        targetMethodNode.getValue()
+                        targetMethodNode.getValue(),
+                        1
                 };
                 DataBaseUtil.insert(getWriteConnection(), KoSqlConstant.addMethodRe, params);
             }
@@ -245,6 +248,7 @@ public class DataBase implements GraphService {
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());
         rootInfo.setMinRunTime(methodRelation.getMinRunTime());
+        rootInfo.setCallNum(methodRelation.getCallNum());
         List<ExceptionInfo> exceptionInfos = getExceptions(methodId);
         rootInfo.setExceptionNum(exceptionInfos.size());
         rootInfo.setExceptions(exceptionInfos);

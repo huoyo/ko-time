@@ -1,5 +1,5 @@
--- spring2 v2.5.0及以上版本
--- spring3 v3.1.0及以上版本
+-- spring2 v2.4.7及以上版本
+-- spring3 v3.0.1及以上版本
 create table ko_method_node
 (
     id          varchar(400) not null primary key comment '主键',

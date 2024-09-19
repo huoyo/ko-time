@@ -232,7 +232,11 @@ public class RedisBase implements GraphService {
                 if (relations.isPresent()) {
                     relation = relations.get();
                 } else {
-                    continue;
+                    relation = new MethodRelation();
+                    relation.setCallNum(0);
+                    relation.setAvgRunTime(0.0);
+                    relation.setMaxRunTime(0.0);
+                    relation.setMinRunTime(0.0);
                 }
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
@@ -279,7 +283,11 @@ public class RedisBase implements GraphService {
                 if (relations.isPresent()) {
                     relation = relations.get();
                 } else {
-                    continue;
+                    relation = new MethodRelation();
+                    relation.setCallNum(0);
+                    relation.setAvgRunTime(0.0);
+                    relation.setMaxRunTime(0.0);
+                    relation.setMinRunTime(0.0);
                 }
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
@@ -420,8 +428,18 @@ public class RedisBase implements GraphService {
         rootInfo.setMethodType(methodNode.getMethodType());
         rootInfo.setRouteName(methodNode.getRouteName());
         List<MethodRelation> methodRelationList = searchList(methodRelationPre, MethodRelation.class);
+        Optional<MethodRelation> methodRelationStream = methodRelationList.stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst();
+        MethodRelation methodRelation;
+        if (!methodRelationStream.isPresent()) {
+            methodRelation = new MethodRelation();
+            methodRelation.setCallNum(0);
+            methodRelation.setAvgRunTime(0.0);
+            methodRelation.setMaxRunTime(0.0);
+            methodRelation.setMinRunTime(0.0);
+        }else {
+            methodRelation = methodRelationStream.get();
+        }
 
-        MethodRelation methodRelation = methodRelationList.stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst().get();
         rootInfo.setValue(methodRelation.getAvgRunTime());
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());

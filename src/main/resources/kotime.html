@@ -70,12 +70,15 @@
         }
 
         function loadApis() {
-            let searchText = $("#searchText").val();
-            get(concatToken('contextPath/koTime/getApis?question=' + searchText), function (data) {
+            let searchDom = getDom("searchText");
+            let searchText = searchDom.value;
+            let apiSortName = getDom('apiSortName')
+            let apiSortType = getDom('apiSortType')
+            get(concatToken(`contextPath/koTime/getApis?question=${searchText}&orderBy=${apiSortName.value}&sort=${apiSortType.value}`), function (data) {
+                searchDom.value='';
                 let element = getDom('apiList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
-                    let simName = data[i]['name'].replace('.','#');
                     let className = data[i]['className'];
                     let methodName = data[i]['methodName'];
                     let avgRunTime = data[i]['avgRunTime'];
@@ -85,25 +88,17 @@
 
                     let apiId = className + "." + methodName;
                     let color = avgRunTime > globalThreshold ? 'danger' : 'success';
-                    if (methodType == 'Controller' && routeName != null && routeName != '') {
-                        if (abbreviationEnable) {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                        }else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                        }
-                    } else {
-                        if (abbreviationEnable) {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                        }else {
-                            html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                "&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                        }
+                    if (abbreviationEnable) {
+                        className = data[i]['name'].split('.')[0];
                     }
-                }
-                ;
+                    if (methodType == 'Controller' && routeName != null && routeName != '') {
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                            "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                    } else {
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                            "&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                    }
+                };
                 element.innerHTML = html;
             });
         }
@@ -423,43 +418,7 @@
 
         function searchApis(e) {
             if (e.keyCode == 13) {
-                let question = $('#searchText').val()
-                get(concatToken('contextPath/koTime/getApis?question=' + question), function (data) {
-                    let element = getDom('apiList');
-                    html = '';
-                    for (let i = 0; i < data.length; i++) {
-                        let simName = data[i]['name'].replace('.','#');
-                        let className = data[i]['className'];
-                        let methodName = data[i]['methodName'];
-                        let avgRunTime = data[i]['avgRunTime'];
-                        let methodType = data[i]['methodType'];
-                        let routeName = data[i]['routeName'];
-                        let callNum = data[i]['callNum'];
-                        let apiId = className + "." + methodName;
-                        let color = avgRunTime > globalThreshold ? 'danger' : 'success';
-
-                        if (methodType == 'Controller' && routeName != null && routeName != '') {
-                            if (abbreviationEnable) {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                            }else {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                            }
-                        } else {
-                            if (abbreviationEnable) {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\"><span class='common-li-bolder'>" + simName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                            }else {
-                                html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                                    "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
-                            }
-                        }
-                    }
-                    ;
-                    element.innerHTML = html;
-                });
-                $('#searchText').val('');
+                loadApis()
             }
         }
 
@@ -670,6 +629,9 @@
             UIkit.notification.closeAll();
             UIkit.modal(getDom("modal-thread")).show();
         }
+        function changeApiSort() {
+            loadApis();
+        }
 
         $(document).ready(function () {
             refreshData();
@@ -682,7 +644,7 @@
 <body style="background-color: #f2f3f2">
 
 
-<nav class="uk-navbar-container" style="background-color: #404b67;height: 85px" uk-navbar>
+<nav class="uk-navbar-container" style="background-color: #404b67;height: 80px" uk-navbar>
     <div class="uk-navbar-center">
         <div class="uk-grid-small" uk-grid>
             <div title="{{kotime-refresh}}" style="margin-top: 20px;font-size: 24px;color: white;cursor: pointer"
@@ -707,7 +669,7 @@
 </ul>
 
 <ul class="uk-switcher uk-margin">
-    <li style="margin-left: 30%;margin-right: 30%;">
+    <li style="margin-left: 30%;margin-right: 30%;margin-top: -10px">
         <ul class="uk-flex-left" uk-tab>
             <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.interface-metric}}</a></li>
         </ul>
@@ -827,29 +789,49 @@
             <p id="apiTip">{{tab.summary.bottom-normal-tip}}</p>
         </div>
     </li>
-    <li style="margin-left: 20%;margin-right: 20%;">
-        <div style="left: 35%;width: 350px;" class="uk-search uk-search-default">
-            <span uk-search-icon></span>
-            <input list="condidates" id="searchText"
-                   style="border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121"
-                   class="uk-search-input" type="search" placeholder="{{tab.interface.search-tip}}"
-                   oninput="searchTip(event);" onkeydown="searchApis(event);">
-            <datalist id="condidates" onkeydown="searchApis(event);">
-            </datalist>
+    <li style="margin-left: 20%;margin-right: 20%;margin-top: -10px">
+        <div style="margin-left: 10%;margin-right: 10%;" class="uk-grid-small uk-flex-center uk-text-center" uk-grid>
+            <div class="uk-width-3-5@s">
+                <div style="left: 10%;width: 400px;" class="uk-search uk-search-default">
+                    <span uk-search-icon></span>
+                    <input list="condidates" id="searchText"
+                           style="border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121"
+                           class="uk-search-input" type="search" placeholder="{{tab.interface.search-tip}}"
+                           oninput="searchTip(event);" onkeydown="searchApis(event);">
+                    <datalist id="condidates" onkeydown="searchApis(event);">
+                    </datalist>
+                </div>
+            </div>
+            <div class="uk-width-1-5@s">
+                <div style="display: flex;">
+                    <input style="width: 60px;border-top: none;border-right: none;border-left: none;background-color: inherit" class="uk-input"  type="text" placeholder="根据" value="根据" disabled>
+                    <select id="apiSortName" onchange="changeApiSort()"  style="width: 100px;border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121;background-color: inherit" class="uk-select">
+                        <option value="avgRunTime" selected>平均响应</option>
+                        <option value="callNum">调用次数</option>
+                    </select>
+                </div>
+            </div>
+            <div class="uk-width-1-5@s">
+                <div style="width: 70px">
+                    <select id="apiSortType" onchange="changeApiSort()"  style="border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121;background-color: inherit" class="uk-select">
+                        <option value="desc" selected>降序</option>
+                        <option value="asc">升序</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <ul id="apiList" style="background-color: rgba(245,242,242,0.96);padding: 10px;overflow-y: auto;max-height: 70%"
-            class="uk-list uk-list-divider">
+        <ul id="apiList" style="background-color: rgba(245,242,242,0.96);padding: 10px;overflow-y: auto;max-height: 70%;margin-top: 10px" class="uk-list uk-list-divider">
             <li>method 1 1&nbsp<span class="uk-label uk-label-success">0</span></li>
         </ul>
     </li>
-    <li style="margin-left: 20%;margin-right: 20%;">
+    <li style="margin-left: 20%;margin-right: 20%;margin-top: -10px">
         <ul id="exceptionList"
             style="background-color: rgba(245,242,242,0.96);padding: 10px;overflow-y: auto;max-height: 73%"
             class="uk-list uk-list-divider">
             <li>exception 1 1&nbsp<span class="uk-label uk-label-danger">未开启</span></li>
         </ul>
     </li>
-    <li style="margin-left: 30%;margin-right: 30%;">
+    <li style="margin-left: 30%;margin-right: 30%;margin-top: -10px">
         <ul class="uk-flex-left" uk-tab>
             <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.thread.thread-metric}}</a></li>
         </ul>
@@ -905,7 +887,7 @@
             <li>thread 1 1&nbsp<span class="uk-label uk-label-success">0</span></li>
         </ul>
     </li>
-    <li style="margin-left: 35%;margin-right: 35%;">
+    <li style="margin-left: 35%;margin-right: 35%;margin-top: -10px">
         <div class="uk-card uk-card-default uk-card-body" style="border-radius: 5px">
             <div id="classForm">
                 <div uk-form-custom="target: true" class="uk-form-controls">
@@ -926,7 +908,7 @@
             </div>
         </div>
     </li>
-    <li style="margin-left: 30%;margin-right: 30%;">
+    <li style="margin-left: 30%;margin-right: 30%;margin-top: -10px">
         <ul class="uk-flex-left" uk-tab>
             <li class="uk-active"><a href="#" style="text-transform: unset">{{tab.configuration.kotime-config}}</a></li>
             <li class=""><a href="#" style="text-transform: unset">{{tab.configuration.dynamic-config}}</a></li>
@@ -986,7 +968,7 @@
         </ul>
 
     </li>
-    <li style="margin-left: 30%;margin-right: 30%;">
+    <li style="margin-left: 30%;margin-right: 30%;margin-top: -10px">
         <script src='https://gitee.com/huoyo/ko-time/widget_preview' async defer></script>
         <div id="osc-gitee-widget-tag"></div>
         <style>
@@ -1055,7 +1037,7 @@
 
 <div id="modal-method" class="uk-modal-full" uk-modal>
     <div class="uk-modal-dialog">
-        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+        <button class="uk-modal-close-full uk-close-large" style="color: red" type="button" uk-close></button>
         <div class="uk-grid-collapse uk-child-width-1-1@s uk-flex-middle" uk-grid>
             <div uk-height-viewport>
                 <div id="layerDemo" width="1200px" height="900px">

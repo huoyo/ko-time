@@ -49,7 +49,7 @@ public class KoTimeController {
     @GetMapping("/getApis")
     @ResponseBody
     @Auth
-    public List<MethodInfo> getApis(String question) {
+    public List<MethodInfo> getApis(String question,String orderBy,String sort) {
         GraphService graphService = GraphService.getInstance();
         List<MethodInfo> list = null;
         if (StringUtils.hasText(question)) {
@@ -57,7 +57,18 @@ public class KoTimeController {
         } else {
             list = graphService.getControllers();
         }
-        Collections.sort(list);
+
+        Collections.sort(list, (o1, o2) -> {
+            int sortValue = -1;
+            if ("asc".equals(sort)) {
+                sortValue = 1;
+            }
+            if ("callNum".equals(orderBy)) {
+                return o1.getCallNum().compareTo(o2.getCallNum())* sortValue;
+            }else {
+                return o1.getAvgRunTime().compareTo(o2.getAvgRunTime())* sortValue;
+            }
+        });
         return list;
     }
 

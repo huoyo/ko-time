@@ -28,9 +28,9 @@ public class KoSqlConstant {
     public final static String updateParamsAna = "UPDATE ko_param_ana SET avg_run_time=?, max_run_time=?, min_run_time=?  WHERE source_id=? and params=?";
 
 
-    public final static String queryControllers = "select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time,r.call_num " +
+    public final static String queryControllers = "select m.id,name,class_name,method_name,method_type,route_name,ifnull(r.avg_run_time,0.0) avg_run_time,ifnull(r.max_run_time,0.0) max_run_time,ifnull(r.min_run_time,0.0) min_run_time,ifnull(r.call_num,0) call_num " +
             "from ko_method_node m " +
-            "join ko_method_relation r on m.id = r.target_id " +
+            "left join ko_method_relation r on m.id = r.target_id " +
             "where m.method_type='Controller'";
 
     public final static String searchMethodsByName = "select m.id,name,class_name,method_name,method_type,route_name,r.avg_run_time,r.max_run_time,r.min_run_time,r.call_num " +

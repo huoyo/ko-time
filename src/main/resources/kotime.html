@@ -92,7 +92,7 @@
                         className = data[i]['name'].split('.')[0];
                     }
                     if (methodType == 'Controller' && routeName != null && routeName != '') {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span><span style='color: #9c40ad;font-size: 14px;font-weight: bold'>()</span>&nbsp; &lt;<span class='common-li-special'>" + routeName + "</span>&gt; &nbsp; &nbsp;<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span><span style='color: #9c40ad;font-size: 14px;font-weight: bold'>()</span>&nbsp; <span style='color: #d1d1e7'>&lt;</span><span class='common-li-special'>" + routeName + "</span><span style='color: #d1d1e7'>&gt;</span> &nbsp; &nbsp;<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
                             "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                     } else {
                         html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span><span style='color: #9c40ad;font-size: 14px;font-weight: bold'>()</span>&nbsp; &nbsp;<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
@@ -830,7 +830,7 @@
                         <option value="desc" selected>{{tab.interface.interface-list.sort-desc-tip}}</option>
                         <option value="asc">{{tab.interface.interface-list.sort-asc-tip}}</option>
                     </select>
-                    <button onclick="exportApis()" style="width: 100px;border: none;color: #0000FF;font-weight: bolder" title="导出csv" class="uk-button uk-button-default">=></button>
+                    <button onclick="exportApis()" style="width: 100px;border: none;color: #1f2c59;font-weight: bolder" title="导出csv" class="uk-button uk-button-default">=></button>
                 </div>
             </div>
         </div>

@@ -92,11 +92,11 @@
                         className = data[i]['name'].split('.')[0];
                     }
                     if (methodType == 'Controller' && routeName != null && routeName != '') {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp(<span class='common-li-special'>" + routeName + "</span>)&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span><span style='color: #9c40ad;font-size: 14px;font-weight: bold'>()</span>&nbsp; &lt;<span class='common-li-special'>" + routeName + "</span>&gt; &nbsp; &nbsp;<span style='font-size: 10px;text-transform: lowercase' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
                             "&nbsp &nbsp<span style='font-size: 10px;text-transform: unset;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                     } else {
-                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span>&nbsp &nbsp<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
-                            "&nbsp &nbsp<span style='font-size: 10px;text-transform: lowercase;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
+                        html += "<li onclick=\"showMethods('" + apiId + "')\" class='common-li' id=\"" + apiId + "-list\">" + className + "#<span class='common-li-bolder'>" + methodName + "</span><span style='color: #9c40ad;font-size: 14px;font-weight: bold'>()</span>&nbsp; &nbsp;<span style='font-size: 10px;text-transform: unset' class=\"uk-label uk-label-" + color + "\">{{tab.interface.interface-list.avg-tip}} " + avgRunTime + " ms</span>" +
+                            "&nbsp; &nbsp;<span style='font-size: 10px;text-transform: lowercase;background-color:#6d6d85' class=\"uk-label\">{{tab.interface.interface-list.call-num-tip}} " + callNum + "</span></li>";
                     }
                 };
                 element.innerHTML = html;
@@ -633,6 +633,19 @@
             loadApis();
         }
 
+        function exportApis() {
+            let searchDom = getDom("searchText");
+            let searchText = searchDom.value;
+            let apiSortName = getDom('apiSortName')
+            let apiSortType = getDom('apiSortType')
+            let url = concatToken(`contextPath/koTime/exportApis?question=${searchText}&orderBy=${apiSortName.value}&sort=${apiSortType.value}`);
+            let a = document.createElement("a");
+            a.style.display='none';
+            a.href = url;
+            a.click();
+            setTimeout(()=>{a.remove();},3000);
+        }
+
         $(document).ready(function () {
             refreshData();
         });
@@ -805,18 +818,19 @@
             <div class="uk-width-1-5@s">
                 <div style="display: flex;">
                     <input style="width: 60px;border-top: none;border-right: none;border-left: none;background-color: inherit" class="uk-input"  type="text" placeholder="根据" value="根据" disabled>
-                    <select id="apiSortName" onchange="changeApiSort()"  style="width: 100px;border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121;background-color: inherit" class="uk-select">
-                        <option value="avgRunTime" selected>平均响应</option>
-                        <option value="callNum">调用次数</option>
+                    <select id="apiSortName" onchange="changeApiSort()"  style="cursor: pointer;width: 100px;border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121;background-color: inherit" class="uk-select">
+                        <option value="avgRunTime" selected>{{tab.interface.interface-list.avg-tip}}</option>
+                        <option value="callNum">{{tab.interface.interface-list.call-num-tip}}</option>
                     </select>
                 </div>
             </div>
             <div class="uk-width-1-5@s">
-                <div style="width: 70px">
-                    <select id="apiSortType" onchange="changeApiSort()"  style="border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121;background-color: inherit" class="uk-select">
-                        <option value="desc" selected>降序</option>
-                        <option value="asc">升序</option>
+                <div style="display: flex;width: 100px">
+                    <select id="apiSortType" onchange="changeApiSort()"  style="cursor: pointer;width: 70px;border-top: none;border-right: none;border-left: none;border-bottom: 1px solid lightgreen;color:#213121;background-color: inherit" class="uk-select">
+                        <option value="desc" selected>{{tab.interface.interface-list.sort-desc-tip}}</option>
+                        <option value="asc">{{tab.interface.interface-list.sort-asc-tip}}</option>
                     </select>
+                    <button onclick="exportApis()" style="width: 100px;border: none;color: #0000FF;font-weight: bolder" title="导出csv" class="uk-button uk-button-default">=></button>
                 </div>
             </div>
         </div>

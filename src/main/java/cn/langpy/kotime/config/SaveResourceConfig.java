@@ -7,6 +7,7 @@ import cn.langpy.kotime.util.KoUtil;
 import cn.langpy.kotime.util.MethodType;
 import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -52,29 +53,42 @@ public class SaveResourceConfig implements CommandLineRunner {
         acquireControllers();
     }
     private void acquireControllers() {
-        RequestMappingHandlerMapping handlerMapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
-        GraphService graphService = GraphService.getInstance();
-        MethodMatcher methodMatcher = aspectJExpressionPointcutAdvisor.getPointcut().getMethodMatcher();
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> methodEntry : handlerMethods.entrySet()) {
-            HandlerMethod handlerMethod = methodEntry.getValue();
-            boolean matches = methodMatcher.matches(handlerMethod.getMethod(), handlerMethod.getClass());
-            if (matches) {
-                MethodNode methodNode = toMethodNode(handlerMethod);
-                graphService.addMethodNode(methodNode);
+        try {
+            RequestMappingHandlerMapping handlerMapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
+            Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
+            GraphService graphService = GraphService.getInstance();
+            MethodMatcher methodMatcher = aspectJExpressionPointcutAdvisor.getPointcut().getMethodMatcher();
+            for (Map.Entry<RequestMappingInfo, HandlerMethod> methodEntry : handlerMethods.entrySet()) {
+                HandlerMethod handlerMethod = methodEntry.getValue();
+                boolean matches = methodMatcher.matches(handlerMethod.getMethod(), handlerMethod.getClass());
+                if (matches) {
+                    MethodNode methodNode = toMethodNode(handlerMethod);
+                    if (methodNode == null) {
+                        continue;
+                    }
+                    graphService.addMethodNode(methodNode);
+                }
             }
+        } catch (BeansException e) {
+            log.warning("kotime=>An error occured while loading all controllers:"+e.getMessage());
         }
     }
 
     private MethodNode toMethodNode(HandlerMethod method) {
         Class<?> beanType = method.getBeanType();
         RequestMapping requestMapping = beanType.getAnnotation(RequestMapping.class);
+        if (requestMapping == null) {
+            return null;
+        }
         String[] cvalues = requestMapping.value();
         String classRoute = "";
         if (cvalues != null && cvalues.length > 0) {
             classRoute = cvalues[0];
         }
         RequestMapping methodAnnotation = method.getMethodAnnotation(RequestMapping.class);
+        if (requestMapping == null) {
+            return null;
+        }
         String[] mvalues = methodAnnotation.value();
         String methodRoute = "";
         if (mvalues != null && mvalues.length > 0) {

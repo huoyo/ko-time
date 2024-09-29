@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -49,7 +50,7 @@ public class KoTimeController {
     @GetMapping("/getApis")
     @ResponseBody
     @Auth
-    public List<MethodInfo> getApis(String question) {
+    public List<MethodInfo> getApis(String question,String orderBy,String sort) {
         GraphService graphService = GraphService.getInstance();
         List<MethodInfo> list = null;
         if (StringUtils.hasText(question)) {
@@ -57,8 +58,45 @@ public class KoTimeController {
         } else {
             list = graphService.getControllers();
         }
-        Collections.sort(list);
+
+        Collections.sort(list, (o1, o2) -> {
+            int sortValue = -1;
+            if ("asc".equals(sort)) {
+                sortValue = 1;
+            }
+            if ("callNum".equals(orderBy)) {
+                return o1.getCallNum().compareTo(o2.getCallNum())* sortValue;
+            }else {
+                return o1.getAvgRunTime().compareTo(o2.getAvgRunTime())* sortValue;
+            }
+        });
         return list;
+    }
+
+    @GetMapping("/exportApis")
+    @ResponseBody
+    @Auth
+    public void exportApis(String question, String orderBy, String sort, HttpServletResponse response) {
+        List<MethodInfo> apis = getApis(question, orderBy, sort);
+        response.setCharacterEncoding("utf-8");
+        response.addHeader("Content-Disposition", "attachment; filename=interfaces.csv");
+
+        try( OutputStream out = response.getOutputStream();
+                BufferedOutputStream bufferedOut = new BufferedOutputStream(out)){
+            String line = "序号,类名,方法名,路由,平均响应（ms）,调用次数\n";
+            if ("english".equals(Context.getConfig().getLanguage())) {
+                line = "No,ClassName,Method,Route,Avg(ms),CallNum\n";
+            }
+            bufferedOut.write(line.getBytes("utf-8"));
+            for (int i = 0; i < apis.size(); i++) {
+                MethodInfo methodInfo = apis.get(i);
+                line = (i+1)+","+methodInfo.getClassName()+","+methodInfo.getMethodName()+"(),"+methodInfo.getRouteName()+","+methodInfo.getAvgRunTime()+","+methodInfo.getCallNum()+"\n";
+                bufferedOut.write(line.getBytes("utf-8"));
+            }
+            bufferedOut.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/getParamGraph")

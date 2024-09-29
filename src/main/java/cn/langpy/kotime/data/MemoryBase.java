@@ -11,6 +11,7 @@ import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -238,7 +239,11 @@ public class MemoryBase implements GraphService {
                 if (relations.isPresent()) {
                     relation = relations.get();
                 } else {
-                    continue;
+                    relation = new MethodRelation();
+                    relation.setCallNum(0);
+                    relation.setAvgRunTime(0.0);
+                    relation.setMaxRunTime(0.0);
+                    relation.setMinRunTime(0.0);
                 }
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
@@ -277,7 +282,11 @@ public class MemoryBase implements GraphService {
                 if (relations.isPresent()) {
                     relation = relations.get();
                 } else {
-                    continue;
+                    relation = new MethodRelation();
+                    relation.setCallNum(0);
+                    relation.setAvgRunTime(0.0);
+                    relation.setMaxRunTime(0.0);
+                    relation.setMinRunTime(0.0);
                 }
                 MethodInfo methodInfo = new MethodInfo();
                 methodInfo.setId(methodNode.getId());
@@ -381,7 +390,17 @@ public class MemoryBase implements GraphService {
         rootInfo.setMethodName(methodNode.getMethodName());
         rootInfo.setMethodType(methodNode.getMethodType());
         rootInfo.setRouteName(methodNode.getRouteName());
-        MethodRelation methodRelation = methodRelations.values().stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst().get();
+        Optional<MethodRelation> methodRelationStream = methodRelations.values().stream().filter(relation -> relation.getTargetId().equals(methodId)).findFirst();
+        MethodRelation methodRelation;
+        if (!methodRelationStream.isPresent()) {
+            methodRelation = new MethodRelation();
+            methodRelation.setCallNum(0);
+            methodRelation.setAvgRunTime(0.0);
+            methodRelation.setMaxRunTime(0.0);
+            methodRelation.setMinRunTime(0.0);
+        }else {
+            methodRelation = methodRelationStream.get();
+        }
         rootInfo.setValue(methodRelation.getAvgRunTime());
         rootInfo.setAvgRunTime(methodRelation.getAvgRunTime());
         rootInfo.setMaxRunTime(methodRelation.getMaxRunTime());

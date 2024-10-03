@@ -3,11 +3,10 @@ package cn.langpy.kotime.controller;
 import cn.langpy.kotime.annotation.Auth;
 import cn.langpy.kotime.config.DefaultConfig;
 import cn.langpy.kotime.model.*;
-import cn.langpy.kotime.service.ClassService;
-import cn.langpy.kotime.service.GraphService;
-import cn.langpy.kotime.service.SysUsageService;
-import cn.langpy.kotime.service.ThreadUsageService;
+import cn.langpy.kotime.service.*;
 import cn.langpy.kotime.util.Context;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -98,6 +97,7 @@ public class KoTimeController {
             e.printStackTrace();
         }
     }
+
 
     @GetMapping("/getParamGraph")
     @ResponseBody
@@ -257,6 +257,37 @@ public class KoTimeController {
         SysUsageService usageService = SysUsageService.newInstance();
         HeapMemoryInfo heapMemoryInfo = usageService.getHeapMemoryInfo();
         return heapMemoryInfo;
+    }
+
+
+    @GetMapping("/dumpHeap")
+    @ResponseBody
+//    @Auth
+    public void dumpHeap(Boolean live, HttpServletResponse response) {
+        live = live==null?false:live;
+        HeapDumpService heapDumpService = HeapDumpService.newInstance();
+        String heapDumpFile = heapDumpService.getHeapDumpFile(live);
+        if (heapDumpFile == null) {
+            throw new RuntimeException("Can not dumpheap file!");
+        }
+        log.info(heapDumpFile);
+        response.setCharacterEncoding("utf-8");
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+heapDumpService.getHeapDumpFileName(live));
+        try( OutputStream out = response.getOutputStream();
+             BufferedOutputStream bufferedOut = new BufferedOutputStream(out);
+             FileInputStream fileInputStream = new FileInputStream(heapDumpFile);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)){
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = bufferedInputStream.read(buffer)) != -1) {
+                bufferedOut.write(buffer,0,bytesRead);
+            }
+            bufferedOut.flush();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @GetMapping("/getPhysicalMemoryInfo")

@@ -48,12 +48,12 @@ public class KoTimeRunner implements ApplicationRunner {
     private void setFinalDataSource() {
         DataSource dataSource = KoUtil.getDataSource();
         if (null != dataSource) {
-            log.info("kotime=>Setting the finnal DataSource for kotime so that previous DataSources will be invalid.");
+            log.info("kotime=>Setting the final DataSource for kotime so that previous DataSources will be invalid.");
             Context.setDataSource(dataSource);
         }
         StringRedisTemplate redisTemplate = KoUtil.getStringRedisTemplate();
         if (null != redisTemplate) {
-            log.info("kotime=>Setting the finnal StringRedisTemplate for kotime so that previous StringRedisTemplate will be invalid.");
+            log.info("kotime=>Setting the final StringRedisTemplate for kotime so that previous StringRedisTemplate will be invalid.");
             Context.setStringRedisTemplate(redisTemplate);
         }
 

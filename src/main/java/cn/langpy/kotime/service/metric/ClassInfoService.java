@@ -1,5 +1,7 @@
-package cn.langpy.kotime.service;
+package cn.langpy.kotime.service.metric;
 
+import cn.langpy.kotime.model.ClassUsage;
+import cn.langpy.kotime.service.core.SystemService;
 import cn.langpy.kotime.util.Context;
 import net.bytebuddy.agent.VirtualMachine;
 import org.springframework.core.io.ClassPathResource;
@@ -8,20 +10,28 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ClassLoadingMXBean;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.logging.Logger;
 
-public class JvmAttachClassService implements ClassService{
-    private static Logger log = Logger.getLogger(JvmAttachClassService.class.toString());
+public class ClassInfoService extends SystemService {
+    Logger log = Logger.getLogger(ClassInfoService.class.toString());
 
+    public ClassUsage getClassUsage() {
+        ClassUsage usage = new ClassUsage();
+        ClassLoadingMXBean classLoadingMXBean = getClassLoadingMXBean();
+        usage.setTotalClassNum(classLoadingMXBean.getTotalLoadedClassCount());
+        usage.setCurrentClassNum(classLoadingMXBean.getLoadedClassCount());
+        usage.setUnloadedClassNum(classLoadingMXBean.getUnloadedClassCount());
+        return usage;
+    }
     private File agentJar;
 
-    public JvmAttachClassService() {
+    public ClassInfoService() {
         this.agentJar = createAgentJar();
     }
 
-    @Override
     public void updateClass(String className, String classPath) {
         try {
             if (agentJar==null || !agentJar.exists()) {

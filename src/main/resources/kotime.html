@@ -514,7 +514,7 @@
             let propertiesDom = document.querySelector("#dynamicText");
             let propertiesText = propertiesDom.value;
             if (propertiesText && propertiesText.indexOf("=") > 0) {
-                put(concatToken('contextPath/koTime/dynamicProperties'),{text: propertiesText},function (re) {
+                put(concatToken('contextPath/koTime/dynamicProperties'),{text: propertiesText.trim()},function (re) {
                     noticeSuccess('{{tab.configuration.dynamic-config.change-ok-tip}}')
                 },function (re) {
                     noticeError('{{tab.configuration.dynamic-config.change-fail-tip}}')

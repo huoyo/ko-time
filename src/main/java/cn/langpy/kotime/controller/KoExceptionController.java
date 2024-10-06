@@ -35,10 +35,10 @@ public class KoExceptionController {
     @GetMapping("/{exceptionId}/details")
     @ResponseBody
     @Auth
-    public List<ExceptionInfo> getMethodsByExceptionId(@PathVariable("exceptionId") String exceptionId, String message) {
+    public KoResult getMethodsByExceptionId(@PathVariable("exceptionId") String exceptionId, String message) {
         GraphService graphService = GraphService.getInstance();
         List<ExceptionInfo> exceptionInfos = graphService.getExceptionInfos(exceptionId, message);
-        return exceptionInfos;
+        return KoResult.success(exceptionInfos);
     }
 
 }

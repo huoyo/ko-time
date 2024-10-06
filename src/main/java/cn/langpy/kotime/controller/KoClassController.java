@@ -36,48 +36,34 @@ public class KoClassController {
     @PutMapping("/{className}/replace")
     @ResponseBody
     @Auth
-    public Map updateClass(@RequestParam("classFile") MultipartFile classFile, @PathVariable("className") String className) {
-        Map map = new HashMap();
+    public KoResult updateClass(@RequestParam("classFile") MultipartFile classFile, @PathVariable("className") String className) {
         if (classFile == null || classFile.isEmpty()) {
-            map.put("state", 0);
-            map.put("message", "文件不能为空");
-            return map;
+            return KoResult.failed("文件不能为空");
         }
         if (!StringUtils.hasText(className)) {
-            map.put("state", 0);
-            map.put("message", "类名不能为空");
-            return map;
+            return KoResult.failed("类名不能为空");
         }
         className = className.trim();
         File file = null;
         try {
             String originalFilename = classFile.getOriginalFilename();
             if (!originalFilename.endsWith(".class")) {
-                map.put("state", 0);
-                map.put("message", "仅支持.class文件");
-                return map;
+                return KoResult.failed("仅支持.class文件");
             }
             String[] filename = originalFilename.split("\\.");
             String substring = className.substring(className.lastIndexOf(".") + 1);
             if (!substring.equals(filename[0])) {
-                map.put("state", 0);
-                map.put("message", "请确认类名是否正确");
-                return map;
+                return KoResult.failed("请确认类名是否正确");
             }
             file = uploadFile(classFile.getBytes(), filename[0]);
         } catch (IOException e) {
             log.severe("Error class file!");
-            map.put("state", 0);
-            map.put("message", "无法解析文件");
-            return map;
+            return KoResult.failed("无法解析文件");
         }
         final ClassInfoService classService = SystemService.getInstance(ClassInfoService.class);
         classService.updateClass(className, file.getAbsolutePath());
         file.deleteOnExit();
-
-        map.put("state", 1);
-        map.put("message", "更新成功");
-        return map;
+        return KoResult.success("更新成功");
     }
 
 

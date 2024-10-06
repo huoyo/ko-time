@@ -526,8 +526,8 @@
         }
 
         function loadDynamicProperties() {
-            get(concatToken('contextPath/koTime/dynamicProperties'), function (data) {
-                let text = data['data'];
+            get(concatToken('contextPath/koTime/dynamicProperties'), function (res) {
+                let text = res['content'];
                 document.querySelector("#dynamicText").value = text;
             });
         }

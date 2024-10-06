@@ -24,9 +24,9 @@ public class KoDynamicPropertyController {
     @PutMapping
     @ResponseBody
     @Auth
-    public boolean updateDynamicProperties(@RequestBody TextParam textParam) {
+    public KoResult updateDynamicProperties(@RequestBody TextParam textParam) {
         if (!StringUtils.hasText(textParam.getText())) {
-            return false;
+            return KoResult.failed("更新失败");
         }
         String[] textSplit = textParam.getText().trim().split("\n");
         Properties dynamicProperties = Context.getDynamicProperties();
@@ -45,16 +45,13 @@ public class KoDynamicPropertyController {
             dynamicProperties.setProperty(propertyStr,valueStr);
         }
 
-        return true;
+        return KoResult.success();
     }
 
     @GetMapping
     @ResponseBody
     @Auth
-    public Map getDynamicProperties() {
-        Map map = new HashMap();
-        map.put("state", 0);
-        map.put("message", "文件不能为空");
+    public KoResult getDynamicProperties() {
         Properties dynamicProperties = Context.getDynamicProperties();
         StringBuilder stringBuilder = new StringBuilder();
         for (String key : dynamicProperties.stringPropertyNames()) {
@@ -63,7 +60,6 @@ public class KoDynamicPropertyController {
                 stringBuilder.append(key+"="+value+"\n");
             }
         }
-        map.put("data", stringBuilder.toString());
-        return map;
+        return KoResult.success(stringBuilder.toString());
     }
 }

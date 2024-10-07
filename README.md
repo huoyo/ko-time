@@ -17,7 +17,7 @@
 <div align="center">
     <img src='https://gitee.com/huoyo/ko-time/badge/star.svg'>
     <img src='https://img.shields.io/github/stars/huoyo/ko-time.svg?&label=Stars&logo=github'>
-    <img src='https://shields.io/badge/version-2.4.9-green.svg'>
+    <img src='https://shields.io/badge/version-2.5.0-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>
@@ -30,7 +30,8 @@
 - ✅ Find exceptions occurred in methods
 - ✅ Email you after finding an overtime method
 - ✅ Hot update online:you needn't restart it
-- ✅ Thread manage:show threads information
+- ✅ Thread manage:show threads information,the deadlocks included
+- ✅ JVM Space：Eden、Survivor、OldGen and Metaspace
 - ✅ Easy to use:you needn't additional learning costs
 - ✅ Enough to add a pom dependency:you needn't additional deployment costs
 
@@ -44,7 +45,8 @@
 - ✅ 追踪系统异常，精确定位到方法
 - ✅ 接口超时邮件通知，无需实时查看
 - ✅ 线上热更新：无需重启更新代码
-- ✅ 线程管理：线程实时统计与状态查看
+- ✅ 线程管理：线程实时统计与状态查看以及死锁检测
+- ✅ JVM空间统计：Eden、Survivor、OldGen and Metaspace
 - ✅ 使用简单，无技术学习成本
 - ✅ pom依赖即可，无代码侵入，无多余部署成本
 

@@ -86,7 +86,7 @@ public class SaveResourceConfig implements CommandLineRunner {
             classRoute = cvalues[0];
         }
         RequestMapping methodAnnotation = method.getMethodAnnotation(RequestMapping.class);
-        if (requestMapping == null) {
+        if (methodAnnotation == null) {
             return null;
         }
         String[] mvalues = methodAnnotation.value();

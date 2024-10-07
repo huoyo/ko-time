@@ -9,7 +9,7 @@
 <div align="center">
     <img src='https://gitee.com/huoyo/ko-time/badge/star.svg'>
     <img src='https://img.shields.io/github/stars/huoyo/ko-time.svg?&label=Stars&logo=github'>
-    <img src='https://shields.io/badge/version-2.4.9-green.svg'>
+    <img src='https://shields.io/badge/version-2.5.0-green.svg'>
     <img src='https://shields.io/badge/author-Chang Zhang-dbab09.svg'>
     <img src='https://shields.io/badge/dependencies-Spring|aspectjweaver|tomcat|UIKit|Metricflow-r.svg'>
 </div>
@@ -21,7 +21,8 @@
 - ✅ Find exceptions occurred in methods
 - ✅ Email you after finding an overtime method
 - ✅ Hot update online:you needn't restart it
-- ✅ Thread manage:show threads information
+- ✅ Thread manage:show threads information,the deadlocks included
+- ✅ JVM Space：Eden、Survivor、OldGen and Metaspace
 - ✅ Easy to use:you needn't additional learning costs
 - ✅ Enough to add a pom dependency:you needn't additional deployment costs
 

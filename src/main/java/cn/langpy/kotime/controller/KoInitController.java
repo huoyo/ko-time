@@ -1,7 +1,9 @@
 package cn.langpy.kotime.controller;
 
+import cn.langpy.kotime.annotation.Auth;
 import cn.langpy.kotime.constant.KoConstant;
 import cn.langpy.kotime.model.*;
+import cn.langpy.kotime.service.GraphService;
 import cn.langpy.kotime.util.Context;
 import cn.langpy.kotime.util.InvalidAuthInfoException;
 import cn.langpy.kotime.util.KoUtil;
@@ -44,26 +46,22 @@ public class KoInitController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Map login(@RequestBody UserInfo userInfo) {
+    public KoResult login(@RequestBody UserInfo userInfo) {
         if (null == userInfo || !StringUtils.hasText(userInfo.getUserName()) || !StringUtils.hasText(userInfo.getPassword())) {
             throw new InvalidAuthInfoException("failed to login for kotime,please fill userName and password!");
         }
-        Map map = new HashMap();
         if (userName.equals(userInfo.getUserName()) && password.equals(userInfo.getPassword())) {
             String token = KoUtil.login(userInfo.getUserName());
-            map.put("state", 1);
+            Map map = new HashMap();
             map.put("token", token);
-            return map;
+            return KoResult.success(map);
         }
-        map.put("state", 0);
-        return map;
+        return KoResult.failed("登录失败");
     }
 
     @GetMapping("/isLogin")
     @ResponseBody
-    public Map isLogin(String kotoken) {
-        Map map = new HashMap();
-        map.put("state", 1);
+    public KoResult isLogin(String kotoken) {
         boolean checkLogin = false;
         if (StringUtils.hasText(kotoken)) {
             if (kotoken.equals(Context.getConfig().getStaticToken())) {
@@ -72,8 +70,18 @@ public class KoInitController {
                 checkLogin = KoUtil.isLogin(kotoken);
             }
         }
+        Map map = new HashMap();
         map.put("isLogin", checkLogin ? 1 : 0);
-        return map;
+        return KoResult.success(map);
+    }
+
+    @PostMapping("/clearData")
+    @ResponseBody
+    @Auth
+    public KoResult clearData() {
+        GraphService graphService = GraphService.getInstance();
+        graphService.clearAll();
+        return KoResult.success();
     }
 
 

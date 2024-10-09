@@ -1,10 +1,9 @@
-package cn.langpy.kotime.service;
+package cn.langpy.kotime.service.metric;
 
 import cn.langpy.kotime.model.ThreadInfo;
-import cn.langpy.kotime.util.Context;
-import org.springframework.util.CollectionUtils;
+import cn.langpy.kotime.model.ThreadUsage;
+import cn.langpy.kotime.service.core.SystemService;
 
-import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,19 +14,38 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class ThreadUsageService {
-    private static Logger log = Logger.getLogger(ThreadUsageService.class.toString());
+public class ThreadMetricService extends SystemService {
+    private static Logger log = Logger.getLogger(ThreadMetricService.class.toString());
 
-    public static ThreadUsageService newInstance() {
-        return new ThreadUsageService();
+
+    public ThreadUsage getThreadUsage() {
+        ThreadUsage usage = new ThreadUsage();
+        List<ThreadInfo> threads = getThreads();
+        usage.setTotalNum(threads.size());
+        usage.setRunnableNum(getThreads("RUNNABLE").size());
+        long[] deadlockedThreads = getThreadMXBean().findDeadlockedThreads();
+        usage.setDeadLockNum(deadlockedThreads==null?0:deadlockedThreads.length);
+        return usage;
+    }
+
+    public List<Long> getDeadlockThreadIds() {
+        List<Long> threads = new ArrayList<>();
+        long[] deadlockedThreads = getThreadMXBean().findDeadlockedThreads();
+        if (deadlockedThreads==null || deadlockedThreads.length == 0) {
+            return threads;
+        }
+        java.lang.management.ThreadInfo[] threadInfos = getThreadMXBean().getThreadInfo(deadlockedThreads);
+        List<Long> collect = Arrays.stream(threadInfos).map(a -> a.getThreadId()).collect(Collectors.toList());
+        return collect;
     }
 
     public List<ThreadInfo> getThreads() {
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();;
+        ThreadMXBean threadMXBean = getThreadMXBean();
         int activeCount = threadGroup.activeCount();
         Thread[] threads = new Thread[activeCount];
         threadGroup.enumerate(threads);
+        List<Long> deadlockThreadIds = getDeadlockThreadIds();
         List<ThreadInfo> list = new ArrayList<>();
         for (int i = 0; i < activeCount; i++) {
             Thread thread = threads[i];
@@ -48,6 +66,11 @@ public class ThreadUsageService {
             threadInfo.setPriority(thread.getPriority());
             StackTraceElement[] stackTrace = thread.getStackTrace();
             threadInfo.setStacks(Arrays.stream(stackTrace).collect(Collectors.toList()));
+            if (deadlockThreadIds.contains(thread.getId())) {
+                threadInfo.setDeadLock(true);
+            }else {
+                threadInfo.setDeadLock(false);
+            }
             list.add(threadInfo);
         }
         Collections.sort(list, Comparator.comparing(ThreadInfo::getCpuUsage).reversed());

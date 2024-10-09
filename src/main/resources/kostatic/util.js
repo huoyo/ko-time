@@ -30,9 +30,26 @@ function post(url,data,successfun,errorFun) {
     });
 }
 
-function postFormData(url,data,successfun,errorFun) {
+function put(url,data,successfun,errorFun) {
     fetch(url, {
-        method: 'post',
+        method: 'put',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => response.json())
+        .then(json => {
+            successfun(json);
+        }).catch(e => {
+        if (errorFun) {
+            errorFun(e);
+        }
+    });
+}
+
+function putFormData(url,data,successfun,errorFun) {
+    fetch(url, {
+        method: 'put',
         body: data
     }).then(response => response.json())
         .then(json => {

@@ -1,6 +1,6 @@
 package cn.langpy.kotime.model;
 
-public class HeapMemoryInfo {
+public class JvmMemoryInfo {
     private Long initValue;
     private Long maxValue;
     private Long usedValue;

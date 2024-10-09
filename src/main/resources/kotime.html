@@ -35,7 +35,7 @@
 
         function refreshData() {
             get(concatToken('contextPath/koTime/isLogin'), function (data) {
-                globalIsLogin = data['isLogin'] == 1 ? true : false;
+                globalIsLogin = data['content']['isLogin'] == 1 ? true : false;
                 if (globalNeedLogin == true && globalIsLogin == false) {
                     UIkit.modal(getDom("modal-login")).show();
                     return;
@@ -47,7 +47,15 @@
                     loadExceptions();
                     loadCpuInfo();
                     loadHeapMemoryInfo();
+                    loadNonHeapMemoryInfo();
                     loadPhysicalMemoryInfo();
+                    loadEdenSpace();
+                    loadSurvivorSpace();
+                    loadOldGenSpace();
+                    loadMetaspace();
+                    loadGcUsage();
+                    loadThreadUsage();
+                    loadClassUsage();
                     loadThreadsInfo();
                     loadDynamicProperties();
                 }
@@ -55,7 +63,12 @@
         }
 
         function loadExceptions() {
-            get(concatToken('contextPath/koTime/getExceptions'), function (data) {
+            get(concatToken('contextPath/koTime/exceptions'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入exceptions失败！");
+                    return;
+                }
+                let data = res['content'];
                 let element = getDom('exceptionList');
                 html = '';
                 for (let i = 0; i < data.length; i++) {
@@ -74,7 +87,12 @@
             let searchText = searchDom.value;
             let apiSortName = getDom('apiSortName')
             let apiSortType = getDom('apiSortType')
-            get(concatToken(`contextPath/koTime/getApis?question=${searchText}&orderBy=${apiSortName.value}&sort=${apiSortType.value}`), function (data) {
+            get(concatToken(`contextPath/koTime/interfaces?question=${searchText}&orderBy=${apiSortName.value}&sort=${apiSortType.value}`), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入interfaces失败！");
+                    return;
+                }
+                let data = res['content'];
                 searchDom.value='';
                 let element = getDom('apiList');
                 html = '';
@@ -104,7 +122,12 @@
         }
 
         function loadStatistic() {
-            get(concatToken('contextPath/koTime/getStatistic'), function (data) {
+            get(concatToken('contextPath/koTime/interfaces/usage'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入interfaces/usage失败！");
+                    return;
+                }
+                let data = res['content'];
                 let totalNum = data['totalNum'];
                 let systemTotalNum = getDom("systemTotalNum");
                 systemTotalNum.innerHTML = totalNum;
@@ -145,15 +168,27 @@
                     getDom("systemMinRunTime").style.color = '#cc0c0c';
                 } else {
                     getDom("systemMinRunTime").style.color = '#29da93';
-                }
-                ;
+                };
+
+                let avgCallNum = data['avgCallNum'];
+                let systemAvgCallNumDom = getDom("systemAvgCallNum");
+                systemAvgCallNumDom.innerHTML = avgCallNum;
+
+                let minCallNum = data['minCallNum'];
+                let systemMinCallNumDom = getDom("systemMinCallNum");
+                systemMinCallNumDom.innerHTML = minCallNum;
+
+
+                let maxCallNum = data['maxCallNum'];
+                let systemMaxCallNumDom = getDom("systemMaxCallNum");
+                systemMaxCallNumDom.innerHTML = maxCallNum;
 
             });
         }
 
         function addConfigEvent() {
             getDom('kotimeEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{enable: getDom('kotimeEnable').checked},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{enable: getDom('kotimeEnable').checked},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}');
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}');
@@ -161,7 +196,7 @@
             };
 
             getDom('exceptionEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{exceptionEnable: getDom('exceptionEnable').checked},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{exceptionEnable: getDom('exceptionEnable').checked},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
@@ -169,7 +204,7 @@
             };
 
             getDom('logEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{logEnable: getDom('logEnable').checked},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{logEnable: getDom('logEnable').checked},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
@@ -177,7 +212,7 @@
             };
 
             getDom('mailEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{mailEnable: getDom('mailEnable').checked},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{mailEnable: getDom('mailEnable').checked},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
@@ -185,7 +220,7 @@
             };
 
             getDom('abbreviationEnable').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{abbreviationEnable: getDom('abbreviationEnable').checked},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{abbreviationEnable: getDom('abbreviationEnable').checked},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
@@ -194,7 +229,7 @@
 
             getDom('languageSwitch').onclick = function () {
                 let selectedObj = getDom('languageSwitch');
-                post(concatToken('contextPath/koTime/updateConfig'),{language: selectedObj.options[selectedObj.selectedIndex].value},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{language: selectedObj.options[selectedObj.selectedIndex].value},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
@@ -202,7 +237,7 @@
             };
 
             getDom('timeThresholdYes').onclick = function () {
-                post(concatToken('contextPath/koTime/updateConfig'),{threshold: getDom('timeThreshold').value},function (res) {
+                put(concatToken('contextPath/koTime/configs'),{threshold: getDom('timeThreshold').value},function (res) {
                     noticeSuccess('{{tab.configuration.kotime-config.change-ok-tip}}')
                 },function () {
                     noticeError('{{tab.configuration.kotime-config.change-fail-tip}}')
@@ -220,7 +255,12 @@
         }
 
         function loadConfig() {
-            get(concatToken('contextPath/koTime/getConfig'), function (data) {
+            get(concatToken('contextPath/koTime/configs'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入configs失败！");
+                    return;
+                }
+                let data = res['content'];
                 let versionNoticeEnable = data['versionNotice'];
                 if (versionNoticeEnable) {
                     loadLatestVersion();
@@ -274,7 +314,12 @@
                 graph.removeNode(clickNodeId + "ana")
                 methodParamMap.delete(clickNodeId + "ana")
             } else {
-                get(concatToken('contextPath/koTime/getParamGraph' + "?methodId=" + clickNodeId.replace('node', '')), function (data) {
+                get(concatToken('contextPath/koTime/interfaces/'+clickNodeId.replace('node', '')+'/paramMetric'), function (res) {
+                    if (res['state']==0) {
+                        noticeError("载入paramMetric失败！");
+                        return;
+                    }
+                    let data = res['content'];
                     let datas = []
                     for (let key in data) {
                         datas.push({"name": key + "：{{tab.interface.interface-list.show-metric.avg}} " + data[key]['avgRunTime'] + " ms"})
@@ -334,7 +379,7 @@
         };
 
 
-        function showMethods(name) {
+        function showMethods(methodId) {
             let exceptionDetailDom = getDom('layerDemo');
             exceptionDetailDom.innerHTML = "";
             let options = {
@@ -349,9 +394,14 @@
             UIkit.notification.closeAll();
             UIkit.modal(getDom("modal-method")).show();
 
-            get(concatToken('contextPath/koTime/getTree?methodName=' + name), function (data) {
+            get(concatToken('contextPath/koTime/interfaces/'+methodId+'/tree'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入tree失败！");
+                    return;
+                }
+                let data = res['content'];
                 let rootX = 100;
-                let rootY = $(window).get(0).innerHeight / 2 - 50;
+                let rootY = window.innerHeight / 2 - 50;
                 data['x'] = rootX;
                 data['y'] = rootY;
                 graph.createNodes(data, formData);
@@ -361,7 +411,12 @@
         };
 
         function showExceptions(id, message) {
-            get(concatToken('contextPath/koTime/getMethodsByExceptionId?exceptionId=' + id + '&message=' + message), function (data) {
+            get(concatToken('contextPath/koTime/exceptions/' + id + '/details?message=' + message), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入tree失败！");
+                    return;
+                }
+                let data = res['content'];
                 let html = '';
                 for (let i = 0; i < data.length; i++) {
                     html +=
@@ -394,7 +449,7 @@
             post("contextPath/koTime/login",{'userName': userId, 'password': password},function (re) {
                 if (re['state'] == 1) {
                     noticeSuccess('登录成功')
-                    sessionStorage.setItem("kotimeToken", re["token"]);
+                    sessionStorage.setItem("kotimeToken", re['content']["token"]);
                     location.reload();
                 } else {
                     noticeError('用户名或密码错误')
@@ -406,7 +461,12 @@
 
         function searchTip(e) {
             let question = $('#searchText').val()
-            get(concatToken('contextPath/koTime/getApiTips?question=' + question), function (data) {
+            get(concatToken('contextPath/koTime/interfaces/searchCondidate?question=' + question), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入interfaces/searchCondidate失败！");
+                    return;
+                }
+                let data = res['content'];
                 $("#condidates").html("")
                 for (let i = 0; i < data.length; i++) {
                     let name = data[i];
@@ -436,8 +496,7 @@
                 return;
             }
             formData.append('classFile', file);
-            formData.append('className', className);
-            postFormData(concatToken('contextPath/koTime/updateClass'),formData,function (res) {
+            putFormData(concatToken('contextPath/koTime/classes/'+className+'/replace'),formData,function (res) {
                     if (res['state'] == 1) {
                         noticeSuccess('{{tab.hotupdate.change-ok-tip}}')
                     } else {
@@ -455,7 +514,7 @@
             let propertiesDom = document.querySelector("#dynamicText");
             let propertiesText = propertiesDom.value;
             if (propertiesText && propertiesText.indexOf("=") > 0) {
-                post(concatToken('contextPath/koTime/updateDynamicProperties'),{text: propertiesText},function (re) {
+                put(concatToken('contextPath/koTime/dynamicProperties'),{text: propertiesText.trim()},function (re) {
                     noticeSuccess('{{tab.configuration.dynamic-config.change-ok-tip}}')
                 },function (re) {
                     noticeError('{{tab.configuration.dynamic-config.change-fail-tip}}')
@@ -467,8 +526,8 @@
         }
 
         function loadDynamicProperties() {
-            get(concatToken('contextPath/koTime/getDynamicProperties'), function (data) {
-                let text = data['data'];
+            get(concatToken('contextPath/koTime/dynamicProperties'), function (res) {
+                let text = res['content'];
                 document.querySelector("#dynamicText").value = text;
             });
         }
@@ -484,7 +543,12 @@
         }
 
         function loadCpuInfo() {
-            get(concatToken('contextPath/koTime/getCpuInfo'), function (data) {
+            get(concatToken('contextPath/koTime/cpus/usage'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入cpus/usage失败！");
+                    return;
+                }
+                let data = res['content'];
                 let systemLoad = data['systemLoad'] * 100;
                 let userRate = data['userRate'] * 100;
                 let sysRate = data['sysRate'] * 100;
@@ -501,12 +565,16 @@
                 document.querySelector("#cpuSysRate").innerHTML = `${sysRate.toFixed(2)}%`;
                 document.querySelector("#cpuUserRate").innerHTML = `${userRate.toFixed(2)}%`;
                 document.querySelector("#cpuLogicalAmount").innerHTML = `{{tab.summary.sysusage-metric.cpu-usage}}（${logicalNum}）：`;
-                document.querySelector("#cpuWaitRate").innerHTML = `${waitRate.toFixed(2)}%`;
             });
         }
 
         function loadHeapMemoryInfo() {
-            get(concatToken('contextPath/koTime/getHeapMemoryInfo'), function (data) {
+            get(concatToken('contextPath/koTime/memories/heap'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入memories/heap失败！");
+                    return;
+                }
+                let data = res['content'];
                 // let initValue = data['initValue'] / 1024 / 1024;
                 // let maxValue = data['maxValue'] / 1024 / 1024;
                 // let usedValue = data['usedValue'] / 1024 / 1024;
@@ -528,8 +596,42 @@
             });
         }
 
+        function loadNonHeapMemoryInfo() {
+            get(concatToken('contextPath/koTime/memories/nonHeap'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入memories/nonHeap失败！");
+                    return;
+                }
+                let data = res['content'];
+                let initValue = getSize(data['initValue']);
+                let maxValue = getSize(data['maxValue']);
+                let usedValue = getSize(data['usedValue']);
+                let usedRate = data['usedRate'] * 100;
+                var nonheapUsedRateDom = document.querySelector("#nonHeapUsedRate");
+                if (usedRate > 50) {
+                    nonheapUsedRateDom.style.color = '#cc0c0c';
+                } else {
+                    nonheapUsedRateDom.style.color = '#29da93';
+                }
+                ;
+                document.querySelector("#nonHeapInit").innerHTML = initValue;
+                document.querySelector("#nonHeapMax").innerHTML = maxValue;
+                document.querySelector("#nonHeapUsed").innerHTML = usedValue;
+                if (data['maxValue']==-1) {
+                    nonheapUsedRateDom.innerHTML = `-%`;
+                }else {
+                    nonheapUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+                }
+            });
+        }
+
         function loadPhysicalMemoryInfo() {
-            get(concatToken('contextPath/koTime/getPhysicalMemoryInfo'), function (data) {
+            get(concatToken('contextPath/koTime/memories/physical'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入memories/physical失败！");
+                    return;
+                }
+                let data = res['content'];
                 // let initValue = data['initValue'] / 1024 / 1024;
                 // let thisUsedValue = data['thisUsedValue'] / 1024 / 1024;
                 // let usedValue = data['usedValue'] / 1024 / 1024;
@@ -553,6 +655,171 @@
             });
         }
 
+        function loadEdenSpace() {
+            get(concatToken('contextPath/koTime/jvmSpaces/edenSpace'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载jvmSpaces/edenSpace失败！");
+                    return;
+                }
+                let data = res['content'];
+                let initValue = getSize(data['initValue']);
+                let maxValue = getSize(data['maxValue']);
+                let usedValue = getSize(data['usedValue']);
+                let usedRate = data['usedRate'] * 100;
+                let edenSpaceUsedRateDom = document.querySelector("#edenSpaceUsedRate");
+                if (usedRate > 50) {
+                    edenSpaceUsedRateDom.style.color = '#cc0c0c';
+                } else {
+                    edenSpaceUsedRateDom.style.color = '#29da93';
+                }
+                ;
+                document.querySelector("#edenSpaceInit").innerHTML = initValue;
+                document.querySelector("#edenSpaceMax").innerHTML = maxValue;
+                document.querySelector("#edenSpaceUsed").innerHTML = usedValue;
+                edenSpaceUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+            });
+        }
+
+        function loadSurvivorSpace() {
+            get(concatToken('contextPath/koTime/jvmSpaces/survivorSpace'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载jvmSpaces/survivorSpace失败！");
+                    return;
+                }
+                let data = res['content'];
+                let initValue = getSize(data['initValue']);
+                let maxValue = getSize(data['maxValue']);
+                let usedValue = getSize(data['usedValue']);
+                let usedRate = data['usedRate'] * 100;
+                let survivorSpaceUsedRateDom = document.querySelector("#survivorSpaceUsedRate");
+                if (usedRate > 50) {
+                    survivorSpaceUsedRateDom.style.color = '#cc0c0c';
+                } else {
+                    survivorSpaceUsedRateDom.style.color = '#29da93';
+                }
+                ;
+                document.querySelector("#survivorSpaceInit").innerHTML = initValue;
+                document.querySelector("#survivorSpaceMax").innerHTML = maxValue;
+                document.querySelector("#survivorSpaceUsed").innerHTML = usedValue;
+                survivorSpaceUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+            });
+        }
+
+        function loadOldGenSpace() {
+            get(concatToken('contextPath/koTime/jvmSpaces/oldGen'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载jvmSpaces/oldGen失败！");
+                    return;
+                }
+                let data = res['content'];
+                let initValue = getSize(data['initValue']);
+                let maxValue = getSize(data['maxValue']);
+                let usedValue = getSize(data['usedValue']);
+                let usedRate = data['usedRate'] * 100;
+                let oldGenUsedRateDom = document.querySelector("#oldGenUsedRate");
+                if (usedRate > 50) {
+                    oldGenUsedRateDom.style.color = '#cc0c0c';
+                } else {
+                    oldGenUsedRateDom.style.color = '#29da93';
+                }
+                ;
+                document.querySelector("#oldGenInit").innerHTML = initValue;
+                document.querySelector("#oldGenMax").innerHTML = maxValue;
+                document.querySelector("#oldGenUsed").innerHTML = usedValue;
+                oldGenUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+            });
+        }
+
+        function loadMetaspace() {
+            get(concatToken('contextPath/koTime/jvmSpaces/metaspace'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载jvmSpaces/metaspace失败！");
+                    return;
+                }
+                let data = res['content'];
+                let initValue = getSize(data['initValue']);
+                let maxValue = getSize(data['maxValue']);
+                let usedValue = getSize(data['usedValue']);
+                let usedRate = data['usedRate'] * 100;
+                let metaspaceUsedRateDom = document.querySelector("#metaspaceUsedRate");
+                if (usedRate > 50) {
+                    metaspaceUsedRateDom.style.color = '#cc0c0c';
+                } else {
+                    metaspaceUsedRateDom.style.color = '#29da93';
+                }
+                ;
+                document.querySelector("#metaspaceInit").innerHTML = initValue;
+                document.querySelector("#metaspaceMax").innerHTML = maxValue;
+                document.querySelector("#metaspaceUsed").innerHTML = usedValue;
+                if (data['maxValue']==-1) {
+                    metaspaceUsedRateDom.innerHTML = `-%`;
+                }else {
+                    metaspaceUsedRateDom.innerHTML = `${usedRate.toFixed(2)}%`;
+                }
+            });
+        }
+
+        function loadGcUsage() {
+            get(concatToken('contextPath/koTime/gcs/usage'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载gcs/usage失败！");
+                    return;
+                }
+                let data = res['content'];
+                let totalNum = data['totalNum'];
+                let fullNum = data['fullNum'];
+                let minorNum = data['minorNum'];
+
+                document.querySelector("#gcTotalNum").innerHTML = totalNum;
+                document.querySelector("#gcMinorNum").innerHTML = minorNum;
+                document.querySelector("#gcFullNum").innerHTML = fullNum;
+
+            });
+        }
+
+        function loadThreadUsage() {
+            get(concatToken('contextPath/koTime/threads/usage'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载threads/usage失败！");
+                    return;
+                }
+                let data = res['content'];
+                let totalNum = data['totalNum'];
+                let runnableNum = data['runnableNum'];
+                let deadlockNum = data['deadLockNum'];
+
+                let threadLockNumDom = document.querySelector("#threadLockNum");
+                if (deadlockNum > 0) {
+                    threadLockNumDom.style.color = '#cc0c0c';
+                } else {
+                    threadLockNumDom.style.color = '#29da93';
+                }
+
+                document.querySelector("#threadTotalNum").innerHTML = totalNum;
+                document.querySelector("#threadRunnableNum").innerHTML = runnableNum;
+                threadLockNumDom.innerHTML = deadlockNum;
+
+            });
+        }
+
+        function loadClassUsage() {
+            get(concatToken('contextPath/koTime/classes/usage'), function (res) {
+                if (res['state']==0) {
+                    noticeError("载classes/usage失败！");
+                    return;
+                }
+                let data = res['content'];
+                let totalNum = data['totalClassNum'];
+                let currentClassNum = data['currentClassNum'];
+                let unloadedClassNum = data['unloadedClassNum'];
+
+                document.querySelector("#classTotalNum").innerHTML = totalNum;
+                document.querySelector("#classCurrentNum").innerHTML = currentClassNum;
+                document.querySelector("#classDeleteNum").innerHTML = unloadedClassNum;
+
+            });
+        }
+
         const cpuUsageColorMap = {
             'RED': '#cc0c0c',
             'YELLOW': '#f0ad4e',
@@ -573,7 +840,12 @@
 
         function loadThreadsInfo(queryState) {
             queryState = queryState || '';
-            get(concatToken('contextPath/koTime/getThreadsInfo?state=' + queryState), function (data) {
+            get(concatToken('contextPath/koTime/threads?state=' + queryState), function (res) {
+                if (res['state']==0) {
+                    noticeError("载入threads失败！");
+                    return;
+                }
+                let data = res['content'];
                 let statistics = data['statistics'];
                 let all = statistics['all'];
                 let RUNNABLE = statistics['RUNNABLE'] || 0;
@@ -592,9 +864,9 @@
                 let threads = data['threads'];
                 let colors = {
                     'RUNNABLE': '#32d296',
-                    'BLOCKED': '#cc0c0c',
-                    'WAITING': '#ad7070',
-                    'TIMED_WAITING': '#ad7070'
+                    'BLOCKED': '#e0ce86',
+                    'WAITING': '#eec793',
+                    'TIMED_WAITING': '#d99292'
                 }
                 for (let i = 0; i < threads.length; i++) {
                     let thread = threads[i];
@@ -604,9 +876,14 @@
                     let state = thread['state'];
                     let stacks = thread['stacks'];
                     let cpuUsage = thread['cpuUsage'];
+                    let deadLock = thread['deadLock'];
                     let cpuUsageColor = getCpuUsageColor(cpuUsage);
                     threadMap[id + ''] = stacks;
-                    html += `<li onclick="showThreadInfo('${id}')" class='common-li'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">{{tab.thread.thread-list.cpu-usage}}:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
+                    if (deadLock) {
+                        html += `<li onclick="showThreadInfo('${id}')" class='common-li'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">{{tab.thread.thread-list.cpu-usage}}:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: #ec2147;' class="uk-label">DEADLOCK</span></li>`;
+                    }else {
+                        html += `<li onclick="showThreadInfo('${id}')" class='common-li'>id=<span style="font-size: 16px;font-weight: 500;">${id}</span>&nbsp; &nbsp;name=${name}&nbsp; &nbsp;class=${classType}&nbsp; &nbsp;<span style="font-size: 10px;background-color: ${cpuUsageColor};" class="uk-label uk-label-success">{{tab.thread.thread-list.cpu-usage}}:${cpuUsage}%</span>&nbsp; &nbsp;<span style='font-size: 10px;background-color: ${colors[state]};' class="uk-label uk-label-success">${state}</span></li>`;
+                    }
                 }
                 element.innerHTML = html;
             });
@@ -638,7 +915,16 @@
             let searchText = searchDom.value;
             let apiSortName = getDom('apiSortName')
             let apiSortType = getDom('apiSortType')
-            let url = concatToken(`contextPath/koTime/exportApis?question=${searchText}&orderBy=${apiSortName.value}&sort=${apiSortType.value}`);
+            let url = concatToken(`contextPath/koTime/interfaces/export?question=${searchText}&orderBy=${apiSortName.value}&sort=${apiSortType.value}`);
+            let a = document.createElement("a");
+            a.style.display='none';
+            a.href = url;
+            a.click();
+            setTimeout(()=>{a.remove();},3000);
+        }
+
+        function dumpHeap() {
+            let url = concatToken(`contextPath/koTime/memories/heap/export`);
             let a = document.createElement("a");
             a.style.display='none';
             a.href = url;
@@ -682,116 +968,173 @@
 </ul>
 
 <ul class="uk-switcher uk-margin">
-    <li style="margin-left: 30%;margin-right: 30%;margin-top: -10px">
+    <li style="margin-left: 28%;margin-right: 28%;margin-top: -10px">
         <ul class="uk-flex-left" uk-tab>
             <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.interface-metric}}</a></li>
         </ul>
-        <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
+        <div style="margin-top: 10px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
-                <div id="systemTotalNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.interface-metric.total-num}}</span><br>
-                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemTotalNum">0</span>
+                <div id="systemNum-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.interface-metric.total-num}}：</span><span class="metric-card-summary-v" id="systemTotalNum">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.interface-metric.delay-num}}：</span><span class="metric-card-item-v" id="systemDelayNum">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.interface-metric.normal-num}}：</span><span class="metric-card-item-v" id="systemNormalNum">0</span></li>
+                    </ul>
                 </div>
             </div>
             <div>
-                <div id="systemDelayNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.interface-metric.delay-num}}</span>
-                    <br>
-                    <span style="font-size: 30px;color: #cc0c0c;font-weight: bold" id="systemDelayNum">0</span>
+                <div id="systemRunTime-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.response-metric.avg-num}}：</span><span class="metric-card-summary-v" id="systemAvgRunTime">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.response-metric.max-num}}：</span><span class="metric-card-item-v" id="systemMaxRunTime">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.response-metric.min-num}}：</span><span class="metric-card-item-v" id="systemMinRunTime">0</span></li>
+                    </ul>
                 </div>
             </div>
             <div>
-                <div id="systemNormalNum-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.interface-metric.normal-num}}</span>
-                    <br>
-                    <span style="font-size: 30px;color: #29da93;font-weight: bold" id="systemNormalNum">0</span></div>
+                <div id="systemCallNum-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.interface-metric.avg-call-num}}：</span><span class="metric-card-summary-v" id="systemAvgCallNum">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.interface-metric.max-call-num}}：</span><span class="metric-card-item-v" id="systemMaxCallNum">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.interface-metric.min-call-num}}：</span><span class="metric-card-item-v" id="systemMinCallNum">0</span></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <ul style="margin-top: 10px;" class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.response-metric}}</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.memory-metric}}</a></li>
         </ul>
         <div style="margin-top: 10px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
-                <div id="systemAvgRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.response-metric.avg-num}}</span>
-                    <br>
-                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemAvgRunTime">0</span></div>
+                <div id="physicalMemory-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.physical-memory}}：</span><span class="metric-card-summary-v" id="physicalUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.physical-memory.total}}：</span><span class="metric-card-item-v" id="physicalAmount">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.physical-memory.used}}：</span><span class="metric-card-item-v" id="physicalUsed">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.physical-memory.current-used}}：</span><span class="metric-card-item-v" id="thisUsed">0</span></li>
+                    </ul>
+                </div>
             </div>
             <div>
-                <div id="systemMaxRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.response-metric.max-num}}</span>
-                    <br>
-                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMaxRunTime">0</span></div>
+                <div id="heapMemory-div"  class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span onclick="dumpHeap();" style="text-transform: unset;background-color: #404b67;position: absolute;cursor: pointer" title="dump" class="uk-card-badge">&gt;</span>
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.heap-memory}}：</span><span class="metric-card-summary-v" id="heapUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span class="metric-card-item-v" id="heapInit">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.max}}：</span><span class="metric-card-item-v" id="heapMax">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span class="metric-card-item-v" id="heapUsed">0</span></li>
+                    </ul>
+                </div>
             </div>
             <div>
-                <div id="systemMinRunTime-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 10px;color: #3b3f4f">{{tab.summary.response-metric.min-num}}</span>
-                    <br>
-                    <span style="font-size: 30px;color: #020718;font-weight: bold" id="systemMinRunTime">0</span></div>
+                <div id="nonHeapMemory-div"  class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.non-heap-memory}}：</span><span class="metric-card-summary-v" id="nonHeapUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span class="metric-card-item-v" id="nonHeapInit">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.max}}：</span><span class="metric-card-item-v" id="nonHeapMax">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span class="metric-card-item-v" id="nonHeapUsed">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <ul style="margin-top: 10px;" class="uk-flex-left" uk-tab>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.jvm-metric}}</a></li>
+        </ul>
+        <div style="margin-top: 10px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
+            <div>
+                <div id="EdenSpace-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.eden-space}}：</span><span class="metric-card-summary-v" id="edenSpaceUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span class="metric-card-item-v" id="edenSpaceInit">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.max}}： </span><span class="metric-card-item-v" id="edenSpaceMax">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span class="metric-card-item-v" id="edenSpaceUsed">0</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div id="SurvivorSpace-div"  class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.survivor-space}}：</span><span class="metric-card-summary-v" id="survivorSpaceUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span class="metric-card-item-v" id="survivorSpaceInit">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.max}}： </span><span class="metric-card-item-v" id="survivorSpaceMax">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span class="metric-card-item-v" id="survivorSpaceUsed">0</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div id="OldGen-div"  class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.old-gen}}：</span><span class="metric-card-summary-v" id="oldGenUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span class="metric-card-item-v" id="oldGenInit">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.max}}： </span><span class="metric-card-item-v" id="oldGenMax">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span class="metric-card-item-v" id="oldGenUsed">0</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div id="Metaspace-div"  class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.meta-space}}：</span><span class="metric-card-summary-v" id="metaspaceUsedRate">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span class="metric-card-item-v" id="metaspaceInit">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.max}}： </span><span class="metric-card-item-v" id="metaspaceMax">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span class="metric-card-item-v" id="metaspaceUsed">0</span></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <ul class="uk-flex-left" uk-tab>
-            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.sysusage-metric}}</a></li>
+            <li class="uk-active"><a style="text-transform: unset" href="#">{{tab.summary.other-metric}}</a></li>
         </ul>
-        <div style="margin-top: 20px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
+        <div style="margin-top: 10px;" class="uk-grid-small uk-child-width-expand@s uk-text-center" uk-grid>
             <div>
-                <div id="cpuInfo-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;" id="cpuLogicalAmount">{{tab.summary.sysusage-metric.cpu-usage}}：</span><span
-                        style="font-size: 15px;color: #020718;font-weight: bold" id="systemLoad">0</span>
+                <div id="cpuInfo-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span id="cpuLogicalAmount" class="metric-card-summary-n">{{tab.summary.sysusage-metric.cpu-usage}}：</span><span class="metric-card-summary-v" id="systemLoad">0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
-                        <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.user-usage}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="cpuUserRate">0</span></li>
-                        <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.sys-usage}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="cpuSysRate">0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.cpu-usage.io-waiting}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="cpuWaitRate">0</span></li>
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.cpu-usage.user-usage}}：</span><span class="metric-card-item-v" id="cpuUserRate">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.cpu-usage.sys-usage}}：</span><span class="metric-card-item-v" id="cpuSysRate">0</span></li>
                     </ul>
                 </div>
             </div>
             <div>
-                <div id="heapMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">{{tab.summary.sysusage-metric.heap-memory}}：</span><span
-                        style="font-size: 15px;color: #020718;font-weight: bold" id="heapUsedRate">0</span>
+                <div id="gc-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.gc-num}}：</span><span class="metric-card-summary-v" id="gcTotalNum">0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.init}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="heapInit">0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.max}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="heapMax">0</span></li>
-                        <li style="margin-top: -2px;"><span style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.heap-memory.used}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="heapUsed">0</span></li>
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.gc-num.minor}}：</span><span class="metric-card-item-v" id="gcMinorNum">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.gc-num.full}}：</span><span class="metric-card-item-v" id="gcFullNum">0</span></li>
                     </ul>
                 </div>
             </div>
             <div>
-                <div id="physicalMemory-div" style="border-radius: 10px;background-color: #fefffe;padding: 20px; text-align: left;"
-                     class="uk-card uk-card-default uk-card-body uk-label-success">
-                    <span style="font-size: 12px;color: #3b3f4f;justify-content: space-around;">{{tab.summary.sysusage-metric.physical-memory}}：</span><span
-                        style="font-size: 15px;color: #020718;font-weight: bold" id="physicalUsedRate">0</span>
+                <div id="thread-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.thread-num}}：</span><span class="metric-card-summary-v" id="threadTotalNum">0</span>
                     <hr style="margin-top: 7px">
-                    <ul class="uk-list-bullet" style="text-align: left;margin-top: -13px; margin-left: -40px;list-style-type: none">
-                        <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.total}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="physicalAmount">0</span>
-                        </li>
-                        <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.used}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="physicalUsed">0</span></li>
-                        <li style="margin-top: -2px;"><span
-                                style="font-size: 8px;color: #3b3f4f;">{{tab.summary.sysusage-metric.physical-memory.current-used}}：</span><span
-                                style="font-size: 12px;color: #020718;font-weight: bold" id="thisUsed">0</span></li>
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.thread-num.runnable}}：</span><span class="metric-card-item-v" id="threadRunnableNum">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.thread-num.deadlock}}：</span><span class="metric-card-item-v" id="threadLockNum">0</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div id="class-div" class="uk-card uk-card-default uk-card-body uk-label-success metric-card">
+                    <span class="metric-card-summary-n">{{tab.summary.sysusage-metric.loaded-class-num}}：</span><span class="metric-card-summary-v" id="classTotalNum">0</span>
+                    <hr style="margin-top: 7px">
+                    <ul class="uk-list metric-card-item">
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.loaded-class-num.current}}：</span><span class="metric-card-item-v" id="classCurrentNum">0</span></li>
+                        <li><div class="metric-card-item-point"></div><span class="metric-card-item-n">{{tab.summary.sysusage-metric.loaded-class-num.unloaded}}：</span><span class="metric-card-item-v" id="classDeleteNum">0</span></li>
                     </ul>
                 </div>
             </div>

@@ -9,7 +9,9 @@ public class SystemStatistic {
     private Integer totalNum = 0 ;
     private Integer delayNum = 0;
     private Integer normalNum = 0;
-
+    private Double avgCallNum = 0.0;
+    private Integer maxCallNum = 0;
+    private Integer minCallNum = 0;
     public String getName() {
         return name;
     }
@@ -64,6 +66,30 @@ public class SystemStatistic {
 
     public void setNormalNum(Integer normalNum) {
         this.normalNum = normalNum;
+    }
+
+    public Double getAvgCallNum() {
+        return avgCallNum;
+    }
+
+    public void setAvgCallNum(Double avgCallNum) {
+        this.avgCallNum = avgCallNum;
+    }
+
+    public Integer getMaxCallNum() {
+        return maxCallNum;
+    }
+
+    public void setMaxCallNum(Integer maxCallNum) {
+        this.maxCallNum = maxCallNum;
+    }
+
+    public Integer getMinCallNum() {
+        return minCallNum;
+    }
+
+    public void setMinCallNum(Integer minCallNum) {
+        this.minCallNum = minCallNum;
     }
 
     @Override

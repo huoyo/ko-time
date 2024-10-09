@@ -1,6 +1,6 @@
 package cn.langpy.kotime.model;
 
-public class CpuInfo {
+public class CpuUsage {
     private Double systemLoad;
     private Double userRate;
     private Double sysRate;

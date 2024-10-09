@@ -14,9 +14,18 @@ public class ThreadInfo {
     private String state;
     private Boolean isInterrupted;
     private Boolean isDaemon;
+    private Boolean deadLock;
     private Integer priority;
     private BigDecimal cpuUsage;
     private List<StackTraceElement> stacks;
+
+    public Boolean getDeadLock() {
+        return this.deadLock;
+    }
+
+    public void setDeadLock(Boolean deadLock) {
+        this.deadLock = deadLock;
+    }
 
     public Long getId() {
         return id;

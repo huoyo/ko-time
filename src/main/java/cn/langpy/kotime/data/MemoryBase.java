@@ -377,6 +377,15 @@ public class MemoryBase implements GraphService {
         systemStatistic.setMaxRunTime(max);
         systemStatistic.setMinRunTime(min);
         systemStatistic.setAvgRunTime(avg);
+
+        int maxCallNum = controllerApis.stream().map(api -> api.getCallNum()).max(Integer::compareTo).get();
+        int minCallNum = controllerApis.stream().map(api -> api.getCallNum()).min(Integer::compareTo).get();
+        double avgCallNum = controllerApis.stream().map(api -> api.getCallNum()).collect(Collectors.averagingInt(Integer::intValue));
+        BigDecimal bgCallNum = BigDecimal.valueOf(avgCallNum);
+        avgCallNum = bgCallNum.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        systemStatistic.setMaxCallNum(maxCallNum);
+        systemStatistic.setMinCallNum(minCallNum);
+        systemStatistic.setAvgCallNum(avgCallNum);
         return systemStatistic;
     }
 
